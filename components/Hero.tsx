@@ -16,29 +16,8 @@ export default function Hero() {
 
       {/* Content */}
       <div className="hero-content">
-        <div style={{ maxWidth: '680px' }}>
-          {/* Badge */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              background: 'var(--orange-dim)',
-              border: '1px solid rgba(232,93,26,0.3)',
-              borderRadius: '20px',
-              padding: '0.35rem 0.875rem',
-              marginBottom: '1.5rem',
-              fontFamily: 'var(--font-barlow)',
-              fontSize: '0.85rem',
-              fontWeight: 500,
-              color: 'var(--orange-light)',
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-            }}
-          >
-            <span style={{ fontSize: '0.7rem' }}>●</span>
-            Toimipialue · Koko Suomi
-          </div>
+        <div style={{ maxWidth: '680px', paddingTop: '4rem' }}>
+          {/* ...badge removed... */}
 
           {/* Heading */}
           <h1
