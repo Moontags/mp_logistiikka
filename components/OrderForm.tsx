@@ -276,12 +276,12 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
               {/* Bike type */}
               <div style={fieldStyle}>
                 <label style={labelStyle}>Pyörätyyppi *</label>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   {(Object.entries(bikeLabels) as [BikeType, string][]).map(([val, label]) => (
                     <label
                       key={val}
                       style={{
-                        flex: 1,
+                        flex: '1 1 auto',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '0.5rem',

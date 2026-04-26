@@ -37,10 +37,11 @@ export default function Gallery() {
   return (
     <section
       id="kuvat"
-      style={{ background: 'transparent', padding: '5rem 1.5rem', borderTop: '1px solid var(--border)' }}
+      className="page-section"
+      style={{ background: 'transparent', padding: '0 1.5rem', borderTop: '1px solid var(--border)' }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ marginBottom: '3rem' }}>
+        <div style={{ marginBottom: 'clamp(1.5rem, 4vw, 3rem)' }}>
           <p style={{ fontFamily: 'var(--font-barlow)', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--orange)', marginBottom: '0.5rem' }}>
             Kuvagalleria
           </p>

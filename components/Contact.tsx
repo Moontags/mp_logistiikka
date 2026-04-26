@@ -2,15 +2,16 @@ export default function Contact() {
   return (
     <section
       id="yhteystiedot"
+      className="page-section"
       style={{
         background: 'transparent',
-        padding: '5rem 1.5rem',
+        padding: '0 1.5rem',
         borderTop: '1px solid var(--border)',
       }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         {/* Header */}
-        <div style={{ marginBottom: '3rem' }}>
+        <div style={{ marginBottom: 'clamp(1.5rem, 4vw, 3rem)' }}>
           <p
             style={{
               fontFamily: 'var(--font-barlow)',
