@@ -20,9 +20,11 @@
   padding: 0;
 }
 
+
 html, body {
   height: 100%;
   overflow: hidden;
+  overscroll-behavior: none;
 }
 
 body {
@@ -71,6 +73,36 @@ h1, h2, h3, h4 {
   .nav-hamburger     { display: none; }
 }
 
+/* ── HERO ── */
+.hero-section {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+}
+@media (max-width: 767px) {
+  .hero-section {
+    height: auto;
+    min-height: calc(100svh - 64px);
+  }
+}
+
+/* ── HERO CONTENT ── */
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.75rem 1.5rem 3rem;
+  width: 100%;
+}
+@media (max-width: 767px) {
+  .hero-content {
+    padding: 2rem 1.5rem 2rem;
+  }
+}
+
 /* ── PAGE LAYOUT ── */
 .page-body {
   display: flex;
@@ -92,10 +124,8 @@ h1, h2, h3, h4 {
 
 .page-main {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   min-height: 0;
-  scroll-behavior: smooth;
 }
 
 /* ── MOBILE: allow normal body scroll ── */
@@ -104,6 +134,10 @@ h1, h2, h3, h4 {
     height: auto;
     overflow-x: hidden;
     overflow-y: auto;
+    overscroll-behavior: none;
+  }
+  body {
+    background-attachment: scroll;
   }
   .page-body {
     height: auto;

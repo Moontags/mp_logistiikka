@@ -5,7 +5,7 @@ export default function Features() {
     { icon: '🔗', title: 'Ammattimainen sidonta', desc: 'Ratseilla ja pehmusteilla – ei naarmuja, ei liikkumista.' },
     { icon: '🛡️', title: 'Vakuutettu kuljetus', desc: 'Jokainen kuljetus vakuutettu koko matkan ajaksi.' },
     { icon: '🗺️', title: 'Koko Suomi', desc: 'Toimipiste Riihimäellä, kuljetuksia kaikkialle Suomeen.' },
-    { icon: '⚡', title: 'Nopea aikataulu', desc: 'Kuljetus usein jo seuraavana päivänä.' },
+    { icon: '⚡', title: 'Nopea aikataulu', desc: 'Kuljetus usein jo samana tai seuraavana päivänä.' },
     { icon: '📦', title: 'Ford Transit -kalusto', desc: 'Mahtuu isommatkin pyörät ja skootterit vaivatta.' },
   ];
 
@@ -50,7 +50,7 @@ export default function Features() {
             fontSize: '0.9rem',
             margin: 0,
           }}>
-            Erikoistuneet moottoripyöräkuljetuksiin. Ei tarpeetonta riskiä, ei odottelua.
+            Sujuva palvelu ammattitaidolla.
           </p>
         </div>
 
@@ -144,24 +144,7 @@ export default function Features() {
                   position: 'relative',
                 }}
               >
-                {b.highlight && (
-                  <span style={{
-                    position: 'absolute',
-                    top: '-9px',
-                    left: '0.875rem',
-                    background: 'var(--orange)',
-                    color: '#fff',
-                    padding: '0.1rem 0.5rem',
-                    borderRadius: '10px',
-                    fontFamily: 'var(--font-barlow)',
-                    fontWeight: 600,
-                    fontSize: '0.65rem',
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
-                  }}>
-                    Yleisin
-                  </span>
-                )}
+                {/* Oranssi viiva poistettu */}
                 <p style={{
                   fontFamily: 'var(--font-barlow-condensed)',
                   fontWeight: 700,

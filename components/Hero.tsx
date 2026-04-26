@@ -2,16 +2,7 @@
 
 export default function Hero() {
   return (
-    <section
-      id="top"
-      style={{
-        position: 'relative',
-        minHeight: 'calc(100dvh - 64px - 48px)',
-        display: 'flex',
-        alignItems: 'center',
-        overflow: 'hidden',
-      }}
-    >
+    <section id="top" className="hero-section">
       {/* Directional gradient overlay for text readability */}
       <div
         style={{
@@ -24,16 +15,7 @@ export default function Hero() {
       />
 
       {/* Content */}
-      <div
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '7rem 1.5rem 4rem',
-          width: '100%',
-        }}
-      >
+      <div className="hero-content">
         <div style={{ maxWidth: '680px' }}>
           {/* Badge */}
           <div
@@ -63,12 +45,13 @@ export default function Hero() {
             style={{
               fontFamily: 'var(--font-barlow-condensed)',
               fontWeight: 800,
-              fontSize: 'clamp(2.8rem, 8vw, 7rem)',
+              fontSize: 'clamp(1.8rem, 9vw, 7rem)',
               lineHeight: 1.0,
               letterSpacing: '-0.01em',
               color: 'var(--text)',
               margin: '0 0 1.5rem',
               textTransform: 'uppercase',
+              overflowWrap: 'break-word',
             }}
           >
             Turvalliset<br />
@@ -87,7 +70,7 @@ export default function Hero() {
               maxWidth: '520px',
             }}
           >
-            Luotettava ja vakuutettu moottoripyöräkuljetus ympäri Suomea 20 v kokemuksella.
+            Luotettava ja vakuutettu moottoripyöräkuljetus ympäri Suomea. Kuljetuspalvelua 20 v kokemuksella.
             Sidonta ammattilaisen käsissä, ei naarmuja, ei harmeja..
           </p>
 
@@ -201,32 +184,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '2rem',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '0.4rem',
-          opacity: 0.4,
-          zIndex: 1,
-        }}
-      >
-        {/* <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-barlow)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-          Vieritä
-        </span> */}
-        <div
-          style={{
-            width: '1px',
-            height: '40px',
-            background: 'linear-gradient(to bottom, var(--text), transparent)',
-          }}
-        />
-      </div>
     </section>
   );
 }

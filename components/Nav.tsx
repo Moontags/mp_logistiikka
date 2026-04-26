@@ -35,8 +35,8 @@ export default function Nav() {
         zIndex: 50,
         background: scrolled ? 'rgba(17,17,17,0.95)' : 'rgba(17,17,17,0.7)',
         backdropFilter: 'blur(12px)',
-        borderBottom: scrolled ? '1px solid rgba(255,255,255,0.08)' : 'none',
-        transition: 'background 0.3s, border-bottom 0.3s',
+        borderBottom: `1px solid ${scrolled ? 'rgba(255,255,255,0.08)' : 'transparent'}`,
+        transition: 'background 0.3s, border-color 0.3s',
       }}
     >
       <div

@@ -170,7 +170,7 @@ export default function Calculator() {
   return (
     <section
       id="hinnasto"
-      style={{ background: 'transparent', padding: '5rem 1.5rem', borderTop: '1px solid var(--border)' }}
+      style={{ background: 'transparent', padding: '2.5rem 1.5rem', borderTop: '1px solid var(--border)' }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ marginBottom: '3rem' }}>
