@@ -38,7 +38,7 @@ export default function Gallery() {
     <section
       id="kuvat"
       className="page-section"
-      style={{ background: 'transparent', padding: '0 1.5rem', borderTop: '1px solid var(--border)' }}
+      style={{ background: 'transparent', paddingLeft: '1.5rem', paddingRight: '1.5rem', borderTop: '1px solid var(--border)' }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ marginBottom: 'clamp(1.5rem, 4vw, 3rem)' }}>

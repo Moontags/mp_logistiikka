@@ -130,25 +130,32 @@ h1, h2, h3, h4 {
 
 /* ── MOBILE: allow normal body scroll ── */
 @media (max-width: 767px) {
-  html, body {
+  html {
     height: auto;
-    overflow-x: hidden;
+    overflow-x: clip;
     overflow-y: auto;
-    overscroll-behavior: none;
   }
   body {
+    height: auto;
+    overflow-x: clip;
+    overflow-y: auto;
+    overscroll-behavior-x: none;
+    position: relative;
     background-attachment: scroll;
   }
   .page-body {
     height: auto;
+    min-height: 100dvh;
     overflow: visible;
   }
   .page-wrapper {
     overflow: visible;
+    flex: 1;
   }
   .page-main {
     overflow: visible;
     min-height: auto;
+    flex: 1;
   }
 }
 
@@ -210,13 +217,26 @@ h1, h2, h3, h4 {
 .footer-links a:hover { color: var(--text); }
 
 @media (max-width: 600px) {
+  .site-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border);
+  }
   .footer-inner {
     flex-direction: column;
-    gap: 0.4rem;
+    align-items: center;
+    gap: 0.6rem;
     text-align: center;
   }
-  .site-footer {
-    padding: 0.75rem 1rem;
+  .footer-copy {
+    display: none;
+  }
+  .footer-links {
+    gap: 1.5rem;
+    justify-content: center;
+  }
+  .footer-links a {
+    font-size: 0.9rem;
+    padding: 0.3rem 0;
   }
 }
 
@@ -239,6 +259,7 @@ h1, h2, h3, h4 {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  min-width: 0;
 }
 
 .calc-result {
@@ -247,11 +268,14 @@ h1, h2, h3, h4 {
   border-radius: 8px;
   padding: 2rem;
   min-height: 280px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 /* ── Autocomplete container ── */
 .ac-container {
   width: 100%;
+  max-width: 100%;
 }
 
 /* PlaceAutocompleteElement – dark theme override */
@@ -449,6 +473,8 @@ h1, h2, h3, h4 {
   font-size: 0.85rem;
   color: var(--muted);
   font-family: var(--font-barlow), sans-serif;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 /* ── Total price ── */
@@ -532,6 +558,71 @@ h1, h2, h3, h4 {
   }
   .breakdown-row {
     font-size: 0.82rem;
+  }
+}
+
+/* ── Contact grid ── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.contact-card {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2rem;
+}
+.contact-card-highlight {
+  background: transparent;
+  border: 1px solid rgba(232,93,26,0.25);
+  border-radius: 8px;
+  padding: 2rem;
+}
+.contact-card-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.contact-card-label {
+  font-family: var(--font-barlow-condensed), sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+}
+.contact-card-value {
+  font-family: var(--font-barlow-condensed), sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--text);
+  margin: 0 0 0.25rem;
+}
+.contact-card-sub {
+  font-family: var(--font-barlow), sans-serif;
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .contact-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .contact-card,
+  .contact-card-highlight {
+    padding: 1.25rem 1rem;
+  }
+  .contact-card-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.6rem;
+  }
+  .contact-card-value {
+    font-size: 1.1rem;
+  }
+  .contact-card-sub {
+    font-size: 0.8rem;
   }
 }
 
