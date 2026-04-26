@@ -1,115 +1,85 @@
-import { NextRequest, NextResponse } from 'next/server'
-import nodemailer from 'nodemailer'
+import { NextRequest, NextResponse } from 'next/server';
+import { sendOrderEmail, OrderEmailData } from '@/lib/email';
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'posti.zoner.fi',
-  port: Number(process.env.SMTP_PORT) || 465,
-  secure: process.env.SMTP_SECURE === 'true',
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-  tls: { rejectUnauthorized: false },
-})
+interface OrderFormRequest {
+  name: string;
+  email: string;
+  phone: string;
+  origin: string;
+  destination: string;
+  date: string;
+  bikeType: string;
+  notes?: string;
+  estimatedPrice?: number | string;
+}
 
-const bikeLabels: Record<string, string> = {
-  scooter: 'Skootteri',
-  standard: 'Vakio',
-  large: 'Iso / Strike',
+function validateOrderForm(data: unknown): data is OrderFormRequest {
+  if (!data || typeof data !== 'object') return false;
+  const d = data as Record<string, unknown>;
+  return (
+    typeof d.name === 'string' && d.name.trim().length > 0 &&
+    typeof d.email === 'string' && d.email.trim().length > 0 &&
+    typeof d.phone === 'string' && d.phone.trim().length > 0 &&
+    typeof d.origin === 'string' && d.origin.trim().length > 0 &&
+    typeof d.destination === 'string' && d.destination.trim().length > 0 &&
+    typeof d.date === 'string' && d.date.trim().length > 0
+  );
+}
+
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { name, email, phone, origin, destination, date, bikeType, notes, estimatedPrice } = body
+    const body = await request.json();
 
-    if (!name || !email || !phone || !origin || !destination || !date) {
-      return NextResponse.json({ error: 'Pakollisia kenttiä puuttuu' }, { status: 400 })
+    if (!validateOrderForm(body)) {
+      return NextResponse.json(
+        { error: 'Pakollisia kenttiä puuttuu' },
+        { status: 400 }
+      );
     }
 
-    const fromAddress = process.env.SMTP_USER!
-    const toAddress = process.env.CONTACT_EMAIL!
+    if (!isValidEmail(body.email)) {
+      return NextResponse.json(
+        { error: 'Tarkista sähköpostiosoite' },
+        { status: 400 }
+      );
+    }
 
-    await transporter.sendMail({
-      from: `"MP-Logistiikka tilaukset" <${fromAddress}>`,
-      to: toAddress,
-      replyTo: email,
-      subject: `🏍️ Uusi tilaus: ${origin} → ${destination} (${date})`,
-      html: `
-        <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-          <h2 style="color:#E85D1A">Uusi kuljetustilaus – MP-Logistiikka</h2>
-          <table style="border-collapse:collapse;width:100%;margin-top:1rem">
-            <tr style="background:#f9f9f9">
-              <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600;width:40%">Asiakas</td>
-              <td style="padding:10px 12px;border:1px solid #ddd">${name}</td>
-            </tr>
-            <tr>
-              <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600">Sähköposti</td>
-              <td style="padding:10px 12px;border:1px solid #ddd"><a href="mailto:${email}">${email}</a></td>
-            </tr>
-            <tr style="background:#f9f9f9">
-              <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600">Puhelin</td>
-              <td style="padding:10px 12px;border:1px solid #ddd"><a href="tel:${phone}">${phone}</a></td>
-            </tr>
-            <tr>
-              <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600">Reitti</td>
-              <td style="padding:10px 12px;border:1px solid #ddd">${origin} → ${destination}</td>
-            </tr>
-            <tr style="background:#f9f9f9">
-              <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600">Kuljetuspäivä</td>
-              <td style="padding:10px 12px;border:1px solid #ddd">${date}</td>
-            </tr>
-            <tr>
-              <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600">Pyörätyyppi</td>
-              <td style="padding:10px 12px;border:1px solid #ddd">${bikeLabels[bikeType] ?? bikeType}</td>
-            </tr>
-            <tr style="background:#f9f9f9">
-              <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600">Arvioitu hinta</td>
-              <td style="padding:10px 12px;border:1px solid #ddd;color:#E85D1A;font-size:1.2em"><strong>${estimatedPrice} €</strong></td>
-            </tr>
-            <tr>
-              <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600">Lisätiedot</td>
-              <td style="padding:10px 12px;border:1px solid #ddd">${notes || '–'}</td>
-            </tr>
-          </table>
-          <p style="margin-top:1.5rem;padding:12px;background:#fff8f0;border-left:3px solid #E85D1A;font-size:0.9em">
-            Vastaa tähän sähköpostiin suoraan – reply-to on asetettu asiakkaan osoitteeseen.
-          </p>
-          <p style="color:#999;font-size:0.8em;margin-top:1rem">Tilaus saapui mp-logistiikka.fi-sivustolta</p>
-        </div>
-      `,
-    })
+    const emailData: OrderEmailData = {
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+      origin: body.origin,
+      destination: body.destination,
+      date: body.date,
+      bikeType: body.bikeType,
+      notes: body.notes,
+      estimatedPrice: body.estimatedPrice,
+    };
 
-    await transporter.sendMail({
-      from: `"MP-Logistiikka" <${fromAddress}>`,
-      to: email,
-      subject: 'Tilausvahvistus – MP-Logistiikka 🏍️',
-      html: `
-        <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-          <h2 style="color:#E85D1A">Kiitos tilauksestasi!</h2>
-          <p>Hei ${name},</p>
-          <p>Olemme vastaanottaneet kuljetustilauksesi. Otamme sinuun yhteyttä pian vahvistaaksemme kuljetuksen.</p>
-          <div style="background:#f9f9f9;border-radius:6px;padding:1.25rem;margin:1.5rem 0">
-            <p style="margin:0 0 0.5rem"><strong>Reitti:</strong> ${origin} → ${destination}</p>
-            <p style="margin:0 0 0.5rem"><strong>Toivottu päivä:</strong> ${date}</p>
-            <p style="margin:0 0 0.5rem"><strong>Pyörätyyppi:</strong> ${bikeLabels[bikeType] ?? bikeType}</p>
-            <p style="margin:0;color:#E85D1A;font-size:1.1em"><strong>Arvioitu hinta: ${estimatedPrice} €</strong></p>
-          </div>
-          <p>Jos sinulla on kysyttävää, vastaa tähän sähköpostiin tai soita suoraan.</p>
-          <p style="margin-top:2rem">Terveisin,<br><strong>MP-Logistiikka</strong></p>
-          <hr style="border:none;border-top:1px solid #eee;margin:2rem 0">
-          <p style="color:#999;font-size:0.8em">MP-Logistiikka · Riihimäki · mp-logistiikka.fi</p>
-        </div>
-      `,
-    })
+    await sendOrderEmail(emailData);
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true });
 
   } catch (error) {
-    console.error('SMTP error:', error)
+    console.error('API Error:', error);
+
+    if (error instanceof SyntaxError) {
+      return NextResponse.json(
+        { error: 'Virheellinen pyyntö' },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
-      { error: 'Sähköpostin lähetys epäonnistui. Yritä uudelleen tai soita suoraan.' },
+      {
+        error: 'Sähköpostin lähetys epäonnistui. Yritä uudelleen tai soita suoraan.',
+        details: process.env.NODE_ENV === 'development' ? String(error) : undefined,
+      },
       { status: 500 }
-    )
+    );
   }
 }
