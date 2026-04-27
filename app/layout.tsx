@@ -50,6 +50,9 @@ export default function RootLayout({
       lang="fi"
       className={`${barlowCondensed.variable} ${barlow.variable}`}
     >
+      <head>
+        <link rel="preload" href="/images/bike.jpg" as="image" type="image/jpeg" />
+      </head>
       <body className="page-body">
         <Nav />
         <div className="page-wrapper">

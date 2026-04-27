@@ -73,7 +73,6 @@ export default function Gallery() {
                   src={item.src}
                   alt={item.alt}
                   fill
-                  priority
                   sizes="(max-width: 768px) 100vw, 33vw"
                   style={{ objectFit: 'cover' }}
                 />
