@@ -114,7 +114,8 @@ export async function sendOrderEmail(data: OrderEmailData) {
           <p style="margin:0 0 0.5rem"><strong>Pyörätyyppi:</strong> ${bikeLabel}</p>
           ${estimatedPrice ? `<p style="margin:0;color:#E85D1A;font-size:1.1em"><strong>Arvioitu hinta: ${estimatedPrice} €</strong></p>` : ''}
         </div>
-        <p>Jos sinulla on kysyttävää, vastaa tähän sähköpostiin tai soita suoraan.</p>
+        <p>Jos sinulla on kysyttävää, vastaa tähän sähköpostiin tai ota yhteyttä:</p>
+        <p>Voit myös soittaa suoraan: <a href="tel:+358503547763">+358 50 354 7763</a></p>
         <p style="margin-top:2rem">Terveisin,<br><strong>MP-Logistiikka</strong></p>
         <hr style="border:none;border-top:1px solid #eee;margin:2rem 0">
         <p style="color:#999;font-size:0.8em">MP-Logistiikka · Riihimäki · mp-logistiikka.fi</p>

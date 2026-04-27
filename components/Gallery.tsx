@@ -5,12 +5,10 @@ import { useState, useEffect } from 'react';
 
 const galleryItems = [
   { src: '/images/paku1.png', alt: 'Kuljetusauto edestä' },
-  { src: '/images/paku2.png', alt: 'Kuljetusauto takaa' },
   { src: '/images/paku5.png', alt: 'Kuljetusauto sivulta' },
-  { src: '/images/mp1.jpeg', alt: 'Moottoripyörä lastattuna kyytiin' },
   { src: '/images/ford.png', alt: 'Ford Transit kuljetusauto' },
   { src: '/images/ramppi.jpeg', alt: 'Ajorampit lastauksen aikana' },
-  { src: '/images/sidonta.jpg', alt: 'Sidontaliinat kiinnitettynä' },
+  { src: '/images/bike3.jpeg', alt: 'BMW S1000R lastattuna kyytiin' },
   { src: '/images/tavaratila.jpeg', alt: 'Tavaratila' },
   { src: '/images/teline.jpeg', alt: 'Kuljetusteline' },
   { src: '/images/teline2.jpeg', alt: 'Kuljetusteline 2' },

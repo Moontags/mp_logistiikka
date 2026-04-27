@@ -43,6 +43,8 @@ export default function Calculator() {
         // New API (required for API keys created after March 2025)
         const originEl = new Places.PlaceAutocompleteElement(opts);
         const destEl = new Places.PlaceAutocompleteElement(opts);
+        originEl.style.fontSize = '16px';
+        destEl.style.fontSize = '16px';
 
         if (originContainerRef.current) {
           originContainerRef.current.innerHTML = '';
@@ -92,6 +94,9 @@ export default function Calculator() {
           input.type = 'text';
           input.placeholder = placeholder;
           input.autocomplete = 'off';
+          input.setAttribute('autocorrect', 'off');
+          input.setAttribute('autocapitalize', 'off');
+          input.style.fontSize = '16px';
           input.className = 'ac-fallback-input';
           if (container.current) {
             container.current.innerHTML = '';
@@ -170,7 +175,7 @@ export default function Calculator() {
   return (
     <section
       id="hinnasto"
-      style={{ background: 'transparent', padding: '2.5rem 1.5rem', borderTop: '1px solid var(--border)' }}
+      style={{ background: 'transparent', paddingBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem', borderTop: '1px solid var(--border)' }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ marginBottom: 'clamp(1.5rem, 4vw, 3rem)' }}>
@@ -190,11 +195,11 @@ export default function Calculator() {
           <div className="calc-form">
             <div className="form-group">
               <label>Lähtöpaikka</label>
-              <div ref={originContainerRef} className="ac-container" />
+              <div ref={originContainerRef} className="ac-container" style={{ fontSize: '16px' }} />
             </div>
             <div className="form-group">
               <label>Määränpää</label>
-              <div ref={destContainerRef} className="ac-container" />
+              <div ref={destContainerRef} className="ac-container" style={{ fontSize: '16px' }} />
             </div>
 
             <div className="form-group">

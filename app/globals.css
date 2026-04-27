@@ -28,7 +28,7 @@ html, body {
 }
 
 body {
-  background-image: url('/images/mp1.jpeg');
+  background-image: url('/images/bike.jpg');
   background-size: cover;
   background-position: center center;
   background-attachment: fixed;
@@ -240,6 +240,11 @@ h1, h2, h3, h4 {
   }
 }
 
+/* ── Calculator section ── */
+#hinnasto {
+  padding-top: 2.5rem;
+}
+
 /* ── Calculator layout ── */
 .calc-grid {
   display: grid;
@@ -351,6 +356,10 @@ h1, h2, h3, h4 {
   border-radius: 0 0 6px 6px !important;
   font-family: var(--font-barlow), sans-serif !important;
   z-index: 9999 !important;
+  position: absolute !important;
+  max-height: 250px !important;
+  overflow-y: auto !important;
+  width: 100% !important;
 }
 .pac-item {
   padding: 0.5rem 1rem !important;
@@ -545,6 +554,18 @@ h1, h2, h3, h4 {
 }
 
 /* ── Calculator mobile overrides ── */
+@media (max-width: 768px) {
+  #hinnasto {
+    padding-top: 6rem;
+  }
+  .calc-result {
+    min-height: 0;
+  }
+  .ac-container gmp-placeautocomplete,
+  .ac-fallback-input {
+    font-size: 16px;
+  }
+}
 @media (max-width: 600px) {
   .calc-form,
   .calc-result {
