@@ -6,7 +6,7 @@ export default function Footer() {
           MP<span className="dot">·</span>Logistiikka
         </span>
         <span className="footer-copy">
-          © {new Date().getFullYear()} MP-Logistiikka · Suomi · All rights reserved
+          © {new Date().getFullYear()} MP-Logistiikka · Y-tunnus: 3163260-9 · Suomi · All rights reserved
         </span>
         <div className="footer-links">
           <a href="tel:+358503547763">050 354 7763</a>

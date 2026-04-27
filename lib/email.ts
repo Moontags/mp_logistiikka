@@ -93,7 +93,7 @@ export async function sendOrderEmail(data: OrderEmailData) {
         <p style="margin-top:1.5rem;padding:12px;background:#fff8f0;border-left:3px solid #E85D1A;font-size:0.9em">
           Vastaa tähän sähköpostiin suoraan – reply-to on asetettu asiakkaan osoitteeseen.
         </p>
-        <p style="color:#999;font-size:0.8em;margin-top:1rem">Tilaus saapui mp-logistiikka.fi-sivustolta ${timestamp}</p>
+        <p style="color:#999;font-size:0.8em;margin-top:1rem">Tilaus saapui mp-logistiikka.fi-sivustolta ${timestamp}<br>MP-Logistiikka · Y-tunnus: 3163260-9</p>
       </div>
     `,
   });
@@ -118,7 +118,7 @@ export async function sendOrderEmail(data: OrderEmailData) {
         <p>Voit myös soittaa suoraan: <a href="tel:+358503547763">+358 50 354 7763</a></p>
         <p style="margin-top:2rem">Terveisin,<br><strong>MP-Logistiikka</strong></p>
         <hr style="border:none;border-top:1px solid #eee;margin:2rem 0">
-        <p style="color:#999;font-size:0.8em">MP-Logistiikka · Riihimäki · mp-logistiikka.fi</p>
+        <p style="color:#999;font-size:0.8em">MP-Logistiikka · Riihimäki · mp-logistiikka.fi · Y-tunnus: 3163260-9</p>
       </div>
     `,
   });
