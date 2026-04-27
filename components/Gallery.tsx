@@ -8,10 +8,11 @@ const galleryItems = [
   { src: '/images/paku5.png', alt: 'Kuljetusauto sivulta' },
   { src: '/images/ford.png', alt: 'Ford Transit kuljetusauto' },
   { src: '/images/ramppi.jpeg', alt: 'Ajorampit lastauksen aikana' },
-  { src: '/images/bike3.jpeg', alt: 'BMW S1000R lastattuna kyytiin' },
-  { src: '/images/tavaratila.jpeg', alt: 'Tavaratila' },
   { src: '/images/teline.jpeg', alt: 'Kuljetusteline' },
   { src: '/images/teline2.jpeg', alt: 'Kuljetusteline 2' },
+  { src: '/images/mp1.jpeg', alt: 'Moottoripyörä lastattuna' },
+  { src: '/images/sidonta.jpg', alt: 'Sidontavyöt kuljetuksessa' },
+  { src: '/images/bike3.jpeg', alt: 'BMW S1000R lastattuna kyytiin' },
 ];
 
 const total = galleryItems.length;
@@ -106,6 +107,17 @@ export default function Gallery() {
 
             <button onClick={next} aria-label="Seuraava" style={btnStyle}>→</button>
           </div>
+
+          <p style={{
+            fontFamily: 'var(--font-barlow)',
+            color: 'var(--muted)',
+            fontSize: '0.82rem',
+            lineHeight: 1.6,
+            textAlign: 'center',
+            marginTop: '1.25rem',
+          }}>
+            Turvallinen kuljetus varmistetaan rampeilla, etupyörätuilla ja kestävillä sidontaliinoilla. Kuljetustilaa kahdelle pienemmälle moottoripyörälle.
+          </p>
         </div>
       </div>
     </section>
