@@ -20,16 +20,16 @@ const barlow = Barlow({
 });
 
 export const metadata: Metadata = {
-  title: 'MP-Logistiikka – Turvalliset moottoripyöräsiirrot',
+  title: 'Moottoripyöräkuljetukset ja -siirrot koko Suomeen | MP-Logistiikka',
   description:
-    'Hellävarainen ja vakuutettu moottoripyöräkuljetus ympäri Suomea. Toimipiste Riihimäellä. Maksu laskulla. Kysy tarjous tai varaa suoraan.',
+    'Turvallinen ja vakuutettu moottoripyörän kuljetus ovelta ovelle. Pyydä tarjous tai laske hinta siirrolle heti. Palvelemme alueilla Helsinki, Tampere, Hämeenlinna, Lahti ja koko Suomessa.',
   keywords:
-    'moottoripyöräkuljetus, moottoripyörä siirto, mp kuljetus, Riihimäki, Helsinki, Tampere, Turku, Mikkeli',
+    'moottoripyöräkuljetus, moottoripyörän siirto hinta, mp kuljetus, mp noutopalvelu, ajoneuvokuljetus, Riihimäki, Helsinki, Tampere, Lahti, Mikkeli, moottoripyörän hinauskuljetus',
   authors: [{ name: 'MP-Logistiikka' }],
   metadataBase: new URL('https://mp-logistiikka.fi'),
   openGraph: {
-    title: 'MP-Logistiikka – Turvalliset moottoripyöräsiirrot',
-    description: 'Hellävarainen moottoripyöräkuljetus ympäri Suomea.',
+    title: 'MP-Logistiikka – Turvalliset moottoripyöräsiirrot ympäri Suomen',
+    description: 'Vakuutettu ja luotettava moottoripyöräkuljetus. Katso hinta ja tilaa siirto!',
     url: 'https://mp-logistiikka.fi',
     siteName: 'MP-Logistiikka',
     images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
