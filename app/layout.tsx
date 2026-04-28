@@ -22,9 +22,9 @@ const barlow = Barlow({
 export const metadata: Metadata = {
   title: 'Moottoripyöräkuljetukset ja -siirrot koko Suomeen | MP-Logistiikka',
   description:
-    'Turvallinen ja vakuutettu moottoripyörän kuljetus ovelta ovelle. Pyydä tarjous tai laske hinta siirrolle heti. Palvelemme alueilla Helsinki, Tampere, Hämeenlinna, Lahti ja koko Suomessa.',
+    'Turvallinen ja vakuutettu moottoripyörän kuljetus ovelta ovelle. Pyydä tarjous tai laske hinta siirrolle heti. Palvelemme alueilla Helsinki, Vantaa, Espoo, Tampere, Hämeenlinna, Lahti ja koko Suomessa.',
   keywords:
-    'moottoripyöräkuljetus, moottoripyörän siirto hinta, mp kuljetus, mp noutopalvelu, ajoneuvokuljetus, Riihimäki, Helsinki, Tampere, Lahti, Mikkeli, moottoripyörän hinauskuljetus',
+    'moottoripyöräkuljetus, moottoripyörän siirto hinta, mp kuljetus, mp noutopalvelu, ajoneuvokuljetus, Riihimäki, Helsinki, Vantaa, Espoo, Tampere, Hämeenlinna, Lahti, Mikkeli, moottoripyörän hinauskuljetus',
   authors: [{ name: 'MP-Logistiikka' }],
   metadataBase: new URL('https://mp-logistiikka.fi'),
   openGraph: {
