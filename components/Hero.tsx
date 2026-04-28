@@ -137,7 +137,7 @@ export default function Hero() {
           >
             {[
                '✓ Helppo varaus',
-              '✓ Nopea maksu',
+              '✓ Nopea toimitus',
               '✓ Varma sidonta',
               '✓ Vakuutettu kuljetus',
             ].map((badge) => (
