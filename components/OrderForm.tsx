@@ -354,7 +354,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                 {[
                   { n: '1', title: 'Täytä lomake', desc: 'Syötä yhteystietosi ja reitin tiedot.' },
                   { n: '2', title: 'Vahvistus', desc: 'Soitamme tai vahvistamme sähköpostitse.' },
-                  { n: '3', title: 'Kuljetus', desc: 'Noudamme pyörän ja toimitetaan turvallisesti.' },
+                  { n: '3', title: 'Kuljetus', desc: 'Noudamme pyörän ja toimitamme sen turvallisesti.' },
                   { n: '4', title: 'Maksu', desc: 'Laskulla kuljetuksen jälkeen.' },
                 ].map((step) => (
                   <div
@@ -405,7 +405,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                   <label style={labelStyle}>Lisätiedot</label>
                   <textarea
                     {...register('notes')}
-                    placeholder="Pyörän merkki/malli, erikoishuomiot..."
+                    placeholder="Pyörän merkki/malli, erityisohjeet ja kellonaikatoiveet"
                     rows={3}
                     style={{ ...inputStyle(false), resize: 'vertical', minHeight: '68px' }}
                   />
