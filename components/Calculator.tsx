@@ -248,7 +248,7 @@ export default function Calculator() {
 
             <div className="breakdown">
               <div className="breakdown-row">
-                <span>Perusmaksu (sis. 40 km)</span>
+                <span>Perusmaksu 119 € (sis. 40 km)</span>
                 <span>{result ? '119,00 €' : '0,00 €'}</span>
               </div>
               <div className="breakdown-row">
