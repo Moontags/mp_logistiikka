@@ -103,30 +103,56 @@ export default function Nav() {
         </ul>
 
         {/* CTA desktop */}
-        <Link
-          href="/tilauslomake"
-          className="nav-cta-desktop"
-          style={{
-            background: 'var(--orange)',
-            color: '#fff',
-            padding: '0.5rem 1.25rem',
-            borderRadius: '4px',
-            fontFamily: 'var(--font-barlow-condensed)',
-            fontWeight: 700,
-            fontSize: '1rem',
-            letterSpacing: '0.05em',
-            textDecoration: 'none',
-            transition: 'background 0.2s',
-          }}
-          onMouseOver={(e) =>
-            ((e.currentTarget as HTMLAnchorElement).style.background = 'var(--orange-light)')
-          }
-          onMouseOut={(e) =>
-            ((e.currentTarget as HTMLAnchorElement).style.background = 'var(--orange)')
-          }
-        >
-          Tilaa kuljetus
-        </Link>
+        <div className="nav-cta-desktop">
+          <Link
+            href="/tilauslomake"
+            style={{
+              background: 'var(--orange)',
+              color: '#fff',
+              padding: '0.5rem 1.25rem',
+              borderRadius: '4px',
+              fontFamily: 'var(--font-barlow-condensed)',
+              fontWeight: 700,
+              fontSize: '1rem',
+              letterSpacing: '0.05em',
+              textDecoration: 'none',
+              transition: 'background 0.2s',
+            }}
+            onMouseOver={(e) =>
+              ((e.currentTarget as HTMLAnchorElement).style.background = 'var(--orange-light)')
+            }
+            onMouseOut={(e) =>
+              ((e.currentTarget as HTMLAnchorElement).style.background = 'var(--orange)')
+            }
+          >
+            Tilaa kuljetus
+          </Link>
+          <a
+            href="https://kuntoraportti.mp-logistiikka.fi"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              background: 'var(--orange)',
+              color: '#fff',
+              padding: '0.5rem 1.25rem',
+              borderRadius: '4px',
+              fontFamily: 'var(--font-barlow-condensed)',
+              fontWeight: 700,
+              fontSize: '1rem',
+              letterSpacing: '0.05em',
+              textDecoration: 'none',
+              transition: 'background 0.2s',
+            }}
+            onMouseOver={(e) =>
+              ((e.currentTarget as HTMLAnchorElement).style.background = 'var(--orange-light)')
+            }
+            onMouseOut={(e) =>
+              ((e.currentTarget as HTMLAnchorElement).style.background = 'var(--orange)')
+            }
+          >
+            Kuntoraportti
+          </a>
+        </div>
 
         {/* Hamburger */}
         <button
@@ -197,6 +223,29 @@ export default function Nav() {
               >
                 Tilaa kuljetus
               </Link>
+            </li>
+            <li style={{ paddingTop: '0.75rem' }}>
+              <a
+                href="https://kuntoraportti.mp-logistiikka.fi"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block',
+                  textAlign: 'center',
+                  background: 'var(--orange)',
+                  color: '#fff',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '4px',
+                  fontFamily: 'var(--font-barlow-condensed)',
+                  fontWeight: 700,
+                  fontSize: '1.1rem',
+                  letterSpacing: '0.05em',
+                  textDecoration: 'none',
+                  minHeight: '44px',
+                }}
+              >
+                Kuntoraportti
+              </a>
             </li>
           </ul>
         </div>
