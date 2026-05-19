@@ -48,7 +48,8 @@ export async function sendOrderEmail(data: OrderEmailData) {
   const timestamp = new Date().toLocaleString('fi-FI', { timeZone: 'Europe/Helsinki' });
 
   // Internal notification to business
-  await transporter.sendMail({
+  try {
+    await transporter.sendMail({
     from: `"MP-Logistiikka tilaukset" <${fromAddress}>`,
     to: toAddress,
     replyTo: email,
@@ -96,10 +97,16 @@ export async function sendOrderEmail(data: OrderEmailData) {
         <p style="color:#999;font-size:0.8em;margin-top:1rem">Tilaus saapui mp-logistiikka.fi-sivustolta ${timestamp}<br>MP-Logistiikka · Y-tunnus: 3163260-9</p>
       </div>
     `,
-  });
+    });
+    console.log('[email] Internal notification sent to', toAddress);
+  } catch (error) {
+    console.error('[email] Internal notification FAILED to', toAddress, error);
+    throw error;
+  }
 
   // Confirmation email to customer
-  await transporter.sendMail({
+  try {
+    await transporter.sendMail({
     from: `"MP-Logistiikka" <${fromAddress}>`,
     to: email,
     subject: 'Tilausvahvistus – MP-Logistiikka 🏍️',
@@ -121,7 +128,12 @@ export async function sendOrderEmail(data: OrderEmailData) {
         <p style="color:#999;font-size:0.8em">MP-Logistiikka · Riihimäki · mp-logistiikka.fi · Y-tunnus: 3163260-9</p>
       </div>
     `,
-  });
+    });
+    console.log('[email] Customer confirmation sent to', email);
+  } catch (error) {
+    console.error('[email] Customer confirmation FAILED to', email, error);
+    throw error;
+  }
 
   console.log('Order emails sent successfully for:', name, email);
 }
