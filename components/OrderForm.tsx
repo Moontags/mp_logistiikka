@@ -132,7 +132,6 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
             </h3>
             <p style={{ fontFamily: 'var(--font-barlow)', color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
               Kiitos tilauksestasi! Vahvistamme kuljetuksen sähköpostiisi pian.
-              Löydät tilausvahvistuksen myös sähköpostistasi.
             </p>
           </div>
         </div>
