@@ -44,7 +44,7 @@ export async function sendOrderEmail(data: OrderEmailData) {
   const { name, email, phone, origin, destination, date, bikeType, notes, estimatedPrice } = data;
   const bikeLabel = bikeLabels[bikeType] ?? bikeType;
   const fromAddress = process.env.SMTP_USER!;
-  const toAddress = process.env.CONTACT_EMAIL!;
+  const toAddress = ["info@pakuvie.fi", "jena9988@gmail.com"];
   const timestamp = new Date().toLocaleString('fi-FI', { timeZone: 'Europe/Helsinki' });
 
   // Internal notification to business
@@ -52,7 +52,6 @@ export async function sendOrderEmail(data: OrderEmailData) {
     await transporter.sendMail({
     from: `"MP-Logistiikka tilaukset" <${fromAddress}>`,
     to: toAddress,
-    replyTo: email,
     subject: `🏍️ Uusi tilaus: ${origin} → ${destination} (${date})`,
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
