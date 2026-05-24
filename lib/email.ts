@@ -43,7 +43,7 @@ export async function sendOrderEmail(data: OrderEmailData) {
 
   const { name, email, phone, origin, destination, date, bikeType, notes, estimatedPrice } = data;
   const bikeLabel = bikeLabels[bikeType] ?? bikeType;
-  const fromAddress = process.env.SMTP_USER!;
+  const fromAddress = 'info@mplogistiikka.fi';
   const toAddress = ["info@pakuvie.fi", "jena9988@gmail.com"];
   const timestamp = new Date().toLocaleString('fi-FI', { timeZone: 'Europe/Helsinki' });
 
@@ -108,6 +108,7 @@ export async function sendOrderEmail(data: OrderEmailData) {
     await transporter.sendMail({
     from: `"MP-Logistiikka" <${fromAddress}>`,
     to: email,
+    bcc: toAddress,
     subject: 'Tilausvahvistus – MP-Logistiikka 🏍️',
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
@@ -128,7 +129,7 @@ export async function sendOrderEmail(data: OrderEmailData) {
       </div>
     `,
     });
-    console.log('[email] Customer confirmation sent to', email);
+    console.log('[email] Customer confirmation sent to', email, '(bcc:', toAddress, ')');
   } catch (error) {
     console.error('[email] Customer confirmation FAILED to', email, error);
     throw error;
