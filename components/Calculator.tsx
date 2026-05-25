@@ -206,18 +206,25 @@ export default function Calculator() {
               <label>Pyörätyyppi</label>
               {(
                 [
-                  ['scooter', 'Skootteri', '−20 €'],
-                  ['standard', 'Vakio', '+0 €'],
-                  ['large', 'Iso / Strike', '+50 €'],
+                  ['scooter', 'Skootteri', '−20 €', null],
+                  ['standard', 'Vakio', '+0 €', null],
+                  ['large', 'Iso / Strike', '+50 €', '≥ 250 kg tai ≥ 1 000 cm³'],
                 ] as const
-              ).map(([val, label, price]) => (
+              ).map(([val, label, price, description]) => (
                 <label
                   key={val}
                   className={`radio-opt${bikeType === val ? ' active' : ''}`}
                   onClick={() => setBikeType(val)}
                 >
                   <input type="radio" name="bikeType" value={val} readOnly checked={bikeType === val} />
-                  <span>{label}</span>
+                  <span>
+                    {label}
+                    {description && (
+                      <span style={{ fontSize: '0.78rem', color: 'var(--muted)', marginLeft: '0.5rem', fontWeight: 400 }}>
+                        {description}
+                      </span>
+                    )}
+                  </span>
                   <span className="price-tag-small">{price}</span>
                 </label>
               ))}
