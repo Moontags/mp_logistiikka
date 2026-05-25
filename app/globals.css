@@ -406,6 +406,17 @@ h1, h2, h3, h4 {
   background: var(--orange-dim);
   border-color: rgba(232,93,26,0.4);
 }
+.bike-type-description {
+  display: inline;
+  margin-left: 0.5rem;
+}
+@media (max-width: 768px) {
+  .bike-type-description {
+    display: block;
+    margin-left: 0;
+    margin-top: 0.2rem;
+  }
+}
 .price-tag-small {
   font-family: var(--font-barlow-condensed), sans-serif;
   font-weight: 700;

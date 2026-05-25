@@ -220,7 +220,7 @@ export default function Calculator() {
                   <span>
                     {label}
                     {description && (
-                      <span style={{ fontSize: '0.78rem', color: 'var(--muted)', marginLeft: '0.5rem', fontWeight: 400 }}>
+                      <span className="bike-type-description" style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 400 }}>
                         {description}
                       </span>
                     )}
