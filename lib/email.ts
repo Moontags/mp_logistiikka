@@ -43,7 +43,7 @@ export async function sendOrderEmail(data: OrderEmailData) {
 
   const { name, email, phone, origin, destination, date, bikeType, notes, estimatedPrice } = data;
   const bikeLabel = bikeLabels[bikeType] ?? bikeType;
-  const fromAddress = 'info@mplogistiikka.fi';
+  const fromAddress = 'info@mp-logistiikka.fi';
   const toAddress = ["info@pakuvie.fi", "jena9988@gmail.com"];
   const timestamp = new Date().toLocaleString('fi-FI', { timeZone: 'Europe/Helsinki' });
 

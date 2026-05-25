@@ -64,7 +64,7 @@ export default function Contact() {
             <div className="contact-card-icon">✉️</div>
             <p className="contact-card-label">Sähköposti</p>
             <a
-              href="mailto:info@mplogistiikka.fi"
+              href="mailto:info@mp-logistiikka.fi"
               style={{
                 fontFamily: 'var(--font-barlow)',
                 fontWeight: 600,
@@ -76,7 +76,7 @@ export default function Contact() {
                 marginBottom: '0.25rem',
               }}
             >
-              info@mplogistiikka.fi
+              info@mp-logistiikka.fi
             </a>
             <p className="contact-card-sub">Vastaamme saman päivän aikana</p>
           </div>

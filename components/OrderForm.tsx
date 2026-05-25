@@ -490,7 +490,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
               050 354 7763
             </a>
             <a
-              href="mailto:info@mplogistiikka.fi"
+              href="mailto:info@mp-logistiikka.fi"
               style={{
                 fontFamily: 'var(--font-barlow)',
                 fontWeight: 500,
@@ -499,7 +499,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                 textDecoration: 'none',
               }}
             >
-              info@mplogistiikka.fi
+              info@mp-logistiikka.fi
             </a>
             <p style={{ fontFamily: 'var(--font-barlow)', color: 'var(--muted)', margin: 0, fontSize: '0.8rem' }}>
               Ma–La klo 8–18

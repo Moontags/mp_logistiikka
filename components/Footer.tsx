@@ -10,7 +10,7 @@ export default function Footer() {
         </span>
         <div className="footer-links">
           <a href="tel:+358503547763">050 354 7763</a>
-          <a href="mailto:info@mplogistiikka.fi">info@mplogistiikka.fi</a>
+          <a href="mailto:info@mp-logistiikka.fi">info@mp-logistiikka.fi</a>
         </div>
       </div>
     </footer>
