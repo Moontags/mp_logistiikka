@@ -13,7 +13,7 @@ export interface OrderEmailData {
 }
 
 const bikeLabels: Record<string, string> = {
-  scooter: 'Skootteri',
+  scooter: 'Mopo/Skootteri',
   standard: 'Vakio',
   large: 'Iso / Strike',
 };

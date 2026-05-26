@@ -130,7 +130,7 @@ export default function Features() {
             gap: '0.75rem',
           }}>
             {[
-              { type: 'Skootteri', price: 'alkaen 60 €', desc: 'Mopot ja skootterit' },
+              { type: 'Mopo/Skootteri', price: 'alkaen 60 €', desc: 'Mopot ja skootterit' },
               { type: 'Vakio', price: 'alkaen 119 €', desc: 'Tavallinen moottoripyörä', highlight: true },
               { type: 'Iso / Strike', price: 'alkaen 130 €', desc: 'Isot chopper- ja matkapyörät' },
             ].map((b) => (

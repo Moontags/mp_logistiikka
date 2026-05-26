@@ -206,7 +206,7 @@ export default function Calculator() {
               <label>Pyörätyyppi</label>
               {(
                 [
-                  ['scooter', 'Skootteri', '−20 €', null],
+                  ['scooter', 'Mopo/Skootteri', '−20 €', null],
                   ['standard', 'Vakio', '+0 €', null],
                   ['large', 'Iso / Strike', '+50 €', '≥ 250 kg tai ≥ 1 000 cm³'],
                 ] as const
