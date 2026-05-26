@@ -91,7 +91,7 @@ export default function Contact() {
           <div className="contact-card-highlight">
             <div className="contact-card-icon">💳</div>
             <p className="contact-card-label">Maksu</p>
-            <p className="contact-card-value">Lasku</p>
+            <p className="contact-card-value">MobilePay tai Lasku</p>
             <p className="contact-card-sub">Maksu kuljetuksen jälkeen</p>
           </div>
         </div>
