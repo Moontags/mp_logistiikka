@@ -3,8 +3,32 @@
 import { useEffect, useRef, useState } from 'react';
 import { calculatePrice, BikeType } from '@/lib/pricing';
 
+type GooglePlace = {
+  fetchFields: (opts: { fields: string[] }) => Promise<void>;
+  formattedAddress?: string;
+  displayName?: string;
+};
+
+type PlacesNamespace = {
+  PlaceAutocompleteElement?: new (opts: {
+    componentRestrictions: { country: string };
+  }) => HTMLElement;
+  Autocomplete?: new (
+    input: HTMLInputElement,
+    opts: { componentRestrictions: { country: string }; fields?: string[] },
+  ) => {
+    addListener: (event: string, cb: () => void) => void;
+    getPlace: () => { name?: string; formatted_address?: string };
+  };
+};
+
 declare global {
-  interface Window { google: any; }
+  interface Window {
+    google?: { maps?: { places?: PlacesNamespace } };
+  }
+  interface HTMLElementEventMap {
+    'gmp-placeautocomplete-place-changed': Event & { place: GooglePlace };
+  }
 }
 
 export default function Calculator() {
@@ -19,17 +43,19 @@ export default function Calculator() {
   const [bikeType, setBikeType] = useState<BikeType>('standard');
   const [result, setResult] = useState<{
     km: number; duration: string; origin: string; destination: string;
-    price: ReturnType<typeof calculatePrice>;
   } | null>(null);
+  const price = result ? calculatePrice(result.km, bikeType) : null;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    function readValue(el: any): string {
+    function readValue(el: HTMLElement | null): string {
       try {
-        return el?.shadowRoot?.querySelector('input')?.value || el?.value || '';
+        return el?.shadowRoot?.querySelector('input')?.value
+          || (el as HTMLInputElement | null)?.value
+          || '';
       } catch {
-        return el?.value || '';
+        return (el as HTMLInputElement | null)?.value || '';
       }
     }
 
@@ -55,7 +81,7 @@ export default function Calculator() {
           destContainerRef.current.appendChild(destEl);
         }
 
-        originEl.addEventListener('gmp-placeautocomplete-place-changed', (e: any) => {
+        originEl.addEventListener('gmp-placeautocomplete-place-changed', (e) => {
           originValueRef.current = '';
           const p = (async () => {
             try {
@@ -68,7 +94,7 @@ export default function Calculator() {
           originFetchRef.current = p;
           p.then((v) => { originValueRef.current = v; });
         });
-        destEl.addEventListener('gmp-placeautocomplete-place-changed', (e: any) => {
+        destEl.addEventListener('gmp-placeautocomplete-place-changed', (e) => {
           destValueRef.current = '';
           const p = (async () => {
             try {
@@ -122,19 +148,12 @@ export default function Calculator() {
     }
   }, []);
 
-  useEffect(() => {
-    if (!result) return;
-    const price = calculatePrice(result.km, bikeType);
-    setResult((prev) => (prev ? { ...prev, price } : null));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bikeType]);
-
   async function handleCalculate() {
     function readShadow(container: HTMLDivElement | null): string {
       try {
-        const el = container?.firstChild as any;
+        const el = container?.firstChild as HTMLElement | null;
         return el?.shadowRoot?.querySelector('input')?.value?.trim() ||
-               (el as HTMLInputElement)?.value?.trim() || '';
+               (el as HTMLInputElement | null)?.value?.trim() || '';
       } catch { return ''; }
     }
 
@@ -162,9 +181,7 @@ export default function Calculator() {
       );
       if (!res.ok) throw new Error('not found');
       const data = await res.json();
-      const price = calculatePrice(data.km, bikeType);
-      const newResult = { km: data.km, duration: data.duration, origin, destination, price };
-      setResult(newResult);
+      setResult({ km: data.km, duration: data.duration, origin, destination });
     } catch {
       setError('Reitti ei löydy – tarkista kaupunkien nimet tai ota yhteyttä.');
     } finally {
@@ -207,7 +224,7 @@ export default function Calculator() {
               {(
                 [
                   ['scooter', 'Mopo/Skootteri', '−20 €', null],
-                  ['standard', 'Vakio', '+0 €', null],
+                  ['standard', 'Perus / Vakio', '+0 €', null],
                   ['large', 'Iso / Strike', '+50 €', '≥ 250 kg tai ≥ 1 000 cm³'],
                 ] as const
               ).map(([val, label, price, description]) => (
@@ -249,7 +266,7 @@ export default function Calculator() {
             </div>
 
             <div className="total-price">
-              {result ? `${result.price.total.toFixed(2).replace('.', ',')} €` : '0,00 €'}
+              {price ? `${price.total.toFixed(2).replace('.', ',')} €` : '0,00 €'}
             </div>
             <p className="total-label">Arvioitu kokonaishinta (sis. ALV)</p>
 
@@ -260,29 +277,29 @@ export default function Calculator() {
               </div>
               <div className="breakdown-row">
                 <span>
-                  {result && result.price.billableKm > 0
-                    ? `Lisäkm (${result.price.billableKm} km × 1,16 €)`
+                  {price && price.billableKm > 0
+                    ? `Lisäkm (${price.billableKm} km × 1,16 €)`
                     : 'Lisäkm (0 km × 1,16 €)'}
                 </span>
                 <span>
-                  {result && result.price.billableKm > 0
-                    ? `${result.price.kmFee.toFixed(2).replace('.', ',')} €`
+                  {price && price.billableKm > 0
+                    ? `${price.kmFee.toFixed(2).replace('.', ',')} €`
                     : '0,00 €'}
                 </span>
               </div>
               <div className="breakdown-row">
                 <span>Pyörätyyppi</span>
                 <span>
-                  {result
-                    ? `${result.price.typeExtra >= 0 ? '+' : ''}${result.price.typeExtra},00 €`
+                  {price
+                    ? `${price.typeExtra >= 0 ? '+' : ''}${price.typeExtra},00 €`
                     : '+0,00 €'}
                 </span>
               </div>
               <div className="breakdown-row total-row">
                 <span>Yhteensä (sis. ALV)</span>
                 <span>
-                  {result
-                    ? `${result.price.total.toFixed(2).replace('.', ',')} €`
+                  {price
+                    ? `${price.total.toFixed(2).replace('.', ',')} €`
                     : '0,00 €'}
                 </span>
               </div>
@@ -300,8 +317,8 @@ export default function Calculator() {
             )}
 
             <a
-              href={result
-                ? `/tilauslomake?origin=${encodeURIComponent(result.origin)}&destination=${encodeURIComponent(result.destination)}&bikeType=${bikeType}&price=${result.price.total.toFixed(2)}`
+              href={result && price
+                ? `/tilauslomake?origin=${encodeURIComponent(result.origin)}&destination=${encodeURIComponent(result.destination)}&bikeType=${bikeType}&price=${price.total.toFixed(2)}`
                 : undefined}
               className={`btn-primary btn-order${!result ? ' btn-disabled' : ''}`}
               onClick={!result ? (e) => e.preventDefault() : undefined}
