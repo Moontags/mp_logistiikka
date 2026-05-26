@@ -23,8 +23,8 @@ interface Props {
 }
 
 const bikeLabels: Record<BikeType, string> = {
-  scooter: 'Mopo/Skootteri',
-  standard: 'Vakio',
+  scooter: 'Mopo / Skootteri',
+  standard: 'Perus / Vakio',
   large: 'Iso / Strike',
 };
 
