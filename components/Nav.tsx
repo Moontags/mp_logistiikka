@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navLinks = [
-  { label: 'Hinnasto', href: '/hinnasto' },
+  { label: 'Tilaus', href: '/hinnasto' },
   { label: 'Palvelut', href: '/palvelut' },
   { label: 'Kuvat', href: '/kuvat' },
   { label: 'Yhteystiedot', href: '/yhteystiedot' },
@@ -125,7 +125,7 @@ export default function Nav() {
               ((e.currentTarget as HTMLAnchorElement).style.background = 'var(--orange)')
             }
           >
-            Tilaa kuljetus
+            Pyydä tarjous
           </Link>
           <a
             href="https://kuntoraportti.mp-logistiikka.fi"
@@ -221,7 +221,7 @@ export default function Nav() {
                   minHeight: '44px',
                 }}
               >
-                Tilaa kuljetus
+                Pyydä tarjous
               </Link>
             </li>
             <li style={{ paddingTop: '0.75rem' }}>
