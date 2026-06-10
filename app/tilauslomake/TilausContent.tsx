@@ -11,6 +11,8 @@ export default function TilausContent() {
   const bikeType = (params.get('bikeType') || 'standard') as BikeType;
   const rawPrice = parseFloat(params.get('price') || '0');
   const price = rawPrice > 0 ? rawPrice : undefined;
+  const kr = params.get('kr');
+  const kuntoraportti = kr === 'included' || kr === 'yes' || kr === 'no' ? kr : undefined;
 
   return (
     <OrderForm
@@ -18,6 +20,7 @@ export default function TilausContent() {
       prefillDestination={destination}
       prefillBikeType={bikeType}
       prefillPrice={price}
+      prefillKuntoraportti={kuntoraportti}
     />
   );
 }

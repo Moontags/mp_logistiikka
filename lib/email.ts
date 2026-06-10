@@ -10,6 +10,7 @@ export interface OrderEmailData {
   bikeType: string;
   notes?: string;
   estimatedPrice?: number | string;
+  kuntoraportti?: string;
 }
 
 const bikeLabels: Record<string, string> = {
@@ -41,7 +42,7 @@ export async function sendOrderEmail(data: OrderEmailData) {
     throw new Error('Email service configuration error');
   }
 
-  const { name, email, phone, origin, destination, date, bikeType, notes, estimatedPrice } = data;
+  const { name, email, phone, origin, destination, date, bikeType, notes, estimatedPrice, kuntoraportti } = data;
   const bikeLabel = bikeLabels[bikeType] ?? bikeType;
   const fromAddress = 'info@mp-logistiikka.fi';
   const toAddress = "info@mp-logistiikka.fi";
@@ -86,6 +87,10 @@ export async function sendOrderEmail(data: OrderEmailData) {
             <td style="padding:10px 12px;border:1px solid #ddd;color:#E85D1A;font-size:1.2em"><strong>${estimatedPrice ? `${estimatedPrice} €` : '–'}</strong></td>
           </tr>
           <tr>
+            <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600">Kuntoraportti</td>
+            <td style="padding:10px 12px;border:1px solid #ddd">${kuntoraportti || '–'}</td>
+          </tr>
+          <tr style="background:#f9f9f9">
             <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600">Lisätiedot</td>
             <td style="padding:10px 12px;border:1px solid #ddd">${notes || '–'}</td>
           </tr>
@@ -119,6 +124,7 @@ export async function sendOrderEmail(data: OrderEmailData) {
           <p style="margin:0 0 0.5rem"><strong>Reitti:</strong> ${origin} → ${destination}</p>
           <p style="margin:0 0 0.5rem"><strong>Toivottu päivä:</strong> ${date}</p>
           <p style="margin:0 0 0.5rem"><strong>Pyörätyyppi:</strong> ${bikeLabel}</p>
+          ${kuntoraportti ? `<p style="margin:0 0 0.5rem"><strong>Kuntoraportti:</strong> ${kuntoraportti}</p>` : ''}
           ${estimatedPrice ? `<p style="margin:0;color:#E85D1A;font-size:1.1em"><strong>Arvioitu hinta: ${estimatedPrice} €</strong></p>` : ''}
         </div>
         <p>Jos sinulla on kysyttävää, vastaa tähän sähköpostiin tai ota yhteyttä:</p>

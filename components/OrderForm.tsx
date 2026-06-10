@@ -15,12 +15,21 @@ interface FormData {
   notes: string;
 }
 
+type KuntoraporttiStatus = 'included' | 'yes' | 'no';
+
 interface Props {
   prefillOrigin?: string;
   prefillDestination?: string;
   prefillBikeType?: BikeType;
   prefillPrice?: number;
+  prefillKuntoraportti?: KuntoraporttiStatus;
 }
+
+const kuntoraporttiLabels: Record<KuntoraporttiStatus, string> = {
+  included: 'Kyllä (ilmainen, sisältyy kuljetukseen)',
+  yes: 'Kyllä (39 €)',
+  no: 'Ei',
+};
 
 const bikeLabels: Record<BikeType, string> = {
   scooter: 'Mopo / Skootteri',
@@ -28,7 +37,7 @@ const bikeLabels: Record<BikeType, string> = {
   large: 'Iso / Strike',
 };
 
-export default function OrderForm({ prefillOrigin, prefillDestination, prefillBikeType, prefillPrice }: Props) {
+export default function OrderForm({ prefillOrigin, prefillDestination, prefillBikeType, prefillPrice, prefillKuntoraportti }: Props) {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState('');
@@ -62,7 +71,11 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
       const res = await fetch('/api/order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...data, estimatedPrice: prefillPrice ?? '' }),
+        body: JSON.stringify({
+          ...data,
+          estimatedPrice: prefillPrice ?? '',
+          kuntoraportti: prefillKuntoraportti ? kuntoraporttiLabels[prefillKuntoraportti] : undefined,
+        }),
       });
       if (!res.ok) throw new Error('Lähetys epäonnistui');
       setSubmitted(true);
@@ -321,6 +334,24 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                       fontWeight: 700,
                       fontFamily: 'var(--font-barlow-condensed)',
                       fontSize: '1.1rem',
+                      cursor: 'default',
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* Kuntoraportti */}
+              {prefillKuntoraportti && (
+                <div style={{ ...fieldStyle, marginBottom: 0, marginTop: '0.75rem' }}>
+                  <label style={labelStyle}>Kuntoraportti</label>
+                  <input
+                    type="text"
+                    readOnly
+                    value={kuntoraporttiLabels[prefillKuntoraportti]}
+                    style={{
+                      ...inputStyle(false),
+                      background: 'transparent',
+                      color: prefillKuntoraportti === 'no' ? 'var(--muted)' : 'var(--text)',
                       cursor: 'default',
                     }}
                   />
