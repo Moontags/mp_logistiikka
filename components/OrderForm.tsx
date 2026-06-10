@@ -22,7 +22,6 @@ interface Props {
   prefillDestination?: string;
   prefillBikeType?: BikeType;
   prefillPrice?: number;
-  prefillKuntoraportti?: KuntoraporttiStatus;
 }
 
 const kuntoraporttiLabels: Record<KuntoraporttiStatus, string> = {
@@ -37,10 +36,15 @@ const bikeLabels: Record<BikeType, string> = {
   large: 'Iso / Strike',
 };
 
-export default function OrderForm({ prefillOrigin, prefillDestination, prefillBikeType, prefillPrice, prefillKuntoraportti }: Props) {
+export default function OrderForm({ prefillOrigin, prefillDestination, prefillBikeType, prefillPrice }: Props) {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState('');
+  const [kuntoraportti, setKuntoraportti] = useState(false);
+
+  // Kuntoraportti sisältyy ilmaiseksi jos kuljetus ≥ 500 €.
+  const krFree = prefillPrice !== undefined && prefillPrice >= 500;
+  const krStatus: KuntoraporttiStatus = krFree ? 'included' : kuntoraportti ? 'yes' : 'no';
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -74,7 +78,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
         body: JSON.stringify({
           ...data,
           estimatedPrice: prefillPrice ?? '',
-          kuntoraportti: prefillKuntoraportti ? kuntoraporttiLabels[prefillKuntoraportti] : undefined,
+          kuntoraportti: kuntoraporttiLabels[krStatus],
         }),
       });
       if (!res.ok) throw new Error('Lähetys epäonnistui');
@@ -319,6 +323,61 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                 </div>
               </div>
 
+              {/* Kuntoraportti */}
+              <div style={fieldStyle}>
+                <label style={labelStyle}>Kuntoraportti</label>
+                {krFree ? (
+                  <div
+                    style={{
+                      padding: '0.4rem 0.625rem',
+                      background: 'transparent',
+                      border: '1px solid rgba(34,197,94,0.3)',
+                      borderRadius: '4px',
+                      fontFamily: 'var(--font-barlow)',
+                      fontSize: '0.875rem',
+                      color: '#86efac',
+                    }}
+                  >
+                    Sisältyy kuljetukseen ✓
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    {([
+                      [false, 'Ei'],
+                      [true, 'Kyllä'],
+                    ] as [boolean, string][]).map(([val, label]) => (
+                      <label
+                        key={label}
+                        style={{
+                          flex: '1 1 auto',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.5rem',
+                          padding: '0.4rem 0.625rem',
+                          background: 'transparent',
+                          border: '1px solid var(--border)',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem',
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="kuntoraportti"
+                          checked={kuntoraportti === val}
+                          onChange={() => setKuntoraportti(val)}
+                          style={{ accentColor: 'var(--orange)', width: '14px', height: '14px', flexShrink: 0 }}
+                        />
+                        <span style={{ fontFamily: 'var(--font-barlow)', color: 'var(--text)', whiteSpace: 'nowrap' }}>
+                          {label}
+                          {val && <span style={{ color: 'var(--orange)', fontWeight: 600 }}> +39 €</span>}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Estimated price */}
               {prefillPrice !== undefined && prefillPrice > 0 && (
                 <div style={{ ...fieldStyle, marginBottom: 0 }}>
@@ -334,24 +393,6 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                       fontWeight: 700,
                       fontFamily: 'var(--font-barlow-condensed)',
                       fontSize: '1.1rem',
-                      cursor: 'default',
-                    }}
-                  />
-                </div>
-              )}
-
-              {/* Kuntoraportti */}
-              {prefillKuntoraportti && (
-                <div style={{ ...fieldStyle, marginBottom: 0, marginTop: '0.75rem' }}>
-                  <label style={labelStyle}>Kuntoraportti</label>
-                  <input
-                    type="text"
-                    readOnly
-                    value={kuntoraporttiLabels[prefillKuntoraportti]}
-                    style={{
-                      ...inputStyle(false),
-                      background: 'transparent',
-                      color: prefillKuntoraportti === 'no' ? 'var(--muted)' : 'var(--text)',
                       cursor: 'default',
                     }}
                   />

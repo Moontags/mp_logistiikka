@@ -41,7 +41,6 @@ export default function Calculator() {
   const destFetchRef = useRef<Promise<string> | null>(null);
 
   const [bikeType, setBikeType] = useState<BikeType>('standard');
-  const [kuntoraportti, setKuntoraportti] = useState<boolean>(false);
   const [result, setResult] = useState<{
     km: number; duration: string; origin: string; destination: string;
   } | null>(null);
@@ -49,11 +48,7 @@ export default function Calculator() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Kuntoraportti: ilmainen jos kuljetus ≥ 500 €, muuten 39 € lisävalinta.
-  const krFree = !!price && price.total >= 500;
-  const krLisa = price && !krFree && kuntoraportti ? 39 : 0;
-  const kokonaishinta = price ? price.total + krLisa : 0;
-  const krStatus: 'included' | 'yes' | 'no' = krFree ? 'included' : kuntoraportti ? 'yes' : 'no';
+  const kokonaishinta = price ? price.total : 0;
 
   useEffect(() => {
     function readValue(el: HTMLElement | null): string {
@@ -302,12 +297,6 @@ export default function Calculator() {
                     : '+0,00 €'}
                 </span>
               </div>
-              {price && (krFree || kuntoraportti) && (
-                <div className="breakdown-row">
-                  <span>Kuntoraportti</span>
-                  <span>{krFree ? 'Sisältyy' : '+39,00 €'}</span>
-                </div>
-              )}
               <div className="breakdown-row total-row">
                 <span>Yhteensä (sis. ALV)</span>
                 <span>
@@ -317,38 +306,6 @@ export default function Calculator() {
                 </span>
               </div>
             </div>
-
-            {/* Kuntoraportti-valinta */}
-            {price && (
-              <div className="kuntoraportti-valinta">
-                {krFree ? (
-                  <div className="kr-sisaltyy">
-                    <span>📋 Kuntoraportti</span>
-                    <span className="kr-ilmainen">Sisältyy kuljetukseen ✓</span>
-                  </div>
-                ) : (
-                  <div className="kr-valinta">
-                    <span>📋 Kuntoraportti <span className="kr-hinta">+39 €</span></span>
-                    <div className="kr-togglet">
-                      <button
-                        type="button"
-                        className={`kr-btn ${!kuntoraportti ? 'kr-btn-active' : ''}`}
-                        onClick={() => setKuntoraportti(false)}
-                      >
-                        Ei
-                      </button>
-                      <button
-                        type="button"
-                        className={`kr-btn ${kuntoraportti ? 'kr-btn-active' : ''}`}
-                        onClick={() => setKuntoraportti(true)}
-                      >
-                        Kyllä
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
 
             {loading && (
               <div className="loading-overlay">
@@ -363,7 +320,7 @@ export default function Calculator() {
 
             <a
               href={result && price
-                ? `/tilauslomake?origin=${encodeURIComponent(result.origin)}&destination=${encodeURIComponent(result.destination)}&bikeType=${bikeType}&price=${kokonaishinta.toFixed(2)}&kr=${krStatus}`
+                ? `/tilauslomake?origin=${encodeURIComponent(result.origin)}&destination=${encodeURIComponent(result.destination)}&bikeType=${bikeType}&price=${kokonaishinta.toFixed(2)}`
                 : undefined}
               className={`btn-primary btn-order${!result ? ' btn-disabled' : ''}`}
               onClick={!result ? (e) => e.preventDefault() : undefined}
