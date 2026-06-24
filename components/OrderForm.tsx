@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { BikeType } from '@/lib/pricing';
+import { hasCity } from '@/lib/address';
 
 interface FormData {
   name: string;
@@ -271,8 +272,11 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                   <label style={labelStyle}>Lähtöosoite *</label>
                   <input
                     type="text"
-                    {...register('origin', { required: 'Lähtöosoite on pakollinen' })}
-                    placeholder="Kadunnimi, Kaupunki"
+                    {...register('origin', {
+                      required: 'Lähtöosoite on pakollinen',
+                      validate: (v) => hasCity(v) || 'Lisää myös kaupunki (esim. Kadunnimi 5, Helsinki)',
+                    })}
+                    placeholder="Kadunnimi 5, Kaupunki"
                     style={inputStyle(!!errors.origin)}
                   />
                   {errors.origin && <p style={errorStyle}>{errors.origin.message}</p>}
@@ -281,8 +285,11 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                   <label style={labelStyle}>Määränpää *</label>
                   <input
                     type="text"
-                    {...register('destination', { required: 'Määränpää on pakollinen' })}
-                    placeholder="Kadunnimi, Kaupunki"
+                    {...register('destination', {
+                      required: 'Määränpää on pakollinen',
+                      validate: (v) => hasCity(v) || 'Lisää myös kaupunki (esim. Kadunnimi 5, Helsinki)',
+                    })}
+                    placeholder="Kadunnimi 5, Kaupunki"
                     style={inputStyle(!!errors.destination)}
                   />
                   {errors.destination && <p style={errorStyle}>{errors.destination.message}</p>}

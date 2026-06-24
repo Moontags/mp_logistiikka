@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { calculatePrice, BikeType } from '@/lib/pricing';
+import { hasCity } from '@/lib/address';
 
 type GooglePlace = {
   fetchFields: (opts: { fields: string[] }) => Promise<void>;
@@ -173,6 +174,10 @@ export default function Calculator() {
     }
     if (origin.toLowerCase() === destination.toLowerCase()) {
       setError('Lähtöpaikka ja määränpää ovat samat.');
+      return;
+    }
+    if (!hasCity(origin) || !hasCity(destination)) {
+      setError('Lisää myös kaupunki osoitteen perään (esim. Kadunnimi 5, Helsinki).');
       return;
     }
     setLoading(true);
