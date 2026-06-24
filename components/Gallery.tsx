@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 const galleryItems = [
-  { src: '/images/paku1.png', alt: 'Kuljetusauto edestä' },
   { src: '/images/paku5.png', alt: 'Kuljetusauto sivulta' },
   { src: '/images/ford.png', alt: 'Ford Transit kuljetusauto' },
   { src: '/images/ramppi.jpeg', alt: 'Ajorampit lastauksen aikana' },
@@ -17,6 +16,8 @@ const galleryItems = [
   { src: '/images/KTM690.jpeg', alt: 'KTM 690 lastattuna kyytiin' },
   { src: '/images/Royal.jpeg', alt: 'Royal Enfield lastattuna kyytiin' },
   { src: '/images/KTM990.jpeg', alt: 'KTM 990 lastattuna kyytiin' },
+  { src: '/images/ninja.png', alt: 'Kawasaki Ninja lastattuna kyytiin' },
+  { src: '/images/ktm3.jpeg', alt: 'KTM lastattuna kyytiin' },
 ];
 
 const total = galleryItems.length;
