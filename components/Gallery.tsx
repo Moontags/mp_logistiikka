@@ -4,20 +4,20 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 const galleryItems = [
-  { src: '/images/paku5.png', alt: 'Kuljetusauto sivulta' },
   { src: '/images/ford.png', alt: 'Ford Transit kuljetusauto' },
   { src: '/images/ramppi.jpeg', alt: 'Ajorampit lastauksen aikana' },
-  { src: '/images/teline.jpeg', alt: 'Kuljetusteline' },
-  { src: '/images/teline2.jpeg', alt: 'Kuljetusteline 2' },
+  { src: '/images/pappa.jpeg', alt: 'Moottoripyörä lastattuna kyytiin' },
+  { src: '/images/bmw-xr.jpeg', alt: 'BMW XR lastattuna kyytiin' },
+  { src: '/images/harley.jpeg', alt: 'Harley-Davidson lastattuna kyytiin' },
   { src: '/images/mp1.jpeg', alt: 'Moottoripyörä lastattuna' },
-  { src: '/images/sidonta.jpg', alt: 'Sidontavyöt kuljetuksessa' },
   { src: '/images/bike3.jpeg', alt: 'BMW S1000R lastattuna kyytiin' },
   { src: '/images/mopo.jpeg', alt: 'Mopo lastattuna kuljetukseen' },
   { src: '/images/KTM690.jpeg', alt: 'KTM 690 lastattuna kyytiin' },
   { src: '/images/Royal.jpeg', alt: 'Royal Enfield lastattuna kyytiin' },
   { src: '/images/KTM990.jpeg', alt: 'KTM 990 lastattuna kyytiin' },
-  { src: '/images/ninja.png', alt: 'Kawasaki Ninja lastattuna kyytiin' },
   { src: '/images/ktm3.jpeg', alt: 'KTM lastattuna kyytiin' },
+  { src: '/images/sidonta.jpg', alt: 'Sidontavyöt kuljetuksessa' },
+  { src: '/images/ninja.png', alt: 'Kawasaki Ninja lastattuna kyytiin' },
 ];
 
 const total = galleryItems.length;

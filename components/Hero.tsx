@@ -33,7 +33,7 @@ export default function Hero() {
               overflowWrap: 'break-word',
             }}
           >
-            Turvalliset<br />
+            Luotettavat<br />
             Moottoripyörä
             <span style={{ color: 'var(--orange)' }}>siirrot</span>
           </h1>
@@ -49,8 +49,7 @@ export default function Hero() {
               maxWidth: '520px',
             }}
           >
-            Luotettava ja vakuutettu moottoripyöräkuljetus ympäri Suomea. Kuljetuspalvelua 20 v kokemuksella.
-            Sidonta ammattilaisen käsissä, ei naarmuja, ei harmeja..
+             Tarjoamme kuljetuksia yli 20 vuoden kokemuksella. Toimitamme moottoripyöriä  kaikkialle Suomeen – nopeasti, turvallisesti ja sovitusti.
           </p>
 
           {/* CTA buttons */}
