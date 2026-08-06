@@ -10,6 +10,7 @@ const barlowCondensed = Barlow_Condensed({
   subsets: ['latin'],
   variable: '--font-barlow-condensed',
   display: 'swap',
+  preload: false,
 });
 
 const barlow = Barlow({
@@ -17,6 +18,7 @@ const barlow = Barlow({
   subsets: ['latin'],
   variable: '--font-barlow',
   display: 'swap',
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -50,9 +52,6 @@ export default function RootLayout({
       lang="fi"
       className={`${barlowCondensed.variable} ${barlow.variable}`}
     >
-      <head>
-        <link rel="preload" href="/images/bike.jpg" as="image" type="image/jpeg" />
-      </head>
       <body className="page-body">
         <Nav />
         <div className="page-wrapper">

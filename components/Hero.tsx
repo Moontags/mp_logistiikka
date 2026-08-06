@@ -49,7 +49,8 @@ export default function Hero() {
               maxWidth: '520px',
             }}
           >
-             Tarjoamme kuljetuksia yli 20 vuoden kokemuksella. Toimitamme moottoripyöriä  kaikkialle Suomeen – nopeasti, turvallisesti ja sovitusti.
+            Tarjoamme kuljetuksia yli 20 vuoden kokemuksella. Toimitamme moottoripyöriä
+            kaikkialle Suomeen ja myös EU-alueelle nopeasti, turvallisesti ja sovitusti.
           </p>
 
           {/* CTA buttons */}
