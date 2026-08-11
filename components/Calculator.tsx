@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { calculatePrice, BikeType } from '@/lib/pricing';
+import { calculatePrice, BikeType, SIIRTYMA_KM_HINTA, SIIRTYMA_VAPAA_KM } from '@/lib/pricing';
 import { hasCity } from '@/lib/address';
 
 type GooglePlace = {
@@ -44,8 +44,14 @@ export default function Calculator() {
   const [bikeType, setBikeType] = useState<BikeType>('standard');
   const [result, setResult] = useState<{
     km: number; duration: string; origin: string; destination: string;
+    transferToPickupKm: number; transferFromDeliveryKm: number;
   } | null>(null);
-  const price = result ? calculatePrice(result.km, bikeType) : null;
+  const price = result
+    ? calculatePrice(result.km, bikeType, {
+        toPickupKm: result.transferToPickupKm,
+        fromDeliveryKm: result.transferFromDeliveryKm,
+      })
+    : null;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -188,7 +194,14 @@ export default function Calculator() {
       );
       if (!res.ok) throw new Error('not found');
       const data = await res.json();
-      setResult({ km: data.km, duration: data.duration, origin, destination });
+      setResult({
+        km: data.km,
+        duration: data.duration,
+        origin,
+        destination,
+        transferToPickupKm: data.transferToPickupKm ?? 0,
+        transferFromDeliveryKm: data.transferFromDeliveryKm ?? 0,
+      });
     } catch {
       setError('Reitti ei löydy – tarkista kaupunkien nimet tai ota yhteyttä.');
     } finally {
@@ -210,7 +223,7 @@ export default function Calculator() {
             Laske kuljetuksen hinta
           </h2>
           <p style={{ color: 'var(--muted)', marginTop: '0.75rem', fontFamily: 'var(--font-barlow)', fontSize: '1rem' }}>
-            Perusmaksu 119 € sisältää ensimmäiset 40 km · sen jälkeen 1,16 €/km
+            {`Perusmaksu 119 € sisältää ensimmäiset 40 km · sen jälkeen 1,16 €/km · siirtymä ${SIIRTYMA_KM_HINTA.toFixed(2).replace('.', ',')} €/km yli ${SIIRTYMA_VAPAA_KM} km`}
           </p>
         </div>
 
@@ -294,6 +307,14 @@ export default function Calculator() {
                     : '0,00 €'}
                 </span>
               </div>
+              {price && price.siirtyma.siirtymamaksu > 0 && (
+                <div className="breakdown-row">
+                  <span>
+                    {`Siirtymämaksu (${price.siirtyma.siirtymaNoutoKm + price.siirtyma.siirtymaToimitusKm} km × ${SIIRTYMA_KM_HINTA.toFixed(2).replace('.', ',')} €)`}
+                  </span>
+                  <span>{`${price.siirtyma.siirtymamaksu.toFixed(2).replace('.', ',')} €`}</span>
+                </div>
+              )}
               <div className="breakdown-row">
                 <span>Pyörätyyppi</span>
                 <span>

@@ -193,16 +193,6 @@ h1, h2, h3, h4 {
   gap: 0.35rem;
 }
 
-.footer-logo {
-  font-family: var(--font-barlow-condensed), sans-serif;
-  font-weight: 800;
-  font-size: 1rem;
-  letter-spacing: 0.04em;
-  color: var(--text);
-}
-
-.footer-logo .dot { color: var(--orange); }
-
 .footer-copy {
   font-size: 0.8rem;
   color: var(--muted);

@@ -5,9 +5,6 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <span className="footer-logo">
-            MP<span className="dot">·</span>Logistiikka
-          </span>
           <span className="footer-copy">
             © {new Date().getFullYear()} MP-Logistiikka · Y-tunnus: 3163260-9 · Kuljetukset Suomessa ja EU-alueella
           </span>
