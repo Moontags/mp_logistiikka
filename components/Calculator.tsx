@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { calculatePrice, BikeType, PRICING, eur, tierSummary } from '@/lib/pricing';
+import { calculatePrice, BikeType, PRICING, eur } from '@/lib/pricing';
 import { hasCity } from '@/lib/address';
 
 type GooglePlace = {
@@ -44,8 +44,14 @@ export default function Calculator() {
   const [bikeType, setBikeType] = useState<BikeType>('standard');
   const [result, setResult] = useState<{
     km: number; duration: string; origin: string; destination: string;
+    positioningToPickupKm: number; positioningFromDeliveryKm: number;
   } | null>(null);
-  const price = result ? calculatePrice(result.km, bikeType) : null;
+  const price = result
+    ? calculatePrice(result.km, bikeType, {
+        toPickupKm: result.positioningToPickupKm,
+        fromDeliveryKm: result.positioningFromDeliveryKm,
+      })
+    : null;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -188,7 +194,14 @@ export default function Calculator() {
       );
       if (!res.ok) throw new Error('not found');
       const data = await res.json();
-      setResult({ km: data.km, duration: data.duration, origin, destination });
+      setResult({
+        km: data.km,
+        duration: data.duration,
+        origin,
+        destination,
+        positioningToPickupKm: data.positioningToPickupKm ?? 0,
+        positioningFromDeliveryKm: data.positioningFromDeliveryKm ?? 0,
+      });
     } catch {
       setError('Reitti ei löydy – tarkista kaupunkien nimet tai ota yhteyttä.');
     } finally {
@@ -210,7 +223,7 @@ export default function Calculator() {
             Laske kuljetuksen hinta
           </h2>
           <p style={{ color: 'var(--muted)', marginTop: '0.75rem', fontFamily: 'var(--font-barlow)', fontSize: '1rem' }}>
-            {`Perusmaksu ${PRICING.BASE_FEE} € sisältää ensimmäiset ${PRICING.BASE_KM_INCLUDED} km · sen jälkeen ${tierSummary()}`}
+            {`Hinta määräytyy matkan pituuden ja nouto-/jättöpaikan sijainnin mukaan. Alkaen ${PRICING.BASE_FEE} €.`}
           </p>
         </div>
 
@@ -278,25 +291,21 @@ export default function Calculator() {
             <p className="total-label">Arvioitu kokonaishinta (sis. ALV)</p>
 
             <div className="breakdown">
+              {/* Yksi rivi = yksi luku. Portaiden erittely on tarkoituksella piilossa –
+                  se on hinnastossa ja sopimusehdoissa, ei asiakkaan tarjousnäkymässä. */}
               <div className="breakdown-row">
-                <span>{`Perusmaksu ${PRICING.BASE_FEE} € (sis. ${PRICING.BASE_KM_INCLUDED} km)`}</span>
+                <span>{`Perusmaksu (sis. ${PRICING.BASE_KM_INCLUDED} km)`}</span>
                 <span>{price ? `${eur(price.baseFee)} €` : '0,00 €'}</span>
               </div>
-              {price && price.tiers.length > 0 ? (
-                price.tiers.map((tier) => (
-                  <div className="breakdown-row" key={tier.fromKm}>
-                    <span>
-                      {`${tier.fromKm}–${tier.toKm} km (${tier.km} km × ${eur(tier.perKm)} €)`}
-                    </span>
-                    <span>{`${eur(tier.fee)} €`}</span>
-                  </div>
-                ))
-              ) : (
+              <div className="breakdown-row">
+                <span>{`Lisäkilometrit (${price ? price.billableKm : 0} km)`}</span>
+                <span>{price ? `${eur(price.kmFee)} €` : '0,00 €'}</span>
+              </div>
+              {/* Positiointi vain kun sitä laskutetaan – ei turhaa 0 €-riviä lähikeikoille. */}
+              {price && price.positioning.fee > 0 && (
                 <div className="breakdown-row">
-                  <span>
-                    {`Lisäkm (0 km × ${eur(PRICING.KM_TIERS[0].perKm)} €)`}
-                  </span>
-                  <span>0,00 €</span>
+                  <span>Positiointi (noutoon ja jätöstä)</span>
+                  <span>{`${eur(price.positioning.fee)} €`}</span>
                 </div>
               )}
               <div className="breakdown-row">

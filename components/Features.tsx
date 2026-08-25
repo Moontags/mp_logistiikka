@@ -1,6 +1,6 @@
 'use client';
 
-import { PRICING, tierSummary } from '@/lib/pricing';
+import { PRICING, tierSummary, positioningSummary, startingPrice, eurShort } from '@/lib/pricing';
 
 export default function Features() {
   const features = [
@@ -132,9 +132,9 @@ export default function Features() {
             gap: '0.75rem',
           }}>
             {[
-              { type: 'Mopo / Skootteri', price: 'alkaen 60 €', desc: 'Mopot ja skootterit' },
-              { type: 'Perus / Vakio', price: 'alkaen 119 €', desc: 'Tavallinen moottoripyörä', highlight: true },
-              { type: 'Iso / Strike', price: 'alkaen 130 €', desc: 'Isot chopper- ja matkapyörät' },
+              { type: 'Mopo / Skootteri', price: `alkaen ${eurShort(startingPrice('scooter'))} €`, desc: 'Mopot ja skootterit' },
+              { type: 'Perus / Vakio', price: `alkaen ${eurShort(startingPrice('standard'))} €`, desc: 'Tavallinen moottoripyörä', highlight: true },
+              { type: 'Iso / Strike', price: `alkaen ${eurShort(startingPrice('large'))} €`, desc: 'Isot chopper- ja matkapyörät' },
             ].map((b) => (
               <div
                 key={b.type}
@@ -183,7 +183,7 @@ export default function Features() {
             fontSize: '0.75rem',
             margin: '0.75rem 0 0',
           }}>
-            {`* Perusmaksu ${PRICING.BASE_FEE} € sis. ensimmäiset ${PRICING.BASE_KM_INCLUDED} km · sen jälkeen ${tierSummary()} · tarkka hinta laskurilla`}
+            {`* Perusmaksu ${PRICING.BASE_FEE} € sis. ensimmäiset ${PRICING.BASE_KM_INCLUDED} km · sen jälkeen ${tierSummary()} · ${positioningSummary()} · tarkka hinta laskurilla`}
           </p>
         </div>
       </div>

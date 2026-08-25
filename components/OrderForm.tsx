@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { BikeType } from '@/lib/pricing';
+import { BikeType, PRICING, eurShort } from '@/lib/pricing';
 import { hasCity } from '@/lib/address';
 
 interface FormData {
@@ -27,7 +27,7 @@ interface Props {
 
 const kuntoraporttiLabels: Record<KuntoraporttiStatus, string> = {
   included: 'Kyllä (ilmainen, sisältyy kuljetukseen)',
-  yes: 'Kyllä (39 €)',
+  yes: `Kyllä (${eurShort(PRICING.KUNTORAPORTTI_FEE)} €)`,
   no: 'Ei',
 };
 
@@ -43,8 +43,8 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
   const [serverError, setServerError] = useState('');
   const [kuntoraportti, setKuntoraportti] = useState(false);
 
-  // Kuntoraportti sisältyy ilmaiseksi jos kuljetus ≥ 500 €.
-  const krFree = prefillPrice !== undefined && prefillPrice >= 500;
+  // Kuntoraportti sisältyy ilmaiseksi kun kuljetus ylittää PRICING.KUNTORAPORTTI_FREE_FROM.
+  const krFree = prefillPrice !== undefined && prefillPrice >= PRICING.KUNTORAPORTTI_FREE_FROM;
   const krStatus: KuntoraporttiStatus = krFree ? 'included' : kuntoraportti ? 'yes' : 'no';
 
   const today = new Date().toISOString().split('T')[0];
@@ -377,7 +377,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                         />
                         <span style={{ fontFamily: 'var(--font-barlow)', color: 'var(--text)', whiteSpace: 'nowrap' }}>
                           {label}
-                          {val && <span style={{ color: 'var(--orange)', fontWeight: 600 }}> +39 €</span>}
+                          {val && <span style={{ color: 'var(--orange)', fontWeight: 600 }}>{` +${eurShort(PRICING.KUNTORAPORTTI_FEE)} €`}</span>}
                         </span>
                       </label>
                     ))}

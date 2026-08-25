@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { PRICING, tierSummary } from '@/lib/pricing';
+import { PRICING, tierSummary, positioningFreeKm, positioningTierSummary, startingPrice, eurShort } from '@/lib/pricing';
 
 export const metadata: Metadata = {
   title: 'Sopimusehdot | MP-Logistiikka',
@@ -36,18 +36,18 @@ const sections: Section[] = [
       'Verkkosivuilla esitetään myytävät palvelut ja niiden hinnat ennen tilauksen vahvistamista. Kuljetuksen lopullinen hinta muodostuu pyörätyypistä, kuljetusmatkasta, osoitteista sekä mahdollisista lisäpalveluista. Hinnat ilmoitetaan euroina ja ne sisältävät arvonlisäveron, ellei toisin ilmoiteta.',
     ],
     list: [
-      { label: 'Mopo / Skootteri', text: 'alkaen 60 €' },
+      { label: 'Mopo / Skootteri', text: `alkaen ${eurShort(startingPrice('scooter'))} €` },
       {
         label: 'Perus / Vakio',
-        text: `(tavallinen moottoripyörä): alkaen ${PRICING.BASE_FEE} €. Perusmaksu sisältää ensimmäiset ${PRICING.BASE_KM_INCLUDED} km, minkä jälkeen kilometrihinta laskutetaan portaittain ja laskee matkan pidentyessä: ${tierSummary()}. Jokainen porras laskutetaan vain siihen osuvilta kilometreiltä.`,
+        text: `(tavallinen moottoripyörä): alkaen ${PRICING.BASE_FEE} €. Perusmaksu sisältää ensimmäiset ${PRICING.BASE_KM_INCLUDED} km, minkä jälkeen kilometrihinta laskutetaan portaittain ja laskee matkan pidentyessä: ${tierSummary()}. Jokainen porras laskutetaan vain siihen osuvilta kilometreiltä. Mikäli nouto- tai jättöpaikka sijaitsee yli ${positioningFreeKm()} km:n päässä Riihimäeltä, veloitetaan lisäksi positiointimaksu ylimenevältä osalta. Positiointi hinnoitellaan samaan tapaan portaittain ja laskee etäisyyden kasvaessa: ${positioningTierSummary()}. Nouto ja jättö arvioidaan erikseen omista etäisyyksistään.`,
       },
       {
         label: 'Iso / Strike',
-        text: '(isot chopper- ja matkapyörät, ≥250 kg tai ≥1000 cm³): alkaen 130 €',
+        text: `(isot chopper- ja matkapyörät, ≥250 kg tai ≥1000 cm³): alkaen ${eurShort(startingPrice('large'))} €`,
       },
       {
         label: 'Kuntoraportti',
-        text: '(lisäpalvelu): 49 €, veloituksetta kuljetuksissa joiden hinta ylittää 500 €',
+        text: `(lisäpalvelu): ${eurShort(PRICING.KUNTORAPORTTI_FEE)} €, veloituksetta kuljetuksissa joiden hinta ylittää ${eurShort(PRICING.KUNTORAPORTTI_FREE_FROM)} €`,
       },
     ],
     note: 'Tarkka hinta-arvio lasketaan sivuston hintalaskurilla reitin ja pyörätyypin perusteella ja esitetään tilaajalle ennen tilauksen vahvistamista.',
