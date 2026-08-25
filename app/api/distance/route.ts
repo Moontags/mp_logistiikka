@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { KOTIPAIKKA } from '@/lib/pricing';
 
 function formatDuration(seconds: number): string {
   const h = Math.floor(seconds / 3600);
@@ -75,22 +74,14 @@ export async function GET(request: NextRequest) {
   const from = `${origin}, Finland`;
   const to = `${destination}, Finland`;
 
-  // Varsinainen kuljetus + tyhjänä ajettavat siirtymät (koti -> nouto, toimitus -> koti)
-  const [main, toPickup, fromDelivery] = await Promise.all([
-    fetchLeg(apiKey, from, to),
-    fetchLeg(apiKey, KOTIPAIKKA, from),
-    fetchLeg(apiKey, to, KOTIPAIKKA),
-  ]);
+  const main = await fetchLeg(apiKey, from, to);
 
   if (!main) {
     return NextResponse.json({ error: 'Route not found' }, { status: 404 });
   }
 
-  // Siirtymäosuudet eivät saa kaataa tarjousta – jos ne epäonnistuvat, maksu jää 0 €.
   return NextResponse.json({
     km: main.km,
     duration: formatDuration(main.durationSec),
-    transferToPickupKm: toPickup?.km ?? 0,
-    transferFromDeliveryKm: fromDelivery?.km ?? 0,
   });
 }

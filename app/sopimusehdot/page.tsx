@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { SIIRTYMA_KM_HINTA, SIIRTYMA_VAPAA_KM } from '@/lib/pricing';
+import { PRICING, tierSummary } from '@/lib/pricing';
 
 export const metadata: Metadata = {
   title: 'Sopimusehdot | MP-Logistiikka',
@@ -39,7 +39,7 @@ const sections: Section[] = [
       { label: 'Mopo / Skootteri', text: 'alkaen 60 €' },
       {
         label: 'Perus / Vakio',
-        text: `(tavallinen moottoripyörä): alkaen 119 € (perusmaksu sis. ensimmäiset 40 km, sen jälkeen 1,16 €/km). Mikäli nouto- tai toimituspaikka sijaitsee yli ${SIIRTYMA_VAPAA_KM} km:n päässä Riihimäeltä, veloitetaan lisäksi siirtymämaksu ${SIIRTYMA_KM_HINTA.toFixed(2).replace('.', ',')} €/km ylimenevältä osalta.`,
+        text: `(tavallinen moottoripyörä): alkaen ${PRICING.BASE_FEE} €. Perusmaksu sisältää ensimmäiset ${PRICING.BASE_KM_INCLUDED} km, minkä jälkeen kilometrihinta laskutetaan portaittain ja laskee matkan pidentyessä: ${tierSummary()}. Jokainen porras laskutetaan vain siihen osuvilta kilometreiltä.`,
       },
       {
         label: 'Iso / Strike',

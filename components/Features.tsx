@@ -1,6 +1,6 @@
 'use client';
 
-import { SIIRTYMA_KM_HINTA, SIIRTYMA_VAPAA_KM } from '@/lib/pricing';
+import { PRICING, tierSummary } from '@/lib/pricing';
 
 export default function Features() {
   const features = [
@@ -183,7 +183,7 @@ export default function Features() {
             fontSize: '0.75rem',
             margin: '0.75rem 0 0',
           }}>
-            {`* Perusmaksu 119 € sis. ensimmäiset 40 km · sen jälkeen 1,16 €/km · siirtymä ${SIIRTYMA_KM_HINTA.toFixed(2).replace('.', ',')} €/km yli ${SIIRTYMA_VAPAA_KM} km · tarkka hinta laskurilla`}
+            {`* Perusmaksu ${PRICING.BASE_FEE} € sis. ensimmäiset ${PRICING.BASE_KM_INCLUDED} km · sen jälkeen ${tierSummary()} · tarkka hinta laskurilla`}
           </p>
         </div>
       </div>

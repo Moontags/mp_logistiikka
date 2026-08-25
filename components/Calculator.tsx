@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { calculatePrice, BikeType, SIIRTYMA_KM_HINTA, SIIRTYMA_VAPAA_KM } from '@/lib/pricing';
+import { calculatePrice, BikeType, PRICING, eur, tierSummary } from '@/lib/pricing';
 import { hasCity } from '@/lib/address';
 
 type GooglePlace = {
@@ -44,14 +44,8 @@ export default function Calculator() {
   const [bikeType, setBikeType] = useState<BikeType>('standard');
   const [result, setResult] = useState<{
     km: number; duration: string; origin: string; destination: string;
-    transferToPickupKm: number; transferFromDeliveryKm: number;
   } | null>(null);
-  const price = result
-    ? calculatePrice(result.km, bikeType, {
-        toPickupKm: result.transferToPickupKm,
-        fromDeliveryKm: result.transferFromDeliveryKm,
-      })
-    : null;
+  const price = result ? calculatePrice(result.km, bikeType) : null;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -194,14 +188,7 @@ export default function Calculator() {
       );
       if (!res.ok) throw new Error('not found');
       const data = await res.json();
-      setResult({
-        km: data.km,
-        duration: data.duration,
-        origin,
-        destination,
-        transferToPickupKm: data.transferToPickupKm ?? 0,
-        transferFromDeliveryKm: data.transferFromDeliveryKm ?? 0,
-      });
+      setResult({ km: data.km, duration: data.duration, origin, destination });
     } catch {
       setError('Reitti ei löydy – tarkista kaupunkien nimet tai ota yhteyttä.');
     } finally {
@@ -223,7 +210,7 @@ export default function Calculator() {
             Laske kuljetuksen hinta
           </h2>
           <p style={{ color: 'var(--muted)', marginTop: '0.75rem', fontFamily: 'var(--font-barlow)', fontSize: '1rem' }}>
-            {`Perusmaksu 119 € sisältää ensimmäiset 40 km · sen jälkeen 1,16 €/km · siirtymä ${SIIRTYMA_KM_HINTA.toFixed(2).replace('.', ',')} €/km yli ${SIIRTYMA_VAPAA_KM} km`}
+            {`Perusmaksu ${PRICING.BASE_FEE} € sisältää ensimmäiset ${PRICING.BASE_KM_INCLUDED} km · sen jälkeen ${tierSummary()}`}
           </p>
         </div>
 
@@ -292,27 +279,24 @@ export default function Calculator() {
 
             <div className="breakdown">
               <div className="breakdown-row">
-                <span>Perusmaksu 119 € (sis. 40 km)</span>
-                <span>{result ? '119,00 €' : '0,00 €'}</span>
+                <span>{`Perusmaksu ${PRICING.BASE_FEE} € (sis. ${PRICING.BASE_KM_INCLUDED} km)`}</span>
+                <span>{price ? `${eur(price.baseFee)} €` : '0,00 €'}</span>
               </div>
-              <div className="breakdown-row">
-                <span>
-                  {price && price.billableKm > 0
-                    ? `Lisäkm (${price.billableKm} km × 1,16 €)`
-                    : 'Lisäkm (0 km × 1,16 €)'}
-                </span>
-                <span>
-                  {price && price.billableKm > 0
-                    ? `${price.kmFee.toFixed(2).replace('.', ',')} €`
-                    : '0,00 €'}
-                </span>
-              </div>
-              {price && price.siirtyma.siirtymamaksu > 0 && (
+              {price && price.tiers.length > 0 ? (
+                price.tiers.map((tier) => (
+                  <div className="breakdown-row" key={tier.fromKm}>
+                    <span>
+                      {`${tier.fromKm}–${tier.toKm} km (${tier.km} km × ${eur(tier.perKm)} €)`}
+                    </span>
+                    <span>{`${eur(tier.fee)} €`}</span>
+                  </div>
+                ))
+              ) : (
                 <div className="breakdown-row">
                   <span>
-                    {`Siirtymämaksu (${price.siirtyma.siirtymaNoutoKm + price.siirtyma.siirtymaToimitusKm} km × ${SIIRTYMA_KM_HINTA.toFixed(2).replace('.', ',')} €)`}
+                    {`Lisäkm (0 km × ${eur(PRICING.KM_TIERS[0].perKm)} €)`}
                   </span>
-                  <span>{`${price.siirtyma.siirtymamaksu.toFixed(2).replace('.', ',')} €`}</span>
+                  <span>0,00 €</span>
                 </div>
               )}
               <div className="breakdown-row">
