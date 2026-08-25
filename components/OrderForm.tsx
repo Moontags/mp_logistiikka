@@ -180,7 +180,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
               marginBottom: '0.25rem',
             }}
           >
-            Tilauslomake
+            Kuljetus
           </p>
           <h2
             style={{
@@ -192,7 +192,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
               margin: 0,
             }}
           >
-            Varaa kuljetus
+            Tarjouspyyntö
           </h2>
         </div>
 
@@ -534,7 +534,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                     (e.currentTarget as HTMLButtonElement).style.background = 'var(--orange)';
                   }}
                 >
-                  {submitting ? 'Lähetetään...' : 'Lähetä tilauslomake'}
+                  {submitting ? 'Lähetetään...' : 'Lähetä lomake'}
                 </button>
               </div>
             </div>
