@@ -180,7 +180,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
               marginBottom: '0.25rem',
             }}
           >
-            Kuljetus
+            Kuljetustiedot
           </p>
           <h2
             style={{
@@ -192,7 +192,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
               margin: 0,
             }}
           >
-            Tarjouspyyntö
+            Pyydä tarjous
           </h2>
         </div>
 
