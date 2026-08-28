@@ -12,12 +12,17 @@ export default function TilausContent() {
   const rawPrice = parseFloat(params.get('price') || '0');
   const price = rawPrice > 0 ? rawPrice : undefined;
 
+  // Laskurin "Tilaa tämä kuljetus" tuo mukanaan hinnan ja reitin -> kyseessä on tilaus,
+  // ei tarjouspyyntö (headerin "Pyydä tarjous" linkittää ilman parametreja).
+  const mode = price !== undefined && origin && destination ? 'order' : 'quote';
+
   return (
     <OrderForm
       prefillOrigin={origin}
       prefillDestination={destination}
       prefillBikeType={bikeType}
       prefillPrice={price}
+      mode={mode}
     />
   );
 }

@@ -12,6 +12,7 @@ interface OrderFormRequest {
   notes?: string;
   estimatedPrice?: number | string;
   kuntoraportti?: string;
+  mode?: 'quote' | 'order';
 }
 
 function validateOrderForm(data: unknown): data is OrderFormRequest {
@@ -60,6 +61,7 @@ export async function POST(request: NextRequest) {
       notes: body.notes,
       estimatedPrice: body.estimatedPrice,
       kuntoraportti: body.kuntoraportti,
+      mode: body.mode === 'order' ? 'order' : 'quote',
     };
 
     await sendOrderEmail(emailData);

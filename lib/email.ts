@@ -11,6 +11,8 @@ export interface OrderEmailData {
   notes?: string;
   estimatedPrice?: number | string;
   kuntoraportti?: string;
+  /** 'order' = vahvistettu tilaus laskurin kautta, 'quote' = tarjouspyyntö. */
+  mode?: 'quote' | 'order';
 }
 
 const bikeLabels: Record<string, string> = {
@@ -42,7 +44,8 @@ export async function sendOrderEmail(data: OrderEmailData) {
     throw new Error('Email service configuration error');
   }
 
-  const { name, email, phone, origin, destination, date, bikeType, notes, estimatedPrice, kuntoraportti } = data;
+  const { name, email, phone, origin, destination, date, bikeType, notes, estimatedPrice, kuntoraportti, mode } = data;
+  const isOrder = mode === 'order';
   const bikeLabel = bikeLabels[bikeType] ?? bikeType;
   const fromAddress = 'info@mp-logistiikka.fi';
   const toAddress = "info@mp-logistiikka.fi";
@@ -51,12 +54,12 @@ export async function sendOrderEmail(data: OrderEmailData) {
   // Internal notification to business
   try {
     await transporter.sendMail({
-    from: `"MP-Logistiikka tilaukset" <${fromAddress}>`,
+    from: `"MP-Logistiikka ${isOrder ? 'tilaukset' : 'tarjouspyynnöt'}" <${fromAddress}>`,
     to: toAddress,
-    subject: `🏍️ Uusi tilaus: ${origin} → ${destination} (${date})`,
+    subject: `🏍️ ${isOrder ? 'Uusi tilaus' : 'Uusi tarjouspyyntö'}: ${origin} → ${destination} (${date})`,
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-        <h2 style="color:#E85D1A">Uusi kuljetustilaus – MP-Logistiikka</h2>
+        <h2 style="color:#E85D1A">${isOrder ? 'Uusi kuljetustilaus' : 'Uusi tarjouspyyntö'} – MP-Logistiikka</h2>
         <table style="border-collapse:collapse;width:100%;margin-top:1rem">
           <tr style="background:#f9f9f9">
             <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600;width:40%">Asiakas</td>
@@ -98,7 +101,7 @@ export async function sendOrderEmail(data: OrderEmailData) {
         <p style="margin-top:1.5rem;padding:12px;background:#fff8f0;border-left:3px solid #E85D1A;font-size:0.9em">
           Vastaa tähän sähköpostiin suoraan – reply-to on asetettu asiakkaan osoitteeseen.
         </p>
-        <p style="color:#999;font-size:0.8em;margin-top:1rem">Tilaus saapui mp-logistiikka.fi-sivustolta ${timestamp}<br>MP-Logistiikka · Y-tunnus: 3163260-9</p>
+        <p style="color:#999;font-size:0.8em;margin-top:1rem">${isOrder ? 'Tilaus' : 'Tarjouspyyntö'} saapui mp-logistiikka.fi-sivustolta ${timestamp}<br>MP-Logistiikka · Y-tunnus: 3163260-9</p>
       </div>
     `,
     });
@@ -114,12 +117,18 @@ export async function sendOrderEmail(data: OrderEmailData) {
     from: `"MP-Logistiikka" <${fromAddress}>`,
     to: email,
     bcc: toAddress,
-    subject: 'Tilausvahvistus – MP-Logistiikka 🏍️',
+    subject: isOrder
+      ? 'Tilausvahvistus – MP-Logistiikka 🏍️'
+      : 'Tarjouspyyntö vastaanotettu – MP-Logistiikka 🏍️',
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
-        <h2 style="color:#E85D1A">Kiitos tilauksestasi!</h2>
+        <h2 style="color:#E85D1A">${isOrder ? 'Kiitos tilauksestasi!' : 'Kiitos tarjouspyynnöstäsi!'}</h2>
         <p>Hei ${name},</p>
-        <p>Olemme vastaanottaneet kuljetustilauksesi. Otamme sinuun yhteyttä pian vahvistaaksemme kuljetuksen.</p>
+        <p>${
+          isOrder
+            ? 'Olemme vastaanottaneet kuljetustilauksesi. Otamme sinuun yhteyttä pian vahvistaaksemme kuljetuksen.'
+            : 'Olemme vastaanottaneet tarjouspyyntösi. Otamme sinuun yhteyttä pian ja lähetämme tarjouksen kuljetuksesta.'
+        }</p>
         <div style="background:#f9f9f9;border-radius:6px;padding:1.25rem;margin:1.5rem 0">
           <p style="margin:0 0 0.5rem"><strong>Reitti:</strong> ${origin} → ${destination}</p>
           <p style="margin:0 0 0.5rem"><strong>Toivottu päivä:</strong> ${date}</p>

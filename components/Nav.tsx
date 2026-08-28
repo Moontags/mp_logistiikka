@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navLinks = [
-  { label: 'Tilaus', href: '/hinnasto' },
+  { label: 'Tilaa kuljetus', href: '/hinnasto' },
   { label: 'Palvelut', href: '/palvelut' },
   { label: 'Kuvat', href: '/kuvat' },
   { label: 'Yhteystiedot', href: '/yhteystiedot' },

@@ -23,6 +23,8 @@ interface Props {
   prefillDestination?: string;
   prefillBikeType?: BikeType;
   prefillPrice?: number;
+  /** 'order' = tullaan laskurin "Tilaa tämä kuljetus" -napista, 'quote' = headerin tarjouspyynnöstä. */
+  mode?: 'quote' | 'order';
 }
 
 const kuntoraporttiLabels: Record<KuntoraporttiStatus, string> = {
@@ -37,7 +39,8 @@ const bikeLabels: Record<BikeType, string> = {
   large: 'Iso / Strike',
 };
 
-export default function OrderForm({ prefillOrigin, prefillDestination, prefillBikeType, prefillPrice }: Props) {
+export default function OrderForm({ prefillOrigin, prefillDestination, prefillBikeType, prefillPrice, mode = 'quote' }: Props) {
+  const isOrder = mode === 'order';
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState('');
@@ -80,6 +83,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
           ...data,
           estimatedPrice: prefillPrice ?? '',
           kuntoraportti: kuntoraporttiLabels[krStatus],
+          mode,
         }),
       });
       if (!res.ok) throw new Error('Lähetys epäonnistui');
@@ -146,10 +150,12 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                 margin: '0 0 0.75rem',
               }}
             >
-              Tilaus vastaanotettu!
+              {isOrder ? 'Tilaus vastaanotettu!' : 'Tarjouspyyntö vastaanotettu!'}
             </h3>
             <p style={{ fontFamily: 'var(--font-barlow)', color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-              Kiitos tilauksestasi! Vahvistamme kuljetuksen sähköpostiisi pian.
+              {isOrder
+                ? 'Kiitos tilauksestasi! Vahvistamme kuljetuksen sähköpostiisi pian.'
+                : 'Kiitos tarjouspyynnöstäsi! Lähetämme tarjouksen sähköpostiisi pian.'}
             </p>
           </div>
         </div>
@@ -192,7 +198,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
               margin: 0,
             }}
           >
-            Pyydä tarjous
+            {isOrder ? 'Vahvista tilaus' : 'Pyydä tarjous'}
           </h2>
         </div>
 
@@ -534,7 +540,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                     (e.currentTarget as HTMLButtonElement).style.background = 'var(--orange)';
                   }}
                 >
-                  {submitting ? 'Lähetetään...' : 'Lähetä lomake'}
+                  {submitting ? 'Lähetetään...' : isOrder ? 'Lähetä tilaus' : 'Lähetä tarjous'}
                 </button>
               </div>
             </div>
