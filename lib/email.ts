@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { KUNTORAPORTTI_ENABLED } from './features';
 
 export interface OrderEmailData {
   name: string;
@@ -89,10 +90,11 @@ export async function sendOrderEmail(data: OrderEmailData) {
             <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600">Arvioitu hinta</td>
             <td style="padding:10px 12px;border:1px solid #ddd;color:#E85D1A;font-size:1.2em"><strong>${estimatedPrice ? `${estimatedPrice} €` : '–'}</strong></td>
           </tr>
+          ${KUNTORAPORTTI_ENABLED ? `
           <tr>
             <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600">Kuntoraportti</td>
             <td style="padding:10px 12px;border:1px solid #ddd">${kuntoraportti || '–'}</td>
-          </tr>
+          </tr>` : ''}
           <tr style="background:#f9f9f9">
             <td style="padding:10px 12px;border:1px solid #ddd;font-weight:600">Lisätiedot</td>
             <td style="padding:10px 12px;border:1px solid #ddd">${notes || '–'}</td>
@@ -133,7 +135,7 @@ export async function sendOrderEmail(data: OrderEmailData) {
           <p style="margin:0 0 0.5rem"><strong>Reitti:</strong> ${origin} → ${destination}</p>
           <p style="margin:0 0 0.5rem"><strong>Toivottu päivä:</strong> ${date}</p>
           <p style="margin:0 0 0.5rem"><strong>Pyörätyyppi:</strong> ${bikeLabel}</p>
-          ${kuntoraportti ? `<p style="margin:0 0 0.5rem"><strong>Kuntoraportti:</strong> ${kuntoraportti}</p>` : ''}
+          ${KUNTORAPORTTI_ENABLED && kuntoraportti ? `<p style="margin:0 0 0.5rem"><strong>Kuntoraportti:</strong> ${kuntoraportti}</p>` : ''}
           ${estimatedPrice ? `<p style="margin:0;color:#E85D1A;font-size:1.1em"><strong>Arvioitu hinta: ${estimatedPrice} €</strong></p>` : ''}
         </div>
         <p>Jos sinulla on kysyttävää, vastaa tähän sähköpostiin tai ota yhteyttä:</p>

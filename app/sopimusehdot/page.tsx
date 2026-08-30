@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { PRICING, tierSummary, positioningFreeKm, positioningTierSummary, startingPrice, eurShort } from '@/lib/pricing';
+import { KUNTORAPORTTI_ENABLED } from '@/lib/features';
 
 export const metadata: Metadata = {
   title: 'Sopimusehdot | MP-Logistiikka',
@@ -45,10 +46,14 @@ const sections: Section[] = [
         label: 'Iso / Strike',
         text: `(isot chopper- ja matkapyörät, ≥250 kg tai ≥1000 cm³): alkaen ${eurShort(startingPrice('large'))} €`,
       },
-      {
-        label: 'Kuntoraportti',
-        text: `(lisäpalvelu): ${eurShort(PRICING.KUNTORAPORTTI_FEE)} €, veloituksetta kuljetuksissa joiden hinta ylittää ${eurShort(PRICING.KUNTORAPORTTI_FREE_FROM)} €`,
-      },
+      ...(KUNTORAPORTTI_ENABLED
+        ? [
+            {
+              label: 'Kuntoraportti',
+              text: `(lisäpalvelu): ${eurShort(PRICING.KUNTORAPORTTI_FEE)} €, veloituksetta kuljetuksissa joiden hinta ylittää ${eurShort(PRICING.KUNTORAPORTTI_FREE_FROM)} €`,
+            },
+          ]
+        : []),
     ],
     note: 'Tarkka hinta-arvio lasketaan sivuston hintalaskurilla reitin ja pyörätyypin perusteella ja esitetään tilaajalle ennen tilauksen vahvistamista.',
   },
@@ -93,7 +98,9 @@ const sections: Section[] = [
       { text: 'Avainten, asiakirjojen ja mahdollisten lisävarusteiden toimittaminen noudon yhteydessä.' },
       { text: 'Yhteyshenkilön tavoitettavuus noudon ja toimituksen ajankohtina.' },
     ],
-    note: 'Huom: Ajoneuvon kunto dokumentoidaan valokuvin noudon yhteydessä. Tilaaja voi tilata erillisen kuntoraportin, joka dokumentoi ajoneuvon senhetkisen kunnon ennen kuljetusta.',
+    note: KUNTORAPORTTI_ENABLED
+      ? 'Huom: Ajoneuvon kunto dokumentoidaan valokuvin noudon yhteydessä. Tilaaja voi tilata erillisen kuntoraportin, joka dokumentoi ajoneuvon senhetkisen kunnon ennen kuljetusta.'
+      : 'Huom: Ajoneuvon kunto dokumentoidaan valokuvin noudon yhteydessä.',
   },
   {
     n: 7,

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { BikeType, PRICING, eurShort } from '@/lib/pricing';
 import { hasCity } from '@/lib/address';
+import { KUNTORAPORTTI_ENABLED } from '@/lib/features';
 
 interface FormData {
   name: string;
@@ -82,7 +83,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
         body: JSON.stringify({
           ...data,
           estimatedPrice: prefillPrice ?? '',
-          kuntoraportti: kuntoraporttiLabels[krStatus],
+          kuntoraportti: KUNTORAPORTTI_ENABLED ? kuntoraporttiLabels[krStatus] : undefined,
           mode,
         }),
       });
@@ -337,59 +338,61 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
               </div>
 
               {/* Kuntoraportti */}
-              <div style={fieldStyle}>
-                <label style={labelStyle}>Kuntoraportti</label>
-                {krFree ? (
-                  <div
-                    style={{
-                      padding: '0.4rem 0.625rem',
-                      background: 'transparent',
-                      border: '1px solid rgba(34,197,94,0.3)',
-                      borderRadius: '4px',
-                      fontFamily: 'var(--font-barlow)',
-                      fontSize: '0.875rem',
-                      color: '#86efac',
-                    }}
-                  >
-                    Sisältyy kuljetukseen ✓
-                  </div>
-                ) : (
-                  <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                    {([
-                      [false, 'Ei'],
-                      [true, 'Kyllä'],
-                    ] as [boolean, string][]).map(([val, label]) => (
-                      <label
-                        key={label}
-                        style={{
-                          flex: '1 1 auto',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          padding: '0.4rem 0.625rem',
-                          background: 'transparent',
-                          border: '1px solid var(--border)',
-                          borderRadius: '4px',
-                          cursor: 'pointer',
-                          fontSize: '0.875rem',
-                        }}
-                      >
-                        <input
-                          type="radio"
-                          name="kuntoraportti"
-                          checked={kuntoraportti === val}
-                          onChange={() => setKuntoraportti(val)}
-                          style={{ accentColor: 'var(--orange)', width: '14px', height: '14px', flexShrink: 0 }}
-                        />
-                        <span style={{ fontFamily: 'var(--font-barlow)', color: 'var(--text)', whiteSpace: 'nowrap' }}>
-                          {label}
-                          {val && <span style={{ color: 'var(--orange)', fontWeight: 600 }}>{` +${eurShort(PRICING.KUNTORAPORTTI_FEE)} €`}</span>}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
+              {KUNTORAPORTTI_ENABLED && (
+                <div style={fieldStyle}>
+                  <label style={labelStyle}>Kuntoraportti</label>
+                  {krFree ? (
+                    <div
+                      style={{
+                        padding: '0.4rem 0.625rem',
+                        background: 'transparent',
+                        border: '1px solid rgba(34,197,94,0.3)',
+                        borderRadius: '4px',
+                        fontFamily: 'var(--font-barlow)',
+                        fontSize: '0.875rem',
+                        color: '#86efac',
+                      }}
+                    >
+                      Sisältyy kuljetukseen ✓
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                      {([
+                        [false, 'Ei'],
+                        [true, 'Kyllä'],
+                      ] as [boolean, string][]).map(([val, label]) => (
+                        <label
+                          key={label}
+                          style={{
+                            flex: '1 1 auto',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            padding: '0.4rem 0.625rem',
+                            background: 'transparent',
+                            border: '1px solid var(--border)',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            fontSize: '0.875rem',
+                          }}
+                        >
+                          <input
+                            type="radio"
+                            name="kuntoraportti"
+                            checked={kuntoraportti === val}
+                            onChange={() => setKuntoraportti(val)}
+                            style={{ accentColor: 'var(--orange)', width: '14px', height: '14px', flexShrink: 0 }}
+                          />
+                          <span style={{ fontFamily: 'var(--font-barlow)', color: 'var(--text)', whiteSpace: 'nowrap' }}>
+                            {label}
+                            {val && <span style={{ color: 'var(--orange)', fontWeight: 600 }}>{` +${eurShort(PRICING.KUNTORAPORTTI_FEE)} €`}</span>}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Estimated price */}
               {prefillPrice !== undefined && prefillPrice > 0 && (
