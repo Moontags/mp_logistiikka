@@ -1,45 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { calculatePrice, BikeType, PRICING, eur } from '@/lib/pricing';
 import { hasCity } from '@/lib/address';
-
-type GooglePlace = {
-  fetchFields: (opts: { fields: string[] }) => Promise<void>;
-  formattedAddress?: string;
-  displayName?: string;
-};
-
-type PlacesNamespace = {
-  PlaceAutocompleteElement?: new (opts: {
-    componentRestrictions: { country: string };
-  }) => HTMLElement;
-  Autocomplete?: new (
-    input: HTMLInputElement,
-    opts: { componentRestrictions: { country: string }; fields?: string[] },
-  ) => {
-    addListener: (event: string, cb: () => void) => void;
-    getPlace: () => { name?: string; formatted_address?: string };
-  };
-};
-
-declare global {
-  interface Window {
-    google?: { maps?: { places?: PlacesNamespace } };
-  }
-  interface HTMLElementEventMap {
-    'gmp-placeautocomplete-place-changed': Event & { place: GooglePlace };
-  }
-}
+import AddressAutocomplete from '@/components/AddressAutocomplete';
 
 export default function Calculator() {
-  const originContainerRef = useRef<HTMLDivElement>(null);
-  const destContainerRef = useRef<HTMLDivElement>(null);
-  const originValueRef = useRef('');
-  const destValueRef = useRef('');
-  // Pending fetchFields promises – awaited in handleCalculate so we always get formattedAddress
-  const originFetchRef = useRef<Promise<string> | null>(null);
-  const destFetchRef = useRef<Promise<string> | null>(null);
+  // AddressAutocomplete keeps these in sync with the full formatted address
+  // (street, postal code, city) of the picked suggestion.
+  const [origin, setOrigin] = useState('');
+  const [destination, setDestination] = useState('');
 
   const [bikeType, setBikeType] = useState<BikeType>('standard');
   const [result, setResult] = useState<{
@@ -57,132 +27,18 @@ export default function Calculator() {
 
   const kokonaishinta = price ? price.total : 0;
 
-  useEffect(() => {
-    function readValue(el: HTMLElement | null): string {
-      try {
-        return el?.shadowRoot?.querySelector('input')?.value
-          || (el as HTMLInputElement | null)?.value
-          || '';
-      } catch {
-        return (el as HTMLInputElement | null)?.value || '';
-      }
-    }
-
-    function init() {
-      const Places = window.google?.maps?.places;
-      if (!Places) return false;
-
-      const opts = { componentRestrictions: { country: 'fi' } };
-
-      if (Places.PlaceAutocompleteElement) {
-        // New API (required for API keys created after March 2025)
-        const originEl = new Places.PlaceAutocompleteElement(opts);
-        const destEl = new Places.PlaceAutocompleteElement(opts);
-        originEl.style.fontSize = '16px';
-        destEl.style.fontSize = '16px';
-
-        if (originContainerRef.current) {
-          originContainerRef.current.innerHTML = '';
-          originContainerRef.current.appendChild(originEl);
-        }
-        if (destContainerRef.current) {
-          destContainerRef.current.innerHTML = '';
-          destContainerRef.current.appendChild(destEl);
-        }
-
-        originEl.addEventListener('gmp-placeautocomplete-place-changed', (e) => {
-          originValueRef.current = '';
-          const p = (async () => {
-            try {
-              await e.place.fetchFields({ fields: ['displayName', 'formattedAddress'] });
-              return e.place.formattedAddress || e.place.displayName || readValue(originEl);
-            } catch {
-              return e.place?.displayName || readValue(originEl);
-            }
-          })();
-          originFetchRef.current = p;
-          p.then((v) => { originValueRef.current = v; });
-        });
-        destEl.addEventListener('gmp-placeautocomplete-place-changed', (e) => {
-          destValueRef.current = '';
-          const p = (async () => {
-            try {
-              await e.place.fetchFields({ fields: ['displayName', 'formattedAddress'] });
-              return e.place.formattedAddress || e.place.displayName || readValue(destEl);
-            } catch {
-              return e.place?.displayName || readValue(destEl);
-            }
-          })();
-          destFetchRef.current = p;
-          p.then((v) => { destValueRef.current = v; });
-        });
-        // No 'input' listeners on PlaceAutocompleteElement – the element updates its own
-        // display input programmatically after place selection, which can race with the
-        // async fetchFields and overwrite the full formattedAddress with the short displayName.
-      } else {
-        // Fallback for older API keys
-        [
-          { container: originContainerRef, valRef: originValueRef, placeholder: 'esim. Riihimäki' },
-          { container: destContainerRef, valRef: destValueRef, placeholder: 'esim. Helsinki' },
-        ].forEach(({ container, valRef, placeholder }) => {
-          const input = document.createElement('input');
-          input.type = 'text';
-          input.placeholder = placeholder;
-          input.autocomplete = 'off';
-          input.setAttribute('autocorrect', 'off');
-          input.setAttribute('autocapitalize', 'off');
-          input.style.fontSize = '16px';
-          input.className = 'ac-fallback-input';
-          if (container.current) {
-            container.current.innerHTML = '';
-            container.current.appendChild(input);
-          }
-          input.addEventListener('input', () => { valRef.current = input.value; });
-          if (Places.Autocomplete) {
-            const ac = new Places.Autocomplete(input, { ...opts, fields: ['formatted_address', 'name'] });
-            ac.addListener('place_changed', () => {
-              const p = ac.getPlace();
-              if (p?.name) valRef.current = p.name;
-            });
-          }
-        });
-      }
-
-      return true;
-    }
-
-    if (!init()) {
-      const interval = setInterval(() => { if (init()) clearInterval(interval); }, 200);
-      return () => clearInterval(interval);
-    }
-  }, []);
-
   async function handleCalculate() {
-    function readShadow(container: HTMLDivElement | null): string {
-      try {
-        const el = container?.firstChild as HTMLElement | null;
-        return el?.shadowRoot?.querySelector('input')?.value?.trim() ||
-               (el as HTMLInputElement | null)?.value?.trim() || '';
-      } catch { return ''; }
-    }
-
-    // Await any in-flight fetchFields so we always get the full formattedAddress
-    // (includes city + postal code) rather than the short display name.
-    const [originResolved, destResolved] = await Promise.all([
-      originFetchRef.current ?? Promise.resolve(originValueRef.current || readShadow(originContainerRef.current)),
-      destFetchRef.current   ?? Promise.resolve(destValueRef.current   || readShadow(destContainerRef.current)),
-    ]);
-    const origin      = (originResolved || '').trim();
-    const destination = (destResolved   || '').trim();
-    if (!origin || !destination) {
+    const originValue = origin.trim();
+    const destinationValue = destination.trim();
+    if (!originValue || !destinationValue) {
       setError('Syötä sekä lähtöpaikka että määränpää.');
       return;
     }
-    if (origin.toLowerCase() === destination.toLowerCase()) {
+    if (originValue.toLowerCase() === destinationValue.toLowerCase()) {
       setError('Lähtöpaikka ja määränpää ovat samat.');
       return;
     }
-    if (!hasCity(origin) || !hasCity(destination)) {
+    if (!hasCity(originValue) || !hasCity(destinationValue)) {
       setError('Lisää myös kaupunki osoitteen perään (esim. Kadunnimi 5, Helsinki).');
       return;
     }
@@ -190,15 +46,15 @@ export default function Calculator() {
     setError(null);
     try {
       const res = await fetch(
-        `/api/distance?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}`
+        `/api/distance?origin=${encodeURIComponent(originValue)}&destination=${encodeURIComponent(destinationValue)}`
       );
       if (!res.ok) throw new Error('not found');
       const data = await res.json();
       setResult({
         km: data.km,
         duration: data.duration,
-        origin,
-        destination,
+        origin: originValue,
+        destination: destinationValue,
         positioningToPickupKm: data.positioningToPickupKm ?? 0,
         positioningFromDeliveryKm: data.positioningFromDeliveryKm ?? 0,
       });
@@ -230,14 +86,18 @@ export default function Calculator() {
         <div className="calc-grid">
           {/* Vasen puoli */}
           <div className="calc-form">
-            <div className="form-group">
-              <label>Lähtöpaikka</label>
-              <div ref={originContainerRef} className="ac-container" style={{ fontSize: '16px' }} />
-            </div>
-            <div className="form-group">
-              <label>Määränpää</label>
-              <div ref={destContainerRef} className="ac-container" style={{ fontSize: '16px' }} />
-            </div>
+            <AddressAutocomplete
+              label="Lähtöpaikka"
+              value={origin}
+              onChange={setOrigin}
+              placeholder="esim. Riihimäki"
+            />
+            <AddressAutocomplete
+              label="Määränpää"
+              value={destination}
+              onChange={setDestination}
+              placeholder="esim. Helsinki"
+            />
 
             <div className="form-group">
               <label>Pyörätyyppi</label>

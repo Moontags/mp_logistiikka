@@ -403,31 +403,17 @@ h1, h2, h3, h4 {
   overflow: hidden;
 }
 
-/* ── Autocomplete container ── */
-.ac-container {
+/* ── Address autocomplete ──
+   Suggestions are rendered by components/AddressAutocomplete.tsx inside this
+   relative wrapper. Google's own dropdowns are not used: the legacy widget
+   appends a `pac-container` to <body> and positions it once, which ends up
+   off-screen on mobile as soon as the keyboard opens and the page scrolls. */
+.addr-field {
+  position: relative;
   width: 100%;
-  max-width: 100%;
 }
 
-/* PlaceAutocompleteElement – dark theme override */
-.ac-container gmp-placeautocomplete {
-  display: block;
-  width: 100%;
-  --gmp-material-color-primary: var(--orange);
-  --gmp-material-color-on-surface: var(--text);
-  --gmp-material-color-on-surface-variant: var(--muted);
-  --gmp-material-color-surface-container-high: var(--surface2);
-  --gmp-material-color-surface-container-highest: var(--surface);
-  --gmp-material-color-outline: rgba(255,255,255,0.08);
-  --gmp-material-color-outline-variant: rgba(255,255,255,0.08);
-  --gmp-material-color-background: var(--surface2);
-  --gmp-input-background: var(--surface2);
-  --gmp-input-border-color: rgba(255,255,255,0.08);
-  font-family: var(--font-barlow), sans-serif !important;
-}
-
-/* Fallback plain input */
-.ac-fallback-input {
+.addr-input {
   width: 100%;
   background: var(--surface2);
   border: 1px solid var(--border);
@@ -435,11 +421,63 @@ h1, h2, h3, h4 {
   padding: 0.75rem 1rem;
   color: var(--text);
   font-family: var(--font-barlow), sans-serif;
-  font-size: 1rem;
+  /* Must stay >= 16px: below that iOS Safari zooms in on focus, and the zoom
+     shifts the layout out from under the suggestion list. */
+  font-size: 16px;
+  line-height: 1.3;
   outline: none;
   transition: border-color 0.2s;
 }
-.ac-fallback-input:focus { border-color: var(--orange); }
+.addr-input:focus { border-color: var(--orange); }
+.addr-input::placeholder { color: var(--muted); }
+
+.addr-suggestions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* Above the fixed nav (z-index: 50) so a list flipped upwards stays visible. */
+  z-index: 60;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  font-family: var(--font-barlow), sans-serif;
+}
+/* Offsets match GAP in AddressAutocomplete.tsx. */
+.addr-suggestions--below { top: calc(100% + 6px); }
+.addr-suggestions--above { bottom: calc(100% + 6px); }
+
+.addr-option {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.15rem;
+  /* Comfortable touch target on phones. */
+  min-height: 44px;
+  padding: 0.7rem 1rem;
+  color: var(--text);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.addr-option + .addr-option { border-top: 1px solid var(--border); }
+.addr-option:hover,
+.addr-option[aria-selected='true'] { background: var(--surface); }
+.addr-option-secondary {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.addr-status {
+  padding: 0.7rem 1rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
 
 /* ── Form group ── */
 .form-group {
@@ -473,34 +511,6 @@ h1, h2, h3, h4 {
 .form-group input:focus {
   border-color: var(--orange);
 }
-
-/* Google Places dropdown */
-.pac-container {
-  background: var(--surface2) !important;
-  border: 1px solid var(--border) !important;
-  border-top: none !important;
-  border-radius: 0 0 6px 6px !important;
-  font-family: var(--font-barlow), sans-serif !important;
-  z-index: 9999 !important;
-  position: absolute !important;
-  max-height: 250px !important;
-  overflow-y: auto !important;
-  width: 100% !important;
-}
-.pac-item {
-  padding: 0.5rem 1rem !important;
-  color: var(--muted) !important;
-  cursor: pointer !important;
-  border-top: 1px solid var(--border) !important;
-}
-.pac-item:hover,
-.pac-item-selected {
-  background: var(--surface) !important;
-  color: var(--text) !important;
-}
-.pac-item-query { color: var(--text) !important; }
-.pac-icon { display: none !important; }
-.pac-logo::after { display: none !important; }
 
 /* ── Radio options ── */
 .radio-opt {
@@ -779,10 +789,6 @@ h1, h2, h3, h4 {
   }
   .calc-result {
     min-height: 0;
-  }
-  .ac-container gmp-placeautocomplete,
-  .ac-fallback-input {
-    font-size: 16px;
   }
 }
 @media (max-width: 600px) {
