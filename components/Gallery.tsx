@@ -18,6 +18,7 @@ const galleryItems = [
   { src: '/images/ktm3.jpeg', alt: 'KTM lastattuna kyytiin' },
   { src: '/images/sidonta.jpg', alt: 'Sidontavyöt kuljetuksessa' },
   { src: '/images/ninja.png', alt: 'Kawasaki Ninja lastattuna kyytiin' },
+  { src: '/images/yamaha1.jpeg', alt: 'Yamaha lastattuna kyytiin' },
 ];
 
 const total = galleryItems.length;
