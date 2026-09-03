@@ -57,6 +57,8 @@ export async function sendOrderEmail(data: OrderEmailData) {
     await transporter.sendMail({
     from: `"MP-Logistiikka ${isOrder ? 'tilaukset' : 'tarjouspyynnöt'}" <${fromAddress}>`,
     to: toAddress,
+    // Reply goes to the customer, not back into this same inbox.
+    replyTo: `"${name.replace(/"/g, '')}" <${email}>`,
     subject: `🏍️ ${isOrder ? 'Uusi tilaus' : 'Uusi tarjouspyyntö'}: ${origin} → ${destination} (${date})`,
     html: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
