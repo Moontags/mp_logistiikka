@@ -38,8 +38,11 @@ export default function Calculator() {
       setError('Lähtöpaikka ja määränpää ovat samat.');
       return;
     }
+    // Hinta-arvioon riittää paikkakunta – tarkkaa osoitetta kysytään vasta
+    // tilauslomakkeella. Tämä torjuu vain katuosoitteen ilman paikkakuntaa,
+    // jonka Google geokoodaisi arvaamalla väärään kuntaan.
     if (!hasCity(originValue) || !hasCity(destinationValue)) {
-      setError('Lisää myös kaupunki osoitteen perään (esim. Kadunnimi 5, Helsinki).');
+      setError('Kerro myös paikkakunta – pelkkä kaupunki riittää (esim. Tampere).');
       return;
     }
     setLoading(true);

@@ -36,10 +36,11 @@ export const PRICING = {
    * jättöpaikan etäisyys tukikohdasta ajetaan tyhjänä eikä näy kuljetusreitin
    * kilometreissä.
    *
-   * Sama progressiivinen tier-laskenta kuin KM_TIERS:ssä, oma taulukko: mitä
-   * kauempana pää on, sitä halvempi marginaalinen km. Ensimmäinen porras on
-   * 0 €/km, joten se toimii vapaarajana – pidetään BASE_KM_INCLUDED:n tasalla,
-   * jotta perusmaksuun mahtuva lähikeikka ei saa positiointilisää.
+   * Sama progressiivinen tier-laskenta kuin KM_TIERS:ssä, mutta oma taulukko:
+   * marginaalinen km halpenee lähiportaissa ja kallistuu taas kaukoportaissa,
+   * koska pitkä tyhjä ajo syö koko päivän. Ensimmäinen porras on 0 €/km, joten
+   * se toimii vapaarajana – pidetään BASE_KM_INCLUDED:n tasalla, jotta
+   * perusmaksuun mahtuva lähikeikka ei saa positiointilisää.
    *
    * Nouto ja jättö lasketaan tällä taulukolla mutta täysin erikseen:
    * etäisyyksiä ei summata ennen portaiden soveltamista.
@@ -50,8 +51,8 @@ export const PRICING = {
     { upToKm: 80, perKm: 0.50 },    //  40–80 km
     { upToKm: 200, perKm: 0.40 },   //  80–200 km
     { upToKm: 400, perKm: 0.30 },   // 200–400 km
-    { upToKm: 600, perKm: 0.20 },   // 400–600 km
-    { upToKm: null, perKm: 0.15 },  // 600 km +
+    { upToKm: 600, perKm: 0.35 },   // 400–600 km
+    { upToKm: null, perKm: 0.50 },  // 600 km +
   ],
 } as const;
 

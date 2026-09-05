@@ -40,7 +40,7 @@ const sections: Section[] = [
       { label: 'Mopo / Skootteri', text: `alkaen ${eurShort(startingPrice('scooter'))} €` },
       {
         label: 'Perus / Vakio',
-        text: `(tavallinen moottoripyörä): alkaen ${PRICING.BASE_FEE} €. Perusmaksu sisältää ensimmäiset ${PRICING.BASE_KM_INCLUDED} km, minkä jälkeen kilometrihinta laskutetaan portaittain ja laskee matkan pidentyessä: ${tierSummary()}. Jokainen porras laskutetaan vain siihen osuvilta kilometreiltä. Mikäli nouto- tai jättöpaikka sijaitsee yli ${positioningFreeKm()} km:n päässä Riihimäeltä, veloitetaan lisäksi positiointimaksu ylimenevältä osalta. Positiointi hinnoitellaan samaan tapaan portaittain ja laskee etäisyyden kasvaessa: ${positioningTierSummary()}. Nouto ja jättö arvioidaan erikseen omista etäisyyksistään.`,
+        text: `(tavallinen moottoripyörä): alkaen ${PRICING.BASE_FEE} €. Perusmaksu sisältää ensimmäiset ${PRICING.BASE_KM_INCLUDED} km, minkä jälkeen kilometrihinta laskutetaan portaittain ja laskee matkan pidentyessä: ${tierSummary()}. Jokainen porras laskutetaan vain siihen osuvilta kilometreiltä. Mikäli nouto- tai jättöpaikka sijaitsee yli ${positioningFreeKm()} km:n päässä Riihimäeltä, veloitetaan lisäksi positiointimaksu ylimenevältä osalta. Positiointi hinnoitellaan samaan tapaan portaittain: ${positioningTierSummary()}. Nouto ja jättö arvioidaan erikseen omista etäisyyksistään.`,
       },
       {
         label: 'Iso / Strike',
