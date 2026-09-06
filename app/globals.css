@@ -1091,3 +1091,139 @@ h1, h2, h3, h4 {
     padding: 1rem 1rem 2rem;
   }
 }
+
+/* ── FERRY PRICING (/lauttahinnat) ── */
+.ferry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0 1.5rem;
+}
+
+.ferry-card {
+  background: rgba(24, 24, 24, 0.72);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem 1.25rem;
+}
+
+.ferry-card-head {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.7rem;
+  margin-bottom: 0.8rem;
+}
+
+.ferry-route {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 0.2rem;
+}
+
+.ferry-meta {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ferry-split-note {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--orange);
+  border: 1px solid rgba(232, 93, 26, 0.3);
+  background: var(--orange-dim);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  margin-bottom: 0.85rem;
+}
+
+.ferry-price-list { list-style: none; }
+
+.ferry-price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ferry-price-row:last-child { border-bottom: none; }
+
+.ferry-vehicle {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  font-size: 0.95rem;
+}
+
+.ferry-direction {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.ferry-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+  font-family: var(--font-barlow-condensed);
+  font-weight: 700;
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.ferry-cabin {
+  font-family: var(--font-barlow);
+  font-weight: 400;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.ferry-empty,
+.ferry-notes {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.ferry-notes {
+  list-style: none;
+  margin-top: 0.75rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--border);
+}
+
+.included-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin-bottom: 0.9rem;
+}
+
+.included-list strong { color: var(--text); }
+
+.included-list span {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .ferry-price-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+  .ferry-price { align-items: flex-start; }
+}
+
+.ferry-row-note {
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: var(--muted);
+}

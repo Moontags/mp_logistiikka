@@ -3,12 +3,12 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { parseBody } from 'next-sanity/webhook';
 
 /**
- * On-demand ISR for the blog.
+ * On-demand ISR for Sanity-driven pages (blog + ferry pricing).
  *
  * Configure a GROQ-powered webhook in Sanity Manage:
  *   URL        https://www.mp-logistiikka.fi/api/revalidate
  *   Trigger    Create, Update, Delete
- *   Filter     _type in ["post", "author", "category"]
+ *   Filter     _type in ["post", "author", "category", "ferryRoute"]
  *   Projection {"_type": _type, "slug": slug.current}
  *   Secret     same value as SANITY_REVALIDATE_SECRET
  */
@@ -39,19 +39,27 @@ export async function POST(req: NextRequest) {
       return new Response('Missing _type in webhook projection', { status: 400 });
     }
 
-    // The listing and the sitemap change for every content type the webhook watches.
-    const revalidated = ['/blogi', '/sitemap.xml'];
-    revalidated.forEach((path) => revalidatePath(path));
-
-    if (body._type === 'post' && body.slug && SLUG_PATTERN.test(body.slug)) {
-      const path = `/blogi/${body.slug}`;
-      revalidatePath(path);
+    const revalidated: string[] = [];
+    const touch = (path: string, type?: 'page' | 'layout') => {
+      revalidatePath(path, type);
       revalidated.push(path);
+    };
+
+    if (body._type === 'ferryRoute') {
+      // Ferry routes only feed the pricing page; they have no per-route URL.
+      touch('/lauttahinnat');
     } else {
-      // A deleted post (no slug in the projection) or an author/category edit that is
-      // rendered on every post page — refresh all of them.
-      revalidatePath('/blogi/[slug]', 'page');
-      revalidated.push('/blogi/[slug]');
+      // The listing and the sitemap change for every blog-related type.
+      touch('/blogi');
+      touch('/sitemap.xml');
+
+      if (body._type === 'post' && body.slug && SLUG_PATTERN.test(body.slug)) {
+        touch(`/blogi/${body.slug}`);
+      } else {
+        // A deleted post (no slug in the projection) or an author/category edit that is
+        // rendered on every post page — refresh all of them.
+        touch('/blogi/[slug]', 'page');
+      }
     }
 
     return NextResponse.json({ revalidated, now: Date.now() });

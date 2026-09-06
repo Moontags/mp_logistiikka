@@ -17,9 +17,9 @@ export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: schema.json
 export type SanityImageAssetReference = {
   _ref: string;
-  _type: "reference";
+  _type: 'reference';
   _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+  [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
 };
 
 export type BlockContent = Array<
@@ -27,18 +27,18 @@ export type BlockContent = Array<
       children?: Array<{
         marks?: Array<string>;
         text?: string;
-        _type: "span";
+        _type: 'span';
         _key: string;
       }>;
-      style?: "normal" | "h2" | "h3" | "blockquote";
-      listItem?: "bullet" | "number";
+      style?: 'normal' | 'h2' | 'h3' | 'blockquote';
+      listItem?: 'bullet' | 'number';
       markDefs?: Array<{
         href?: string;
-        _type: "link";
+        _type: 'link';
         _key: string;
       }>;
       level?: number;
-      _type: "block";
+      _type: 'block';
       _key: string;
     }
   | {
@@ -48,14 +48,54 @@ export type BlockContent = Array<
       crop?: SanityImageCrop;
       alt?: string;
       caption?: string;
-      _type: "contentImage";
+      _type: 'contentImage';
       _key: string;
     }
 >;
 
+export type FerryRoute = {
+  _id: string;
+  _type: 'ferryRoute';
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  routeName?: string;
+  slug?: Slug;
+  operator?: string;
+  departurePort?: string;
+  arrivalPort?: string;
+  crossingDurationHours?: number;
+  schedule?: Array<{
+    weekday?: 'ma' | 'ti' | 'ke' | 'to' | 'pe' | 'la' | 'su';
+    departureTime?: string;
+    arrivalTime?: string;
+    _type: 'departure';
+    _key: string;
+  }>;
+  vehiclePricing?: Array<{
+    vehicleType?: 'motorcycle' | 'car' | 'van' | 'van_trailer';
+    direction?: 'meno' | 'paluu' | 'molemmat';
+    priceEur?: number;
+    includesCabin?: boolean;
+    notes?: string;
+    _type: 'vehiclePrice';
+    _key: string;
+  }>;
+  validFrom?: string;
+  validUntil?: string;
+  usedByFinishpoint?: boolean;
+  usedByMpLogistiikka?: boolean;
+};
+
+export type Slug = {
+  _type: 'slug';
+  current?: string;
+  source?: string;
+};
+
 export type Category = {
   _id: string;
-  _type: "category";
+  _type: 'category';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -64,29 +104,23 @@ export type Category = {
   description?: string;
 };
 
-export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
-};
-
 export type AuthorReference = {
   _ref: string;
-  _type: "reference";
+  _type: 'reference';
   _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "author";
+  [internalGroqTypeReferenceTo]?: 'author';
 };
 
 export type CategoryReference = {
   _ref: string;
-  _type: "reference";
+  _type: 'reference';
   _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "category";
+  [internalGroqTypeReferenceTo]?: 'category';
 };
 
 export type Post = {
   _id: string;
-  _type: "post";
+  _type: 'post';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -99,7 +133,7 @@ export type Post = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
-    _type: "image";
+    _type: 'image';
   };
   publishedAt?: string;
   author?: AuthorReference;
@@ -112,7 +146,7 @@ export type Post = {
 };
 
 export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
+  _type: 'sanity.imageCrop';
   top?: number;
   bottom?: number;
   left?: number;
@@ -120,7 +154,7 @@ export type SanityImageCrop = {
 };
 
 export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
+  _type: 'sanity.imageHotspot';
   x?: number;
   y?: number;
   height?: number;
@@ -129,7 +163,7 @@ export type SanityImageHotspot = {
 
 export type Author = {
   _id: string;
-  _type: "author";
+  _type: 'author';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -142,30 +176,30 @@ export type Author = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
-    _type: "image";
+    _type: 'image';
   };
   bio?: Array<{
     children?: Array<{
       marks?: Array<string>;
       text?: string;
-      _type: "span";
+      _type: 'span';
       _key: string;
     }>;
-    style?: "normal";
-    listItem?: "bullet" | "number";
+    style?: 'normal';
+    listItem?: 'bullet' | 'number';
     markDefs?: Array<{
       href?: string;
-      _type: "link";
+      _type: 'link';
       _key: string;
     }>;
     level?: number;
-    _type: "block";
+    _type: 'block';
     _key: string;
   }>;
 };
 
 export type SanityImagePaletteSwatch = {
-  _type: "sanity.imagePaletteSwatch";
+  _type: 'sanity.imagePaletteSwatch';
   background?: string;
   foreground?: string;
   population?: number;
@@ -173,7 +207,7 @@ export type SanityImagePaletteSwatch = {
 };
 
 export type SanityImagePalette = {
-  _type: "sanity.imagePalette";
+  _type: 'sanity.imagePalette';
   darkMuted?: SanityImagePaletteSwatch;
   lightVibrant?: SanityImagePaletteSwatch;
   darkVibrant?: SanityImagePaletteSwatch;
@@ -184,14 +218,14 @@ export type SanityImagePalette = {
 };
 
 export type SanityImageDimensions = {
-  _type: "sanity.imageDimensions";
+  _type: 'sanity.imageDimensions';
   height?: number;
   width?: number;
   aspectRatio?: number;
 };
 
 export type SanityImageMetadata = {
-  _type: "sanity.imageMetadata";
+  _type: 'sanity.imageMetadata';
   location?: Geopoint;
   dimensions?: SanityImageDimensions;
   palette?: SanityImagePalette;
@@ -204,7 +238,7 @@ export type SanityImageMetadata = {
 
 export type SanityFileAsset = {
   _id: string;
-  _type: "sanity.fileAsset";
+  _type: 'sanity.fileAsset';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -225,7 +259,7 @@ export type SanityFileAsset = {
 };
 
 export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData";
+  _type: 'sanity.assetSourceData';
   name?: string;
   id?: string;
   url?: string;
@@ -233,7 +267,7 @@ export type SanityAssetSourceData = {
 
 export type SanityImageAsset = {
   _id: string;
-  _type: "sanity.imageAsset";
+  _type: 'sanity.imageAsset';
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
@@ -255,7 +289,7 @@ export type SanityImageAsset = {
 };
 
 export type Geopoint = {
-  _type: "geopoint";
+  _type: 'geopoint';
   lat?: number;
   lng?: number;
   alt?: number;
@@ -264,8 +298,9 @@ export type Geopoint = {
 export type AllSanitySchemaTypes =
   | SanityImageAssetReference
   | BlockContent
-  | Category
+  | FerryRoute
   | Slug
+  | Category
   | AuthorReference
   | CategoryReference
   | Post
@@ -296,7 +331,7 @@ export type POSTS_QUERY_RESULT = Array<{
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
-    _type: "image";
+    _type: 'image';
   } | null;
   author: {
     _id: string;
@@ -324,7 +359,7 @@ export type POST_QUERY_RESULT = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
-    _type: "image";
+    _type: 'image';
   } | null;
   author: {
     _id: string;
@@ -340,18 +375,18 @@ export type POST_QUERY_RESULT = {
         children?: Array<{
           marks?: Array<string>;
           text?: string;
-          _type: "span";
+          _type: 'span';
           _key: string;
         }>;
-        style?: "blockquote" | "h2" | "h3" | "normal";
-        listItem?: "bullet" | "number";
+        style?: 'blockquote' | 'h2' | 'h3' | 'normal';
+        listItem?: 'bullet' | 'number';
         markDefs: Array<{
           href: string | null;
-          _type: "link";
+          _type: 'link';
           _key: string;
         }> | null;
         level?: number;
-        _type: "block";
+        _type: 'block';
         _key: string;
       }
     | {
@@ -361,7 +396,7 @@ export type POST_QUERY_RESULT = {
         crop: SanityImageCrop | null;
         alt: string | null;
         caption: string | null;
-        _type: "contentImage";
+        _type: 'contentImage';
         _key: string;
       }
   > | null;
@@ -380,7 +415,7 @@ export type POST_SEO_QUERY_RESULT = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     alt?: string;
-    _type: "image";
+    _type: 'image';
   } | null;
 } | null;
 
@@ -389,6 +424,24 @@ export type POST_SEO_QUERY_RESULT = {
 // Query: *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
 export type POST_SLUGS_QUERY_RESULT = Array<{
   slug: string | null;
+}>;
+
+// Source: ../mp-logistiikka/sanity/lib/queries.ts
+// Variable: MP_FERRY_ROUTES_QUERY
+// Query: *[_type == "ferryRoute" && usedByMpLogistiikka == true]  | order(routeName asc) {    _id,    routeName,    operator,    crossingDurationHours,    vehiclePricing[]{      _key,      vehicleType,      direction,      priceEur,      includesCabin,      notes    }  }
+export type MP_FERRY_ROUTES_QUERY_RESULT = Array<{
+  _id: string;
+  routeName: string | null;
+  operator: string | null;
+  crossingDurationHours: number | null;
+  vehiclePricing: Array<{
+    _key: string;
+    vehicleType: 'car' | 'motorcycle' | 'van_trailer' | 'van' | null;
+    direction: 'meno' | 'molemmat' | 'paluu' | null;
+    priceEur: number | null;
+    includesCabin: boolean | null;
+    notes: string | null;
+  }> | null;
 }>;
 
 // Source: ../mp-logistiikka/sanity/lib/queries.ts
@@ -406,10 +459,11 @@ declare global {
     '\n  *[_type == "post" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  publishedAt,\n  mainImage,\n  "author": author->{_id, name},\n  "categories": categories[]->{_id, title, "slug": slug.current}\n,\n    body[]{\n      ...,\n      _type == "block" => { markDefs[]{ ..., _type == "link" => { href } } },\n      _type == "contentImage" => { asset, hotspot, crop, alt, caption }\n    }\n  }\n': POST_QUERY_RESULT;
     '\n  *[_type == "post" && slug.current == $slug][0]{\n    title,\n    excerpt,\n    publishedAt,\n    mainImage\n  }\n': POST_SEO_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }\n': POST_SLUGS_QUERY_RESULT;
+    '\n  *[_type == "ferryRoute" && usedByMpLogistiikka == true]\n  | order(routeName asc) {\n    _id,\n    routeName,\n    operator,\n    crossingDurationHours,\n    vehiclePricing[]{\n      _key,\n      vehicleType,\n      direction,\n      priceEur,\n      includesCabin,\n      notes\n    }\n  }\n': MP_FERRY_ROUTES_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)]\n  | order(publishedAt desc) {\n    "slug": slug.current,\n    _updatedAt\n  }\n': POSTS_SITEMAP_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too
-declare module "@sanity/client" {
+declare module '@sanity/client' {
   interface SanityQueries extends globalThis.SanityQueries {}
 }

@@ -42,6 +42,28 @@ export const POST_SLUGS_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
 `);
 
+/**
+ * Ferry routes shown on /lauttahinnat.
+ * Deliberately omits validFrom/validUntil and usedByFinishpoint — internal only.
+ */
+export const MP_FERRY_ROUTES_QUERY = defineQuery(`
+  *[_type == "ferryRoute" && usedByMpLogistiikka == true]
+  | order(routeName asc) {
+    _id,
+    routeName,
+    operator,
+    crossingDurationHours,
+    vehiclePricing[]{
+      _key,
+      vehicleType,
+      direction,
+      priceEur,
+      includesCabin,
+      notes
+    }
+  }
+`);
+
 export const POSTS_SITEMAP_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current)]
   | order(publishedAt desc) {

@@ -1,0 +1,12 @@
+# Build output and tooling artifacts
+.next
+out
+build
+coverage
+.vercel
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+# Lockfiles and static assets
+package-lock.json
+public
