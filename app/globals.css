@@ -1188,6 +1188,15 @@ h1, h2, h3, h4 {
   color: var(--muted);
 }
 
+.ferry-card-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.85rem;
+}
+
 .ferry-split-note {
   font-size: 0.82rem;
   line-height: 1.5;

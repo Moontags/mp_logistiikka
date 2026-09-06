@@ -65,6 +65,14 @@ export type FerryRoute = {
   departurePort?: string;
   arrivalPort?: string;
   crossingDurationHours?: number;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: 'image';
+  };
   schedule?: Array<{
     weekday?: 'ma' | 'ti' | 'ke' | 'to' | 'pe' | 'la' | 'su';
     departureTime?: string;
@@ -85,6 +93,22 @@ export type FerryRoute = {
   validUntil?: string;
   usedByFinishpoint?: boolean;
   usedByMpLogistiikka?: boolean;
+};
+
+export type SanityImageCrop = {
+  _type: 'sanity.imageCrop';
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: 'sanity.imageHotspot';
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
 };
 
 export type Slug = {
@@ -143,22 +167,6 @@ export type Post = {
     } & CategoryReference
   >;
   body?: BlockContent;
-};
-
-export type SanityImageCrop = {
-  _type: 'sanity.imageCrop';
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityImageHotspot = {
-  _type: 'sanity.imageHotspot';
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
 };
 
 export type Author = {
@@ -299,13 +307,13 @@ export type AllSanitySchemaTypes =
   | SanityImageAssetReference
   | BlockContent
   | FerryRoute
+  | SanityImageCrop
+  | SanityImageHotspot
   | Slug
   | Category
   | AuthorReference
   | CategoryReference
   | Post
-  | SanityImageCrop
-  | SanityImageHotspot
   | Author
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -428,12 +436,18 @@ export type POST_SLUGS_QUERY_RESULT = Array<{
 
 // Source: ../mp-logistiikka/sanity/lib/queries.ts
 // Variable: MP_FERRY_ROUTES_QUERY
-// Query: *[_type == "ferryRoute" && usedByMpLogistiikka == true]  | order(routeName asc) {    _id,    routeName,    operator,    crossingDurationHours,    vehiclePricing[]{      _key,      vehicleType,      direction,      priceEur,      includesCabin,      notes    }  }
+// Query: *[_type == "ferryRoute" && usedByMpLogistiikka == true]  | order(routeName asc) {    _id,    routeName,    operator,    crossingDurationHours,    image{ asset, hotspot, crop, alt },    vehiclePricing[]{      _key,      vehicleType,      direction,      priceEur,      includesCabin,      notes    }  }
 export type MP_FERRY_ROUTES_QUERY_RESULT = Array<{
   _id: string;
   routeName: string | null;
   operator: string | null;
   crossingDurationHours: number | null;
+  image: {
+    asset: SanityImageAssetReference | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+    alt: string | null;
+  } | null;
   vehiclePricing: Array<{
     _key: string;
     vehicleType: 'car' | 'motorcycle' | 'van_trailer' | 'van' | null;
@@ -459,7 +473,7 @@ declare global {
     '\n  *[_type == "post" && slug.current == $slug][0]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  excerpt,\n  publishedAt,\n  mainImage,\n  "author": author->{_id, name},\n  "categories": categories[]->{_id, title, "slug": slug.current}\n,\n    body[]{\n      ...,\n      _type == "block" => { markDefs[]{ ..., _type == "link" => { href } } },\n      _type == "contentImage" => { asset, hotspot, crop, alt, caption }\n    }\n  }\n': POST_QUERY_RESULT;
     '\n  *[_type == "post" && slug.current == $slug][0]{\n    title,\n    excerpt,\n    publishedAt,\n    mainImage\n  }\n': POST_SEO_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }\n': POST_SLUGS_QUERY_RESULT;
-    '\n  *[_type == "ferryRoute" && usedByMpLogistiikka == true]\n  | order(routeName asc) {\n    _id,\n    routeName,\n    operator,\n    crossingDurationHours,\n    vehiclePricing[]{\n      _key,\n      vehicleType,\n      direction,\n      priceEur,\n      includesCabin,\n      notes\n    }\n  }\n': MP_FERRY_ROUTES_QUERY_RESULT;
+    '\n  *[_type == "ferryRoute" && usedByMpLogistiikka == true]\n  | order(routeName asc) {\n    _id,\n    routeName,\n    operator,\n    crossingDurationHours,\n    image{ asset, hotspot, crop, alt },\n    vehiclePricing[]{\n      _key,\n      vehicleType,\n      direction,\n      priceEur,\n      includesCabin,\n      notes\n    }\n  }\n': MP_FERRY_ROUTES_QUERY_RESULT;
     '\n  *[_type == "post" && defined(slug.current)]\n  | order(publishedAt desc) {\n    "slug": slug.current,\n    _updatedAt\n  }\n': POSTS_SITEMAP_QUERY_RESULT;
   }
 }

@@ -53,6 +53,7 @@ export const MP_FERRY_ROUTES_QUERY = defineQuery(`
     routeName,
     operator,
     crossingDurationHours,
+    image{ asset, hotspot, crop, alt },
     vehiclePricing[]{
       _key,
       vehicleType,

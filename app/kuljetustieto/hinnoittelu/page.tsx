@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
+import { stegaClean } from 'next-sanity';
 
 import {
   entryLabel,
@@ -9,6 +11,7 @@ import {
   groupByVehicle,
   hasSplitPricing,
 } from '@/lib/ferryPricing';
+import { urlFor } from '@/sanity/lib/image';
 import { sanityFetch } from '@/sanity/lib/live';
 import { MP_FERRY_ROUTES_QUERY } from '@/sanity/lib/queries';
 
@@ -100,6 +103,17 @@ export default async function HinnoitteluPage() {
                             .join(' · ')}
                         </p>
                       </header>
+
+                      {route.image?.asset?._ref && (
+                        <Image
+                          src={urlFor(route.image).width(800).height(450).url()}
+                          alt={stegaClean(route.image.alt) ?? ''}
+                          width={800}
+                          height={450}
+                          sizes="(max-width: 767px) 100vw, 360px"
+                          className="ferry-card-img"
+                        />
+                      )}
 
                       {isSplitPriced && (
                         <p className="ferry-split-note">
