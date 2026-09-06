@@ -19,7 +19,9 @@ export async function generateStaticParams() {
   return data.filter((entry) => entry.slug).map((entry) => ({ slug: entry.slug! }));
 }
 
-export async function generateMetadata(props: PageProps<'/blogi/[slug]'>): Promise<Metadata> {
+export async function generateMetadata(
+  props: PageProps<'/kuljetustieto/[slug]'>
+): Promise<Metadata> {
   const { slug } = await props.params;
   const { data: post } = await sanityFetch({
     query: POST_SEO_QUERY,
@@ -29,7 +31,7 @@ export async function generateMetadata(props: PageProps<'/blogi/[slug]'>): Promi
 
   if (!post) return {};
 
-  const url = `https://www.mp-logistiikka.fi/blogi/${slug}`;
+  const url = `https://www.mp-logistiikka.fi/kuljetustieto/${slug}`;
   const ogImage = post.mainImage?.asset?._ref
     ? urlFor(post.mainImage).width(1200).height(630).url()
     : undefined;
@@ -58,7 +60,7 @@ function formatDate(value?: string | null) {
   });
 }
 
-export default async function BlogPostPage(props: PageProps<'/blogi/[slug]'>) {
+export default async function BlogPostPage(props: PageProps<'/kuljetustieto/[slug]'>) {
   const { slug } = await props.params;
   const { data: post } = await sanityFetch({ query: POST_QUERY, params: { slug } });
 
@@ -67,8 +69,8 @@ export default async function BlogPostPage(props: PageProps<'/blogi/[slug]'>) {
   return (
     <div className="blog-scroll">
       <article className="blog-article">
-        <Link href="/blogi" className="blog-back">
-          ← Takaisin blogiin
+        <Link href="/kuljetustieto" className="blog-back">
+          ← Takaisin kuljetustietoon
         </Link>
 
         <p className="blog-card-meta">

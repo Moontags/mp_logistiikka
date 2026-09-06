@@ -8,9 +8,8 @@ import { KUNTORAPORTTI_ENABLED } from '@/lib/features';
 const navLinks = [
   { label: 'Tilaa kuljetus', href: '/hinnasto' },
   { label: 'Palvelut', href: '/palvelut' },
-  { label: 'Hinnoittelu', href: '/lauttahinnat' },
   { label: 'Kuvat', href: '/kuvat' },
-  { label: 'Blogi', href: '/blogi' },
+  { label: 'Kuljetustieto', href: '/kuljetustieto' },
   { label: 'Yhteystiedot', href: '/yhteystiedot' },
 ];
 

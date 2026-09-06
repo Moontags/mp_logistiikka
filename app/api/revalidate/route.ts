@@ -47,18 +47,18 @@ export async function POST(req: NextRequest) {
 
     if (body._type === 'ferryRoute') {
       // Ferry routes only feed the pricing page; they have no per-route URL.
-      touch('/lauttahinnat');
+      touch('/kuljetustieto/hinnoittelu');
     } else {
       // The listing and the sitemap change for every blog-related type.
-      touch('/blogi');
+      touch('/kuljetustieto');
       touch('/sitemap.xml');
 
       if (body._type === 'post' && body.slug && SLUG_PATTERN.test(body.slug)) {
-        touch(`/blogi/${body.slug}`);
+        touch(`/kuljetustieto/${body.slug}`);
       } else {
         // A deleted post (no slug in the projection) or an author/category edit that is
         // rendered on every post page — refresh all of them.
-        touch('/blogi/[slug]', 'page');
+        touch('/kuljetustieto/[slug]', 'page');
       }
     }
 

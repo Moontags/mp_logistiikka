@@ -10,8 +10,8 @@ const staticRoutes: MetadataRoute.Sitemap = [
   { url: `${BASE_URL}/hinnasto`, changeFrequency: 'monthly', priority: 0.9 },
   { url: `${BASE_URL}/tilauslomake`, changeFrequency: 'monthly', priority: 0.9 },
   { url: `${BASE_URL}/palvelut`, changeFrequency: 'monthly', priority: 0.8 },
-  { url: `${BASE_URL}/lauttahinnat`, changeFrequency: 'weekly', priority: 0.8 },
-  { url: `${BASE_URL}/blogi`, changeFrequency: 'weekly', priority: 0.7 },
+  { url: `${BASE_URL}/kuljetustieto`, changeFrequency: 'weekly', priority: 0.8 },
+  { url: `${BASE_URL}/kuljetustieto/hinnoittelu`, changeFrequency: 'weekly', priority: 0.8 },
   { url: `${BASE_URL}/kuvat`, changeFrequency: 'monthly', priority: 0.6 },
   { url: `${BASE_URL}/yhteystiedot`, changeFrequency: 'yearly', priority: 0.6 },
   { url: `${BASE_URL}/sopimusehdot`, changeFrequency: 'yearly', priority: 0.3 },
@@ -27,7 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const postRoutes: MetadataRoute.Sitemap = posts
     .filter((post) => post.slug)
     .map((post) => ({
-      url: `${BASE_URL}/blogi/${post.slug}`,
+      url: `${BASE_URL}/kuljetustieto/${post.slug}`,
       lastModified: new Date(post._updatedAt),
       changeFrequency: 'monthly',
       priority: 0.6,

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 import {
   entryLabel,
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   title: 'Hinnoittelu ja lauttamaksut | MP-Logistiikka',
   description:
     'Näin kuljetuksen hinta muodostuu: läpinäkyvä lauttamaksu varustamon hinnaston mukaan sekä itse kuljetuspalvelu. Katso ajoneuvokohtaiset lauttahinnat.',
-  alternates: { canonical: 'https://www.mp-logistiikka.fi/lauttahinnat' },
+  alternates: { canonical: 'https://www.mp-logistiikka.fi/kuljetustieto/hinnoittelu' },
   robots: { index: true, follow: true },
 };
 
@@ -42,13 +43,17 @@ const INCLUDED_SERVICES = [
   },
 ];
 
-export default async function LauttahinnatPage() {
+export default async function HinnoitteluPage() {
   const { data: routes } = await sanityFetch({ query: MP_FERRY_ROUTES_QUERY });
 
   return (
     <div className="legal-scroll">
       <section className="legal-page" aria-labelledby="pricing-title">
         <div className="legal-inner">
+          <Link href="/kuljetustieto" className="blog-back">
+            ← Takaisin kuljetustietoon
+          </Link>
+
           <p className="legal-eyebrow">Hinnoittelu</p>
           <h1 id="pricing-title" className="legal-title">
             Näin kuljetuksen hinta muodostuu
