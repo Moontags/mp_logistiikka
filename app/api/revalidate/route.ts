@@ -6,7 +6,7 @@ import { parseBody } from 'next-sanity/webhook';
  * On-demand ISR for the blog.
  *
  * Configure a GROQ-powered webhook in Sanity Manage:
- *   URL        https://mp-logistiikka.fi/api/revalidate
+ *   URL        https://www.mp-logistiikka.fi/api/revalidate
  *   Trigger    Create, Update, Delete
  *   Filter     _type in ["post", "author", "category"]
  *   Projection {"_type": _type, "slug": slug.current}

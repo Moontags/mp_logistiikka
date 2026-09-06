@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Sopimusehdot | MP-Logistiikka',
   description:
     'MP-Logistiikan sopimusehdot moottoripyörä-, skootteri- ja mopokuljetuksille. Voimassa 1.8.2026 alkaen.',
-  alternates: { canonical: 'https://mp-logistiikka.fi/sopimusehdot' },
+  alternates: { canonical: 'https://www.mp-logistiikka.fi/sopimusehdot' },
   robots: { index: true, follow: true },
 };
 

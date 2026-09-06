@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next';
 import { client } from '@/sanity/lib/client';
 import { POSTS_SITEMAP_QUERY } from '@/sanity/lib/queries';
 
-const BASE_URL = 'https://mp-logistiikka.fi';
+const BASE_URL = 'https://www.mp-logistiikka.fi';
 
 const staticRoutes: MetadataRoute.Sitemap = [
   { url: BASE_URL, changeFrequency: 'weekly', priority: 1 },

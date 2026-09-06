@@ -29,7 +29,7 @@ export async function generateMetadata(props: PageProps<'/blogi/[slug]'>): Promi
 
   if (!post) return {};
 
-  const url = `https://mp-logistiikka.fi/blogi/${slug}`;
+  const url = `https://www.mp-logistiikka.fi/blogi/${slug}`;
   const ogImage = post.mainImage?.asset?._ref
     ? urlFor(post.mainImage).width(1200).height(630).url()
     : undefined;

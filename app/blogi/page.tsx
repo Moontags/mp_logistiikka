@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: 'Blogi | MP-Logistiikka',
   description:
     'Vinkkejä ja uutisia moottoripyörien kuljetuksesta, säilytyksestä ja kausihuollosta. MP-Logistiikan blogi.',
-  alternates: { canonical: 'https://mp-logistiikka.fi/blogi' },
+  alternates: { canonical: 'https://www.mp-logistiikka.fi/blogi' },
   robots: { index: true, follow: true },
 };
 

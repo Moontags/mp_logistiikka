@@ -31,18 +31,18 @@ export const metadata: Metadata = {
   keywords:
     'moottoripyöräkuljetus, moottoripyörän siirto hinta, mp kuljetus, mp noutopalvelu, ajoneuvokuljetus, Riihimäki, Helsinki, Vantaa, Espoo, Tampere, Hämeenlinna, Lahti, Mikkeli, moottoripyörän hinauskuljetus',
   authors: [{ name: 'MP-Logistiikka' }],
-  metadataBase: new URL('https://mp-logistiikka.fi'),
+  metadataBase: new URL('https://www.mp-logistiikka.fi'),
   openGraph: {
     title: 'MP-Logistiikka – Turvalliset moottoripyöräsiirrot ympäri Suomen',
     description: 'Vakuutettu ja luotettava moottoripyöräkuljetus. Katso hinta ja tilaa siirto!',
-    url: 'https://mp-logistiikka.fi',
+    url: 'https://www.mp-logistiikka.fi',
     siteName: 'MP-Logistiikka',
     images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
     locale: 'fi_FI',
     type: 'website',
   },
   robots: { index: true, follow: true },
-  alternates: { canonical: 'https://mp-logistiikka.fi' },
+  alternates: { canonical: 'https://www.mp-logistiikka.fi' },
 };
 
 export default async function RootLayout({
