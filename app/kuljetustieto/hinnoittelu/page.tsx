@@ -35,11 +35,11 @@ const INCLUDED_SERVICES = [
   },
   {
     title: 'Kuljetusvakuutus',
-    text: 'Kuljetukset hoidetaan voimassa olevan kuljetusvakuutuksen turvin. Vakuutusturva on tyypillisesti luokkaa 50 000 € kertavahinkoa kohden, ja kuhunkin kuljetukseen sovellettava kattavuus vahvistetaan tarjouksessa ja sopimusehdoissa.',
+    text: 'Kuljetukset hoidetaan voimassa olevan kuljetusvakuutuksen turvin. Vakuutusturva on luokkaa 50 000 € kertavahinkoa kohden, ja kuhunkin kuljetukseen sovellettava kattavuus vahvistetaan tarjouksessa ja sopimusehdoissa.',
   },
   {
     title: 'Kuljettajan työaika koko matkan ajalta',
-    text: 'Hintaan sisältyy kuljettajan työaika koko matkan ajalta — myös lauttaosuudet, tauot ja paluumatka.',
+    text: 'Hintaan sisältyy kuljettajan työaika koko matkan ajalta — myös lauttaosuudet ja ajoaika.',
   },
 ];
 
