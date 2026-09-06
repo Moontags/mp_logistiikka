@@ -9,6 +9,7 @@ const navLinks = [
   { label: 'Tilaa kuljetus', href: '/hinnasto' },
   { label: 'Palvelut', href: '/palvelut' },
   { label: 'Kuvat', href: '/kuvat' },
+  { label: 'Blogi', href: '/blogi' },
   { label: 'Yhteystiedot', href: '/yhteystiedot' },
 ];
 

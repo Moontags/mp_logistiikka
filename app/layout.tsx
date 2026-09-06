@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import { Barlow_Condensed, Barlow } from 'next/font/google';
+import { draftMode } from 'next/headers';
 import Script from 'next/script';
+import { VisualEditing } from 'next-sanity/visual-editing';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+import { SanityLive } from '@/sanity/lib/live';
 import './globals.css';
 
 const barlowCondensed = Barlow_Condensed({
@@ -42,11 +45,13 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://mp-logistiikka.fi' },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isEnabled: isDraftMode } = await draftMode();
+
   return (
     <html
       lang="fi"
@@ -64,6 +69,8 @@ export default function RootLayout({
           src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&language=fi&region=FI&loading=async`}
           strategy="afterInteractive"
         />
+        <SanityLive />
+        {isDraftMode && <VisualEditing />}
       </body>
     </html>
   );
