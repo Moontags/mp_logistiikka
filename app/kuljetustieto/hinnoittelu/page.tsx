@@ -15,7 +15,7 @@ import { MP_FERRY_ROUTES_QUERY } from '@/sanity/lib/queries';
 export const metadata: Metadata = {
   title: 'Hinnoittelu ja lauttamaksut | MP-Logistiikka',
   description:
-    'Näin kuljetuksen hinta muodostuu: läpinäkyvä lauttamaksu varustamon hinnaston mukaan sekä itse kuljetuspalvelu. Katso ajoneuvokohtaiset lauttahinnat.',
+    'Näin kuljetuksen hinta ulkomaille muodostuu: läpinäkyvä lauttamaksu varustamon hinnaston mukaan sekä itse kuljetuspalvelu. Katso ajoneuvokohtaiset lauttahinnat.',
   alternates: { canonical: 'https://www.mp-logistiikka.fi/kuljetustieto/hinnoittelu' },
   robots: { index: true, follow: true },
 };
@@ -56,7 +56,7 @@ export default async function HinnoitteluPage() {
 
           <p className="legal-eyebrow">Hinnoittelu</p>
           <h1 id="pricing-title" className="legal-title">
-            Näin kuljetuksen hinta muodostuu
+            Näin kuljetuksen hinta ulkomaille muodostuu
           </h1>
 
           <p className="legal-intro">

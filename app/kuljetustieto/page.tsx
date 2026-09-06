@@ -41,7 +41,7 @@ export default async function KuljetustietoPage() {
 
         <Link href="/kuljetustieto/hinnoittelu" className="info-card">
           <p className="info-card-eyebrow">Hinnoittelu</p>
-          <h2 className="info-card-title">Näin kuljetuksen hinta muodostuu</h2>
+          <h2 className="info-card-title">Näin kuljetuksen hinta ulkomaille muodostuu</h2>
           <p className="info-card-text">
             Läpinäkyvä lauttamaksu varustamon hinnaston mukaan sekä itse kuljetuspalvelu. Katso
             ajoneuvokohtaiset lauttahinnat reiteittäin.
