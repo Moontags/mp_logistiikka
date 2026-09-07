@@ -192,10 +192,10 @@ export default async function HinnoitteluPage() {
           </section>
 
           <div className="legal-area">
-            <h2 className="legal-area-title">Pyydä tarkka hinta</h2>
+            <h2 className="legal-area-title">Pyydä tarjous</h2>
             <p>
-              Kokonaishinta riippuu reitistä, ajoneuvotyypistä, noutoajankohdasta ja mahdollisesta
-              lauttaosuudesta. Kerro lähtö- ja kohdeosoite, niin saat sitovan tarjouksen.
+              Kokonaishinta muodostuu reitistä, ajoneuvotyypistä, kuljetuksen kestosta ja 
+              lauttaosuudesta. Kerro lähtö- ja kohdeosoite, niin saat meiltä tarjouksen.
             </p>
           </div>
         </div>
