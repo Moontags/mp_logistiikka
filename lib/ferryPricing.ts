@@ -12,7 +12,7 @@ export const VEHICLE_LABELS: Record<string, string> = {
 export const DIRECTION_LABELS: Record<string, string> = {
   meno: 'Meno',
   paluu: 'Paluu',
-  molemmat: 'Molemmat suuntaan',
+  molemmat: 'Meno paluu',
 };
 
 export type PricingEntry = {
