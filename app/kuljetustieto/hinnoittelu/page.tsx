@@ -26,11 +26,11 @@ export const metadata: Metadata = {
 const INCLUDED_SERVICES = [
   {
     title: 'Nouto ja toimitus sovittuun osoitteeseen',
-    text: 'Haemme ajoneuvon sovitusta osoitteesta ja toimitamme sen perille — et tarvitse omaa peräkärryä etkä erillistä noutoreissua.',
+    text: 'Haemme ajoneuvon sovitusta osoitteesta ja toimitamme sen perille — et tarvitse omaa peräkärryä.',
   },
   {
     title: 'Ajoneuvon lastaus ja sidonta',
-    text: 'Lastaus ramppia pitkin sekä ammattimainen sidonta liinoilla ja pehmusteilla. Sidonta tarkastetaan matkan aikana.',
+    text: 'Lastaus sekä ammattimainen sidonta liinoilla 4 pisteestä ja pehmusteilla.',
   },
   {
     title: 'Suljettu kuljetustila',
@@ -38,11 +38,11 @@ const INCLUDED_SERVICES = [
   },
   {
     title: 'Kuljetusvakuutus',
-    text: 'Kuljetukset hoidetaan voimassa olevan kuljetusvakuutuksen turvin. Vakuutusturva on luokkaa 50 000 € kertavahinkoa kohden, ja kuhunkin kuljetukseen sovellettava kattavuus vahvistetaan tarjouksessa ja sopimusehdoissa.',
+    text: 'Kuljetukset hoidetaan voimassa olevan kuljetusvakuutuksen turvin. Vakuutusturva on 50 000 € kertavahinkoa kohden, ja kuhunkin kuljetukseen sovellettava kattavuus vahvistetaan tarjouksessa ja sopimusehdoissa.',
   },
   {
     title: 'Kuljettajan työaika koko matkan ajalta',
-    text: 'Hintaan sisältyy kuljettajan työaika koko matkan ajalta — myös lauttaosuudet ja ajoaika.',
+    text: 'Hintaan sisältyy kuljettajan työaika koko matkan ajalta, lauttaosuudet ja ajoaika.',
   },
 ];
 
@@ -64,11 +64,7 @@ export default async function HinnoitteluPage() {
 
           <p className="legal-intro">
             Kuljetuksen hinta rakentuu kahdesta osasta: varustamon perimästä lauttamaksusta ja
-            itse kuljetuspalvelusta. Lauttamaksu on läpinäkyvä läpikulkuerä — se näkyy alla
-            varustamon hinnaston mukaisena, emmekä lisää siihen omaa katetta. Kuljetuspalvelun
-            osuus kattaa noudon, lastauksen, sidonnan, suljetun kuljetustilan, vakuutuksen ja
-            kuljettajan työajan. Saat aina tarkan kokonaishinnan tarjouksessa ennen tilauksen
-            vahvistamista.
+            itse kuljetuspalvelusta. 
           </p>
 
           {/* ── Ferry costs (from Sanity) ── */}
