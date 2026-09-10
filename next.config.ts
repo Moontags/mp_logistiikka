@@ -13,9 +13,13 @@ const nextConfig: NextConfig = {
   // same way by search engines.
   async redirects() {
     return [
-      { source: '/blogi', destination: '/kuljetustieto', permanent: true },
-      { source: '/blogi/:slug*', destination: '/kuljetustieto/:slug*', permanent: true },
-      { source: '/lauttahinnat', destination: '/kuljetustieto/hinnoittelu', permanent: true },
+      { source: '/blogi', destination: '/ulkomaat', permanent: true },
+      { source: '/blogi/:slug*', destination: '/ulkomaat/:slug*', permanent: true },
+      { source: '/lauttahinnat', destination: '/ulkomaat/hinnoittelu', permanent: true },
+      // `/kuljetustieto` was renamed to `/ulkomaat`; the sub-path rule also covers
+      // `/kuljetustieto/hinnoittelu` and every post slug.
+      { source: '/kuljetustieto', destination: '/ulkomaat', permanent: true },
+      { source: '/kuljetustieto/:slug*', destination: '/ulkomaat/:slug*', permanent: true },
     ];
   },
 };

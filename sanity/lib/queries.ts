@@ -43,7 +43,7 @@ export const POST_SLUGS_QUERY = defineQuery(`
 `);
 
 /**
- * Ferry routes shown on /kuljetustieto/hinnoittelu.
+ * Ferry routes shown on /ulkomaat/hinnoittelu.
  * Deliberately omits validFrom/validUntil and usedByFinishpoint — internal only.
  */
 export const MP_FERRY_ROUTES_QUERY = defineQuery(`

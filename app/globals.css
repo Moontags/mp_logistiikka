@@ -933,7 +933,7 @@ h1, h2, h3, h4 {
   margin-bottom: 1.1rem;
 }
 
-/* Landing card linking to a sub-page (e.g. /kuljetustieto → hinnoittelu) */
+/* Landing card linking to a sub-page (e.g. /ulkomaat → hinnoittelu) */
 .info-card {
   display: block;
   background: rgba(17, 17, 17, 0.72);
@@ -1153,7 +1153,7 @@ h1, h2, h3, h4 {
   }
 }
 
-/* ── FERRY PRICING (/kuljetustieto/hinnoittelu) ── */
+/* ── FERRY PRICING (/ulkomaat/hinnoittelu) ── */
 .ferry-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));

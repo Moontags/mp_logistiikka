@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(
-  props: PageProps<'/kuljetustieto/[slug]'>
+  props: PageProps<'/ulkomaat/[slug]'>
 ): Promise<Metadata> {
   const { slug } = await props.params;
   const { data: post } = await sanityFetch({
@@ -31,7 +31,7 @@ export async function generateMetadata(
 
   if (!post) return {};
 
-  const url = `https://www.mp-logistiikka.fi/kuljetustieto/${slug}`;
+  const url = `https://www.mp-logistiikka.fi/ulkomaat/${slug}`;
   const ogImage = post.mainImage?.asset?._ref
     ? urlFor(post.mainImage).width(1200).height(630).url()
     : undefined;
@@ -60,7 +60,7 @@ function formatDate(value?: string | null) {
   });
 }
 
-export default async function BlogPostPage(props: PageProps<'/kuljetustieto/[slug]'>) {
+export default async function BlogPostPage(props: PageProps<'/ulkomaat/[slug]'>) {
   const { slug } = await props.params;
   const { data: post } = await sanityFetch({ query: POST_QUERY, params: { slug } });
 
@@ -69,8 +69,8 @@ export default async function BlogPostPage(props: PageProps<'/kuljetustieto/[slu
   return (
     <div className="blog-scroll">
       <article className="blog-article">
-        <Link href="/kuljetustieto" className="blog-back">
-          ← Takaisin kuljetustietoon
+        <Link href="/ulkomaat" className="blog-back">
+          ← Takaisin Ulkomaat-sivulle
         </Link>
 
         <p className="blog-card-meta">

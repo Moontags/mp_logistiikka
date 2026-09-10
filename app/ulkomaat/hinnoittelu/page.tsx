@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: 'Hinnoittelu ja lauttamaksut | MP-Logistiikka',
   description:
     'Näin kuljetuksen hinta ulkomaille muodostuu: läpinäkyvä lauttamaksu varustamon hinnaston mukaan sekä itse kuljetuspalvelu. Katso ajoneuvokohtaiset lauttahinnat.',
-  alternates: { canonical: 'https://www.mp-logistiikka.fi/kuljetustieto/hinnoittelu' },
+  alternates: { canonical: 'https://www.mp-logistiikka.fi/ulkomaat/hinnoittelu' },
   robots: { index: true, follow: true },
 };
 
@@ -53,8 +53,8 @@ export default async function HinnoitteluPage() {
     <div className="legal-scroll">
       <section className="legal-page" aria-labelledby="pricing-title">
         <div className="legal-inner">
-          <Link href="/kuljetustieto" className="blog-back">
-            ← Takaisin kuljetustietoon
+          <Link href="/ulkomaat" className="blog-back">
+            ← Takaisin Ulkomaat-sivulle
           </Link>
 
           <p className="legal-eyebrow">Hinnoittelu</p>

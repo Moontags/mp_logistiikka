@@ -8,10 +8,10 @@ import { sanityFetch } from '@/sanity/lib/live';
 import { POSTS_QUERY } from '@/sanity/lib/queries';
 
 export const metadata: Metadata = {
-  title: 'Kuljetustieto | MP-Logistiikka',
+  title: 'Ulkomaat | MP-Logistiikka',
   description:
-    'Kuljetustieto kokoaa yhteen hinnoittelun sekä vinkit ja uutiset moottoripyörien kuljetuksesta, säilytyksestä ja kausihuollosta.',
-  alternates: { canonical: 'https://www.mp-logistiikka.fi/kuljetustieto' },
+    'Ulkomaat kokoaa yhteen hinnoittelun sekä vinkit ja uutiset moottoripyörien kuljetuksesta, säilytyksestä ja kausihuollosta.',
+  alternates: { canonical: 'https://www.mp-logistiikka.fi/ulkomaat' },
   robots: { index: true, follow: true },
 };
 
@@ -24,21 +24,21 @@ function formatDate(value?: string | null) {
   });
 }
 
-export default async function KuljetustietoPage() {
+export default async function UlkomaatPage() {
   const { data: posts } = await sanityFetch({ query: POSTS_QUERY });
 
   return (
     <div className="blog-scroll">
-      <section className="blog-page" aria-labelledby="kuljetustieto-title">
-        <p className="blog-eyebrow">Kuljetustieto</p>
-        <h1 id="kuljetustieto-title" className="blog-title">
+      <section className="blog-page" aria-labelledby="ulkomaat-title">
+        <p className="blog-eyebrow">Ulkomaat</p>
+        <h1 id="ulkomaat-title" className="blog-title">
           Tietoa kuljetuksista
         </h1>
         <p className="blog-lead">
           Täältä löydät kuljetuksen hinnoittelun
         </p>
 
-        <Link href="/kuljetustieto/hinnoittelu" className="info-card">
+        <Link href="/ulkomaat/hinnoittelu" className="info-card">
           <p className="info-card-eyebrow">Hinnoittelu</p>
           <h2 className="info-card-title">Näin kuljetuksen hinta ulkomaille muodostuu</h2>
           <p className="info-card-text">
@@ -59,7 +59,7 @@ export default async function KuljetustietoPage() {
           <ul className="blog-grid" aria-labelledby="articles-title">
             {posts.map((post) => (
               <li key={post._id} className="blog-card">
-                <Link href={`/kuljetustieto/${post.slug}`} className="blog-card-link">
+                <Link href={`/ulkomaat/${post.slug}`} className="blog-card-link">
                   {post.mainImage?.asset?._ref && (
                     <Image
                       src={urlFor(post.mainImage).width(800).height(450).url()}
