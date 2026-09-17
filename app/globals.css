@@ -1117,10 +1117,15 @@ h1, h2, h3, h4 {
   font-style: italic;
 }
 
+/* Tailwindin preflight nollaa list-stylen, joten merkit palautetaan tässä. */
 .blog-list {
-  margin: 0 0 1.1rem 1.25rem;
+  margin: 0 0 1.1rem;
+  padding-left: 1.5rem;
   line-height: 1.75;
+  list-style: disc outside;
 }
+
+ol.blog-list { list-style: decimal outside; }
 
 .blog-list li { margin-bottom: 0.35rem; }
 
