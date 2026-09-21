@@ -9,7 +9,7 @@ export default function Features() {
     { icon: '🗺️', title: 'Koko Suomi', desc: 'Toimipiste Riihimäellä, kuljetuksia kaikkialle Suomeen.' },
     { icon: '⚡', title: 'Nopea aikataulu', desc: 'Kuljetus usein jo samana tai seuraavana päivänä.' },
     { icon: '📦', title: 'Ford Transit L3H2', desc: 'Mahtuu isommatkin pyörät ja skootterit vaivatta.' },
-    { icon: '🏍️', title: 'Ajopalvelu', desc: 'Tarvittaessa ajamme pyöräsi perille itse – kuljettajallamme on A-luokan ajokortti. Usein trailerikuljetusta edullisempi vaihtoehto, jos et itse ehdi.' },
+    { icon: '🏍️', title: 'Ajopalvelu', desc: 'Tarvittaessa ajamme pyöräsi perille itse – kuljettajallamme on A-luokan ajokortti. Usein trailerikuljetusta edullisempi vaihtoehto, jos et itse ehdi. Hintaan lisätään lentolipun hinta noutopaikkaan.' },
   ];
 
   return (

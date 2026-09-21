@@ -200,8 +200,9 @@ export default async function HinnoitteluPage() {
             <p className="legal-note">
               Trailerikuljetuksen sijaan voimme joissain tapauksissa myös ajaa pyörän perille –
               kuljettajallamme on A-luokan ajokortti. Tämä voi olla edullisempi ratkaisu, jos
-              noutopaikka on kaukana tai reitti sopii ajettavaksi. Kysy mahdollisuutta tarjouksen
-              yhteydessä.
+              noutopaikka on kaukana tai reitti sopii ajettavaksi. Hintaan lisätään lentolipun
+              hinta noutopaikkaan; muuten hinta vaihtelee kausittain, joten kysy mahdollisuutta
+              ja hintaa tarjouksen yhteydessä.
             </p>
           </section>
 

@@ -40,7 +40,8 @@ export default async function UlkomaatPage() {
 
         <p className="blog-lead">
           Jos et itse ehdi ajaa pyörää kohteeseen, voimme myös ajaa sen puolestasi – kysy
-          ajopalvelusta tarjouksen yhteydessä.
+          ajopalvelusta tarjouksen yhteydessä (hintaan lisätään lentolipun hinta
+          noutopaikkaan).
         </p>
 
         <Link href="/ulkomaat/hinnoittelu" className="info-card">
