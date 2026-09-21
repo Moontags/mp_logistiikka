@@ -1400,3 +1400,19 @@ ol.blog-list { list-style: decimal outside; }
   line-height: 1.45;
   color: var(--muted);
 }
+
+/* ── FEATURES (Miksi valita MP-Logistiikka?) ── */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .features-grid { grid-template-columns: 1fr; }
+}

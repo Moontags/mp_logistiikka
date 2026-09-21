@@ -57,13 +57,8 @@ export default function Features() {
           </p>
         </div>
 
-        {/* Feature grid – 3 cols on large screens */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-          gap: '0.875rem',
-          marginBottom: '1.25rem',
-        }}>
+        {/* Feature grid – 3 cols desktop, 2 tablet, 1 mobile */}
+        <div className="features-grid">
           {features.map((f) => (
             <div
               key={f.title}
