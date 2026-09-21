@@ -38,6 +38,11 @@ export default async function UlkomaatPage() {
           Täältä löydät kuljetuksen hinnoittelun
         </p>
 
+        <p className="blog-lead">
+          Jos et itse ehdi ajaa pyörää kohteeseen, voimme myös ajaa sen puolestasi – kysy
+          ajopalvelusta tarjouksen yhteydessä.
+        </p>
+
         <Link href="/ulkomaat/hinnoittelu" className="info-card">
           <p className="info-card-eyebrow">Hinnoittelu</p>
           <h2 className="info-card-title">Näin kuljetuksen hinta ulkomaille muodostuu</h2>

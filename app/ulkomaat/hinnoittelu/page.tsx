@@ -191,6 +191,20 @@ export default async function HinnoitteluPage() {
             </ul>
           </section>
 
+          {/* ── Alternative: driving service (static) ── */}
+          <section className="legal-section" aria-labelledby="ajopalvelu-title">
+            <h2 id="ajopalvelu-title" className="legal-section-title">
+              Vaihtoehto: ajopalvelu
+            </h2>
+
+            <p className="legal-note">
+              Trailerikuljetuksen sijaan voimme joissain tapauksissa myös ajaa pyörän perille –
+              kuljettajallamme on A-luokan ajokortti. Tämä voi olla edullisempi ratkaisu, jos
+              noutopaikka on kaukana tai reitti sopii ajettavaksi. Kysy mahdollisuutta tarjouksen
+              yhteydessä.
+            </p>
+          </section>
+
           <div className="legal-area">
             <h2 className="legal-area-title">Pyydä tarjous</h2>
             <p>
