@@ -15,6 +15,12 @@ type ContentImageValue = {
   caption?: string;
 };
 
+type PriceTableValue = {
+  caption?: string;
+  columns?: string[];
+  rows?: { _key: string; cells?: string[] }[];
+};
+
 const components: PortableTextComponents = {
   block: {
     normal: ({ children }) => <p className="blog-p">{children}</p>,
@@ -61,6 +67,47 @@ const components: PortableTextComponents = {
           />
           {value.caption && <figcaption className="blog-caption">{value.caption}</figcaption>}
         </figure>
+      );
+    },
+
+    priceTable: ({ value }: { value: PriceTableValue }) => {
+      const columns = value?.columns ?? [];
+      const rows = value?.rows ?? [];
+      if (columns.length === 0 || rows.length === 0) return null;
+
+      return (
+        <div className="blog-table-wrap">
+          <table className="blog-table">
+            {value.caption && <caption className="blog-table-caption">{value.caption}</caption>}
+            <thead>
+              <tr>
+                {columns.map((column, i) => (
+                  <th key={i} scope="col">
+                    {column}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr key={row._key}>
+                  {columns.map((column, i) => {
+                    const cell = row.cells?.[i] ?? '';
+                    return i === 0 ? (
+                      <th key={i} scope="row" data-label={column}>
+                        {cell}
+                      </th>
+                    ) : (
+                      <td key={i} data-label={column}>
+                        {cell}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       );
     },
   },

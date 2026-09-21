@@ -15,6 +15,17 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type PriceTable = {
+  _type: 'priceTable';
+  caption?: string;
+  columns?: Array<string>;
+  rows?: Array<{
+    cells?: Array<string>;
+    _type: 'row';
+    _key: string;
+  }>;
+};
+
 export type SanityImageAssetReference = {
   _ref: string;
   _type: 'reference';
@@ -51,6 +62,9 @@ export type BlockContent = Array<
       _type: 'contentImage';
       _key: string;
     }
+  | ({
+      _key: string;
+    } & PriceTable)
 >;
 
 export type FerryRoute = {
@@ -304,6 +318,7 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | PriceTable
   | SanityImageAssetReference
   | BlockContent
   | FerryRoute
@@ -406,6 +421,17 @@ export type POST_QUERY_RESULT = {
         caption: string | null;
         _type: 'contentImage';
         _key: string;
+      }
+    | {
+        _key: string;
+        _type: 'priceTable';
+        caption?: string;
+        columns?: Array<string>;
+        rows?: Array<{
+          cells?: Array<string>;
+          _type: 'row';
+          _key: string;
+        }>;
       }
   > | null;
 } | null;

@@ -1150,6 +1150,104 @@ ol.blog-list { list-style: decimal outside; }
   color: var(--muted);
 }
 
+/* Taulukkolohko (priceTable) artikkelin sisällössä. */
+.blog-table-wrap {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.blog-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.blog-table-caption {
+  caption-side: top;
+  margin-bottom: 0.6rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: left;
+}
+
+.blog-table th,
+.blog-table td {
+  padding: 0.6rem 0.9rem 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  vertical-align: baseline;
+}
+
+.blog-table thead th {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--orange);
+  border-bottom-color: var(--border);
+  white-space: nowrap;
+}
+
+.blog-table tbody th {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.blog-table tbody tr:last-child th,
+.blog-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Viimeinen sarake (hinta) korostettuna, samaan tapaan kuin .ferry-price. */
+.blog-table tbody td:last-child {
+  font-family: var(--font-barlow-condensed);
+  font-weight: 700;
+  font-size: 1.05rem;
+  white-space: nowrap;
+  padding-right: 0;
+}
+
+/* Kapealla näytöllä rivit pinotaan kortiksi, jottei taulukkoa tarvitse rullata. */
+@media (max-width: 600px) {
+  .blog-table,
+  .blog-table tbody,
+  .blog-table tr,
+  .blog-table th,
+  .blog-table td {
+    display: block;
+  }
+
+  .blog-table thead {
+    display: none;
+  }
+
+  .blog-table tbody tr {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .blog-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .blog-table tbody th,
+  .blog-table tbody td {
+    padding: 0.15rem 0;
+    border-bottom: none;
+  }
+
+  .blog-table tbody td::before {
+    content: attr(data-label) ': ';
+    font-family: var(--font-barlow);
+    font-weight: 400;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+}
+
 @media (max-width: 767px) {
   .blog-scroll {
     height: auto;
