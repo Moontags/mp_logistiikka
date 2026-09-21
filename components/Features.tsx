@@ -6,10 +6,10 @@ export default function Features() {
   const features = [
     { icon: '🔗', title: 'Ammattimainen sidonta', desc: 'Liinoilla ja pehmusteilla – ei naarmuja, ei liikkumista.' },
     { icon: '🛡️', title: 'Vakuutettu kuljetus', desc: 'Kuljetus on vakuutettu lastauksen ja matkan ajaksi.' },
-    { icon: '🗺️', title: 'Koko Suomi', desc: 'Toimipiste Riihimäellä, kuljetuksia kaikkialle Suomeen.' },
+    { icon: '🗺️', title: 'Suomi & Eurooppa', desc: 'Toimipiste Riihimäellä, kuljetuksia kaikkialle Suomeen ja Eurooppaan.' },
     { icon: '⚡', title: 'Nopea aikataulu', desc: 'Kuljetus usein jo samana tai seuraavana päivänä.' },
     { icon: '📦', title: 'Ford Transit L3H2', desc: 'Mahtuu isommatkin pyörät ja skootterit vaivatta.' },
-    { icon: '🏍️', title: 'Ajopalvelu', desc: 'Tarvittaessa ajamme pyöräsi perille itse. Edullisempi vaihtoehto, jos et itse ehdi. Hintaan lisätään lentolipun hinta noutopaikkaan.' },
+    { icon: '🏍️', title: 'Ajopalvelu', desc: 'Tarvittaessa ajamme pyöräsi perille itse. Edullisempi vaihtoehto. Hintaan lisätään lentolipun hinta.' },
   ];
 
   return (
