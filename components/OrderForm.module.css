@@ -5,6 +5,8 @@
 }
 
 .priceLink {
+  width: 100%;
+  cursor: pointer;
   margin-top: 1rem;
   display: flex;
   align-items: center;
@@ -26,11 +28,14 @@
 }
 .priceLink:hover { background: var(--orange-light); }
 .priceLink:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+.mobilePriceLink { display: none; }
 @media (min-width: 768px) {
   .leftColumn { align-self: stretch; display: flex; flex-direction: column; }
   .leftColumn .priceLink { margin-top: auto; }
 }
 @media (max-width: 767px) {
+  .desktopPriceLink { display: none; }
+  .mobilePriceLink { display: flex; }
   .quoteGrid { grid-template-columns: minmax(0, 1fr) !important; }
   .formCard {
     border: 0;

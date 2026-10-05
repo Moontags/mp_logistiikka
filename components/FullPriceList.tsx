@@ -25,13 +25,13 @@ function zones(
   });
 }
 
-export default function FullPriceList({ leadLink }: { leadLink: ReactNode }) {
+export default function FullPriceList({ leadLink, initiallyOpen = false }: { leadLink: ReactNode; initiallyOpen?: boolean }) {
   return (
     <div className={styles.actions}>
       <div className={styles.leadLink}>{leadLink}</div>
-      <details id="hinnasto-tarkemmin" className={styles.details}>
+      <details id="hinnasto-tarkemmin" className={styles.details} open={initiallyOpen}>
         <summary className={styles.summary}>
-          <span className={styles.closed}>Näytä koko hinnasto →</span>
+          <span className={styles.closed}>Näytä hinnasto</span>
           <span className={styles.open}>Piilota hinnasto →</span>
         </summary>
         <div className={`calc-form ${styles.content}`}>

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import FullPriceList from './FullPriceList';
 import styles from './OrderForm.module.css';
 import { useForm } from 'react-hook-form';
 import { BikeType, PRICING, eurShort } from '@/lib/pricing';
@@ -47,7 +47,12 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState('');
+  const [showPriceList, setShowPriceList] = useState(false);
   const [kuntoraportti, setKuntoraportti] = useState(false);
+
+  useEffect(() => {
+    if (showPriceList) document.getElementById('hinnasto-tarkemmin')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, [showPriceList]);
 
   // Kuntoraportti sisältyy ilmaiseksi kun kuljetus ylittää PRICING.KUNTORAPORTTI_FREE_FROM.
   const krFree = prefillPrice !== undefined && prefillPrice >= PRICING.KUNTORAPORTTI_FREE_FROM;
@@ -416,9 +421,9 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                 </div>
               )}
             {!isOrder && (
-              <Link className={styles.priceLink} href="/hinnasto#hinnasto-tarkemmin">
-                Näytä koko hinnasto →
-              </Link>
+              <button type="button" className={`${styles.priceLink} ${styles.desktopPriceLink}`} onClick={() => setShowPriceList(true)}>
+                Näytä hinnasto
+              </button>
             )}
             </div>
 
@@ -549,11 +554,17 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                 >
                   {submitting ? 'Lähetetään...' : isOrder ? 'Lähetä tilaus' : 'Lähetä tarjous'}
                 </button>
+                {!isOrder && (
+                  <button type="button" className={`${styles.priceLink} ${styles.mobilePriceLink}`} onClick={() => setShowPriceList(true)}>
+                    Näytä hinnasto
+                  </button>
+                )}
               </div>
             </div>
           </div>
 
           {/* Full-width below grid – contact */}
+          {showPriceList && <FullPriceList leadLink={null} initiallyOpen />}
           <div
             style={{
               background: 'transparent',
