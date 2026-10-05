@@ -1,3 +1,9 @@
+.formCard {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
 .priceLink {
   margin-top: 1rem;
   display: flex;
@@ -26,5 +32,9 @@
 }
 @media (max-width: 767px) {
   .quoteGrid { grid-template-columns: minmax(0, 1fr) !important; }
-
+  .formCard {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+  }
 }

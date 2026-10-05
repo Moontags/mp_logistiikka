@@ -1259,7 +1259,7 @@ ol.blog-list { list-style: decimal outside; }
 /* ── FERRY PRICING (/ulkomaat/hinnoittelu) ── */
 .ferry-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(290px, 100%), 1fr));
   gap: 1rem;
   margin: 1.25rem 0 1.5rem;
 }
@@ -1464,4 +1464,14 @@ ol.blog-list { list-style: decimal outside; }
 }
 @media (max-width: 768px) {
   .group-transport-grid { grid-template-areas: "route" "contact" "info"; grid-template-rows: auto; }
+}
+
+@media (max-width: 767px) {
+  #hinnasto .calc-grid > .calc-form,
+  .group-transport-route,
+  .group-transport-contact {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+  }
 }

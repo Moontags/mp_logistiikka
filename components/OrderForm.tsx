@@ -207,7 +207,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div
-            className={!isOrder ? styles.quoteGrid : undefined}
+            className={styles.quoteGrid}
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -218,12 +218,9 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
           >
             {/* Left – required fields */}
             <div
-              className={!isOrder ? styles.leftColumn : undefined}
+              className={`${styles.formCard}${!isOrder ? ` ${styles.leftColumn}` : ''}`}
               style={{
                 background: 'transparent',
-                border: '1px solid var(--border)',
-                borderRadius: '8px',
-                padding: '1.25rem',
               }}
             >
               {/* Name + Phone */}
@@ -490,11 +487,9 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
 
               {/* Notes + submit */}
               <div
+                className={styles.formCard}
                 style={{
                   background: 'transparent',
-                  border: '1px solid var(--border)',
-                  borderRadius: '8px',
-                  padding: '1.25rem',
                 }}
               >
                 <div style={fieldStyle}>
