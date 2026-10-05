@@ -23,39 +23,38 @@ export default function GroupTransportPage() {
             ajankohta, niin voimme huomioida kuljetuksesi suunnittelussa.
           </p>
         </div>
-        <div className="calc-grid">
-          <Suspense
-            fallback={
-              <div className="calc-form" role="status">
-                Ladataan lomaketta…
-              </div>
-            }
-          >
-            <GroupTransportContent />
-          </Suspense>
-          <aside className="calc-result group-transport-info" aria-labelledby="group-how-title">
-            <h2 id="group-how-title">Näin ennakkoilmoitus toimii</h2>
-            <ol>
-              <li>Ilmoita reitti ja sinulle sopiva kuljetusviikko tai aikaväli.</li>
-              <li>
-                Selvitämme, voidaanko kuljetus yhdistää muihin samalla suunnalla tehtäviin
-                kuljetuksiin.
-              </li>
-              <li>Vahvistamme toteutumisen, aikataulun ja hinnan kanssasi erikseen.</li>
-            </ol>
-            <p>
-              Yhdistäminen voi pienentää kuljetuskustannuksia. Ennakkoilmoitus ei takaa kuljetusta
-              tai tiettyä alennusta.
-            </p>
-            <p>
-              <strong>Kyseessä on ennakkoilmoitus, ei sitova kuljetustilaus.</strong>
-            </p>
-            <p>
-              Kiireellinen kuljetus? <a href="/hinnasto">Laske kuljetuksen hinta</a> tai soita{' '}
-              <a href="tel:+358503547763">050 354 7763</a>.
-            </p>
-          </aside>
-        </div>
+        <Suspense
+          fallback={
+            <div className="calc-form" role="status">
+              Ladataan lomaketta…
+            </div>
+          }
+        >
+          <GroupTransportContent>
+            <aside className="calc-result group-transport-info" aria-labelledby="group-how-title">
+              <h2 id="group-how-title">Näin ennakkoilmoitus toimii</h2>
+              <ol>
+                <li>Ilmoita reitti ja sinulle sopiva kuljetusviikko tai aikaväli.</li>
+                <li>
+                  Selvitämme, voidaanko kuljetus yhdistää muihin samalla suunnalla tehtäviin
+                  kuljetuksiin.
+                </li>
+                <li>Vahvistamme toteutumisen, aikataulun ja hinnan kanssasi erikseen.</li>
+              </ol>
+              <p>
+                Yhdistäminen voi pienentää kuljetuskustannuksia. Ennakkoilmoitus ei takaa kuljetusta
+                tai tiettyä alennusta.
+              </p>
+              <p>
+                <strong>Kyseessä on ennakkoilmoitus, ei sitova kuljetustilaus.</strong>
+              </p>
+              <p>
+                Kiireellinen kuljetus? <a href="/hinnasto">Laske kuljetuksen hinta</a> tai soita{' '}
+                <a href="tel:+358503547763">050 354 7763</a>.
+              </p>
+            </aside>
+          </GroupTransportContent>
+        </Suspense>
       </div>
     </section>
   );

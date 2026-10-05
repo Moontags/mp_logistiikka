@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import styles from './OrderForm.module.css';
 import { useForm } from 'react-hook-form';
 import { BikeType, PRICING, eurShort } from '@/lib/pricing';
 import { hasCity } from '@/lib/address';
@@ -205,6 +207,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div
+            className={!isOrder ? styles.quoteGrid : undefined}
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -215,6 +218,7 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
           >
             {/* Left – required fields */}
             <div
+              className={!isOrder ? styles.leftColumn : undefined}
               style={{
                 background: 'transparent',
                 border: '1px solid var(--border)',
@@ -414,10 +418,15 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
                   />
                 </div>
               )}
+            {!isOrder && (
+              <Link className={styles.priceLink} href="/hinnasto#hinnasto-tarkemmin">
+                Näytä koko hinnasto →
+              </Link>
+            )}
             </div>
 
             {/* Right – steps + notes + submit */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className={!isOrder ? styles.rightColumn : undefined} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               {/* Miten se toimii? */}
               <div
                 style={{

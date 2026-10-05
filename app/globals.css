@@ -1419,6 +1419,9 @@ ol.blog-list { list-style: decimal outside; }
 
 /* Group transport uses the calculator's cards and input styles. */
 .group-transport-page { padding: 2.5rem 1.5rem; border-top: 1px solid var(--border); }
+@media (min-width: 768px) {
+  .group-transport-page { height: 100%; overflow-y: auto; }
+}
 .group-transport-inner { max-width: 1200px; margin: 0 auto; }
 .group-transport-header { margin-bottom: clamp(1.5rem, 4vw, 3rem); }
 .group-transport-eyebrow { font-family: var(--font-barlow), sans-serif; font-size: .8rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--orange); margin-bottom: .5rem; }
@@ -1443,9 +1446,22 @@ ol.blog-list { list-style: decimal outside; }
 .group-transport-info a, .group-transport-success a, .group-transport-link { color: var(--orange); text-underline-offset: 3px; }
 .group-transport-link { display: block; font-family: var(--font-barlow), sans-serif; font-size: .85rem; line-height: 1.6; margin-top: .85rem; }
 @media (max-width: 540px) {
-  .group-transport-form, .group-transport-info { padding: 1.25rem; }
+  .group-transport-info { padding: 1.25rem; }
   .group-transport-date-grid { grid-template-columns: 1fr; }
 }
 .feature-card-link { color: inherit; text-decoration: none; }
 .feature-card-link::after { content: ''; position: absolute; inset: 0; border-radius: 8px; }
 .feature-card-link:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+
+/* The route card and explanatory card stack beside the schedule/contact card. */
+.group-transport-form > .group-transport-required { margin-bottom: 1.25rem; }
+.group-transport-grid { grid-template-areas: "route contact" "info contact"; grid-template-rows: auto 1fr; }
+.group-transport-route { grid-area: route; }
+.group-transport-contact { grid-area: contact; }
+.group-transport-grid > .group-transport-info { grid-area: info; min-height: 0; }
+@media (min-width: 769px) {
+  .group-transport-grid > .group-transport-info { align-self: stretch; }
+}
+@media (max-width: 768px) {
+  .group-transport-grid { grid-template-areas: "route" "contact" "info"; grid-template-rows: auto; }
+}

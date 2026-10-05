@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { BIKE_OPTIONS, type BikeType } from '@/lib/pricing';
 import {
@@ -14,7 +14,13 @@ import {
 
 type Prefill = { origin: string; destination: string; bikeType: BikeType };
 
-export default function GroupTransportForm({ prefill }: { prefill: Prefill }) {
+export default function GroupTransportForm({
+  prefill,
+  children,
+}: {
+  prefill: Prefill;
+  children?: ReactNode;
+}) {
   const { register, control, handleSubmit } = useForm<Registration>({
     defaultValues: {
       ...prefill,
@@ -101,31 +107,25 @@ export default function GroupTransportForm({ prefill }: { prefill: Prefill }) {
     };
   }
 
-  if (submitted)
-    return (
-      <div
-        className="calc-form group-transport-success"
-        role="status"
-        tabIndex={-1}
-        ref={successRef}
-      >
-        <h2>Ennakkoilmoitus vastaanotettu</h2>
-        <p>
-          Kiitos! Ennakkoilmoituksesi on lähetetty meille sähköpostitse. Otamme yhteyttä, kun
-          reitille voidaan suunnitella sopiva yhteiskuljetus.
-        </p>
-        <p>
-          Tämä ei ole sitova kuljetustilaus. Toteutuminen, aikataulu ja hinta vahvistetaan erikseen.
-        </p>
-        <p>
-          Jos kuljetuksella on kiire, soita <a href="tel:+358503547763">050 354 7763</a>.
-        </p>
-      </div>
-    );
+  const success = (
+    <div className="group-transport-success" role="status" tabIndex={-1} ref={successRef}>
+      <h2>Ennakkoilmoitus vastaanotettu</h2>
+      <p>
+        Kiitos! Ennakkoilmoituksesi on lähetetty meille sähköpostitse. Otamme yhteyttä, kun reitille
+        voidaan suunnitella sopiva yhteiskuljetus.
+      </p>
+      <p>
+        Tämä ei ole sitova kuljetustilaus. Toteutuminen, aikataulu ja hinta vahvistetaan erikseen.
+      </p>
+      <p>
+        Jos kuljetuksella on kiire, soita <a href="tel:+358503547763">050 354 7763</a>.
+      </p>
+    </div>
+  );
 
   return (
     <form
-      className="calc-form group-transport-form"
+      className="group-transport-form"
       ref={formRef}
       onSubmit={(event) => void handleSubmit(submit)(event)}
       noValidate
@@ -133,161 +133,192 @@ export default function GroupTransportForm({ prefill }: { prefill: Prefill }) {
       aria-busy={busy}
     >
       <p className="group-transport-required">Tähdellä (*) merkityt tiedot ovat pakollisia.</p>
-      <fieldset disabled={busy} className="group-transport-fields">
-        <div className="form-group">
-          <label htmlFor="group-origin">Lähtöpaikkakunta *</label>
-          <input
-            id="group-origin"
-            type="text"
-            placeholder="esim. Riihimäki"
-            maxLength={FIELD_LIMITS.town}
-            required
-            {...register('origin')}
-            {...accessibility('origin')}
-          />
-          {error('origin')}
-        </div>
-        <div className="form-group">
-          <label htmlFor="group-destination">Määränpää *</label>
-          <input
-            id="group-destination"
-            type="text"
-            placeholder="esim. Oulu"
-            maxLength={FIELD_LIMITS.town}
-            required
-            {...register('destination')}
-            {...accessibility('destination')}
-          />
-          {error('destination')}
-        </div>
-        <fieldset className="form-group group-transport-choice">
-          <legend>Pyörätyyppi *</legend>
-          {BIKE_OPTIONS.map((option) => (
-            <label
-              key={option.value}
-              className={`radio-opt${bikeType === option.value ? ' active' : ''}`}
-            >
+      <div className="calc-grid group-transport-grid">
+        <div className="calc-form group-transport-route">
+          <fieldset disabled={busy || submitted} className="group-transport-fields">
+            <div className="form-group">
+              <label htmlFor="group-origin">Lähtöpaikkakunta *</label>
               <input
-                type="radio"
-                value={option.value}
-                {...register('bikeType')}
-                {...accessibility('bikeType')}
+                id="group-origin"
+                type="text"
+                placeholder="esim. Riihimäki"
+                maxLength={FIELD_LIMITS.town}
+                required
+                {...register('origin')}
+                {...accessibility('origin')}
               />
-              <span>
-                {option.label}
-                {option.description && (
-                  <span className="bike-type-description">{option.description}</span>
+              {error('origin')}
+            </div>
+            <div className="form-group">
+              <label htmlFor="group-destination">Määränpää *</label>
+              <input
+                id="group-destination"
+                type="text"
+                placeholder="esim. Oulu"
+                maxLength={FIELD_LIMITS.town}
+                required
+                {...register('destination')}
+                {...accessibility('destination')}
+              />
+              {error('destination')}
+            </div>
+            <fieldset className="form-group group-transport-choice">
+              <legend>Pyörätyyppi *</legend>
+              {BIKE_OPTIONS.map((option) => (
+                <label
+                  key={option.value}
+                  className={`radio-opt${bikeType === option.value ? ' active' : ''}`}
+                >
+                  <input
+                    type="radio"
+                    value={option.value}
+                    {...register('bikeType')}
+                    {...accessibility('bikeType')}
+                  />
+                  <span>
+                    {option.label}
+                    {option.description && (
+                      <span className="bike-type-description">{option.description}</span>
+                    )}
+                  </span>
+                </label>
+              ))}
+              {error('bikeType')}
+            </fieldset>
+          </fieldset>
+        </div>
+        <div className="calc-form group-transport-contact">
+          {submitted ? (
+            success
+          ) : (
+            <>
+              <fieldset disabled={busy} className="group-transport-fields">
+                <div className="form-group">
+                  <label htmlFor="group-timeframe">Toivottu kuljetusviikko tai aikaväli *</label>
+                  <select id="group-timeframe" {...register('timeframeType')}>
+                    <option value="week">Kuljetusviikko</option>
+                    <option value="interval">Päivämääräväli</option>
+                  </select>
+                </div>
+                {timeframeType === 'interval' ? (
+                  <div className="group-transport-date-grid">
+                    <div className="form-group">
+                      <label htmlFor="group-startDate">Alkaen *</label>
+                      <input
+                        id="group-startDate"
+                        type="date"
+                        min={todayInFinland()}
+                        required
+                        {...register('startDate')}
+                        {...accessibility('startDate')}
+                      />
+                      {error('startDate')}
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="group-endDate">Viimeistään *</label>
+                      <input
+                        id="group-endDate"
+                        type="date"
+                        min={todayInFinland()}
+                        required
+                        {...register('endDate')}
+                        {...accessibility('endDate')}
+                      />
+                      {error('endDate')}
+                    </div>
+                    <p className="group-transport-help">Aikaväli voi olla enintään 90 päivää.</p>
+                  </div>
+                ) : (
+                  <div className="form-group">
+                    <label htmlFor="group-week">Kuljetusviikko *</label>
+                    <input
+                      id="group-week"
+                      type="week"
+                      placeholder="2026-W45"
+                      required
+                      {...register('week')}
+                      {...accessibility('week')}
+                    />
+                    <p className="group-transport-help">
+                      Esimerkiksi 2026-W45 tarkoittaa viikkoa 45 vuonna 2026. Valitse nykyinen tai
+                      tuleva viikko.
+                    </p>
+                    {error('week')}
+                  </div>
                 )}
-              </span>
-            </label>
-          ))}
-          {error('bikeType')}
-        </fieldset>
-        <div className="form-group">
-          <label htmlFor="group-timeframe">Toivottu kuljetusviikko tai aikaväli *</label>
-          <select id="group-timeframe" {...register('timeframeType')}>
-            <option value="week">Kuljetusviikko</option>
-            <option value="interval">Päivämääräväli</option>
-          </select>
+                <div className="form-group">
+                  <label htmlFor="group-name">Nimi *</label>
+                  <input
+                    id="group-name"
+                    type="text"
+                    autoComplete="name"
+                    maxLength={FIELD_LIMITS.name}
+                    required
+                    {...register('name')}
+                    {...accessibility('name')}
+                  />
+                  {error('name')}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="group-email">Sähköposti *</label>
+                  <input
+                    id="group-email"
+                    type="email"
+                    autoComplete="email"
+                    maxLength={FIELD_LIMITS.email}
+                    required
+                    {...register('email')}
+                    {...accessibility('email')}
+                  />
+                  {error('email')}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="group-phone">Puhelin *</label>
+                  <input
+                    id="group-phone"
+                    type="tel"
+                    autoComplete="tel"
+                    maxLength={FIELD_LIMITS.phone}
+                    required
+                    {...register('phone')}
+                    {...accessibility('phone')}
+                  />
+                  {error('phone')}
+                </div>
+                <div className="form-group">
+                  <label htmlFor="group-notes">Lisätiedot (vapaaehtoinen)</label>
+                  <textarea
+                    id="group-notes"
+                    rows={4}
+                    maxLength={FIELD_LIMITS.notes}
+                    placeholder="Esimerkiksi aikataulun joustovara tai pyörää koskevat lisätiedot."
+                    {...register('notes')}
+                    {...accessibility('notes')}
+                  />
+                  {error('notes')}
+                </div>
+              </fieldset>
+              <p className="group-transport-help">
+                Yhteystietoja käytetään tämän kuljetusilmoituksen käsittelyyn. Tietoja ei julkaista
+                sivustolla.
+              </p>
+              <p className="group-transport-help">
+                Ennakkoilmoitus ei ole sitova tilaus. Toteutuminen, aikataulu ja hinta vahvistetaan
+                erikseen.
+              </p>
+              {serverError && (
+                <p className="error-text" role="alert">
+                  {serverError}
+                </p>
+              )}
+              <button type="submit" className="btn-primary" disabled={busy}>
+                {busy ? 'Lähetetään…' : 'Lähetä ennakkoilmoitus →'}
+              </button>
+            </>
+          )}
         </div>
-        {timeframeType === 'interval' ? (
-          <div className="group-transport-date-grid">
-            <div className="form-group">
-              <label htmlFor="group-startDate">Alkaen *</label>
-              <input
-                id="group-startDate"
-                type="date"
-                min={todayInFinland()}
-                required
-                {...register('startDate')}
-                {...accessibility('startDate')}
-              />
-              {error('startDate')}
-            </div>
-            <div className="form-group">
-              <label htmlFor="group-endDate">Viimeistään *</label>
-              <input
-                id="group-endDate"
-                type="date"
-                min={todayInFinland()}
-                required
-                {...register('endDate')}
-                {...accessibility('endDate')}
-              />
-              {error('endDate')}
-            </div>
-            <p className="group-transport-help">Aikaväli voi olla enintään 90 päivää.</p>
-          </div>
-        ) : (
-          <div className="form-group">
-            <label htmlFor="group-week">Kuljetusviikko *</label>
-            <input
-              id="group-week"
-              type="week"
-              placeholder="2026-W45"
-              required
-              {...register('week')}
-              {...accessibility('week')}
-            />
-            <p className="group-transport-help">
-              Esimerkiksi 2026-W45 tarkoittaa viikkoa 45 vuonna 2026. Valitse nykyinen tai tuleva
-              viikko.
-            </p>
-            {error('week')}
-          </div>
-        )}
-        <div className="form-group">
-          <label htmlFor="group-name">Nimi *</label>
-          <input
-            id="group-name"
-            type="text"
-            autoComplete="name"
-            maxLength={FIELD_LIMITS.name}
-            required
-            {...register('name')}
-            {...accessibility('name')}
-          />
-          {error('name')}
-        </div>
-        <div className="form-group">
-          <label htmlFor="group-email">Sähköposti *</label>
-          <input
-            id="group-email"
-            type="email"
-            autoComplete="email"
-            maxLength={FIELD_LIMITS.email}
-            required
-            {...register('email')}
-            {...accessibility('email')}
-          />
-          {error('email')}
-        </div>
-        <div className="form-group">
-          <label htmlFor="group-phone">Puhelin *</label>
-          <input
-            id="group-phone"
-            type="tel"
-            autoComplete="tel"
-            maxLength={FIELD_LIMITS.phone}
-            required
-            {...register('phone')}
-            {...accessibility('phone')}
-          />
-          {error('phone')}
-        </div>
-        <div className="form-group">
-          <label htmlFor="group-notes">Lisätiedot (vapaaehtoinen)</label>
-          <textarea
-            id="group-notes"
-            rows={4}
-            maxLength={FIELD_LIMITS.notes}
-            placeholder="Esimerkiksi aikataulun joustovara tai pyörää koskevat lisätiedot."
-            {...register('notes')}
-            {...accessibility('notes')}
-          />
-          {error('notes')}
-        </div>
-      </fieldset>
+        {children}
+      </div>
       <div className="group-transport-trap" aria-hidden="true">
         <label htmlFor="group-website">Verkkosivu</label>
         <input
@@ -299,22 +330,6 @@ export default function GroupTransportForm({ prefill }: { prefill: Prefill }) {
           autoComplete="off"
         />
       </div>
-      <p className="group-transport-help">
-        Yhteystietoja käytetään tämän kuljetusilmoituksen käsittelyyn. Tietoja ei julkaista
-        sivustolla.
-      </p>
-      <p className="group-transport-help">
-        Ennakkoilmoitus ei ole sitova tilaus. Toteutuminen, aikataulu ja hinta vahvistetaan
-        erikseen.
-      </p>
-      {serverError && (
-        <p className="error-text" role="alert">
-          {serverError}
-        </p>
-      )}
-      <button type="submit" className="btn-primary" disabled={busy}>
-        {busy ? 'Lähetetään…' : 'Lähetä ennakkoilmoitus →'}
-      </button>
     </form>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { PRICING, tierSummary, positioningSummary, startingPrice, eurShort } from '@/lib/pricing';
+import { PRICING, startingPrice, eurShort } from '@/lib/pricing';
 
 export default function Features() {
   const features = [
@@ -249,7 +249,9 @@ export default function Features() {
               margin: '0.75rem 0 0',
             }}
           >
-            {`* Perusmaksu ${PRICING.BASE_FEE} € sis. ensimmäiset ${PRICING.BASE_KM_INCLUDED} km · sen jälkeen ${tierSummary()} · ${positioningSummary()} · kaikki hinnat sisältävät ALV:n · tarkka hinta laskurilla`}
+            <Link href="/hinnasto#hinnasto-tarkemmin" style={{ color: 'var(--orange)' }}>
+              Tarkka hinnasto ja esimerkkihinnat →
+            </Link>
           </p>
         </div>
       </div>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { calculatePrice, BikeType, PRICING, eur, eurShort, BIKE_OPTIONS } from '@/lib/pricing';
 import { hasCity } from '@/lib/address';
 import AddressAutocomplete from '@/components/AddressAutocomplete';
+import FullPriceList from '@/components/FullPriceList';
 import { townFromAddress } from '@/lib/group-transport/validation';
 
 export default function Calculator() {
@@ -121,6 +122,20 @@ export default function Calculator() {
           >
             {`Hinta määräytyy matkan pituuden, nouto-/jättöpaikan sijainnin ja pyörätyypin mukaan. Peruspyörän hinta alkaen ${PRICING.BASE_FEE} € (sis. ALV).`}
           </p>
+          <FullPriceList
+            leadLink={
+              <a
+                href={
+                  result
+                    ? `/yhteiskuljetus?${new URLSearchParams({ origin: townFromAddress(result.origin), destination: townFromAddress(result.destination), bikeType }).toString()}`
+                    : '/yhteiskuljetus'
+                }
+                className="group-transport-link"
+              >
+                Ei kiire? Ilmoita ennakkoon – yhdistetty kuljetus on edullisempi →
+              </a>
+            }
+          />
         </div>
 
         <div className="calc-grid">
@@ -245,16 +260,6 @@ export default function Calculator() {
               aria-disabled={!result}
             >
               Tilaa tämä kuljetus →
-            </a>
-            <a
-              href={
-                result
-                  ? `/yhteiskuljetus?${new URLSearchParams({ origin: townFromAddress(result.origin), destination: townFromAddress(result.destination), bikeType }).toString()}`
-                  : '/yhteiskuljetus'
-              }
-              className="group-transport-link"
-            >
-              Ei kiire? Ilmoita ennakkoon – yhdistetty kuljetus on edullisempi →
             </a>
           </div>
         </div>
