@@ -30,7 +30,7 @@ export default function FullPriceList({ leadLink, initiallyOpen = false }: { lea
     <div className={styles.actions}>
       <div className={styles.leadLink}>{leadLink}</div>
       <details id="hinnasto-tarkemmin" className={styles.details} open={initiallyOpen}>
-        <summary className={styles.summary}>
+        <summary className={styles.summary} hidden={initiallyOpen}>
           <span className={styles.closed}>Näytä hinnasto</span>
           <span className={styles.open}>Piilota hinnasto →</span>
         </summary>
