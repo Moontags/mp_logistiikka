@@ -14,31 +14,6 @@ import {
 
 type Prefill = { origin: string; destination: string; bikeType: BikeType };
 
-async function submissionId(data: Registration) {
-  // Retain only a random ID and a digest, never contact details, across reloads.
-  const digest = await crypto.subtle.digest(
-    'SHA-256',
-    new TextEncoder().encode(JSON.stringify(data)),
-  );
-  const fingerprint = Array.from(new Uint8Array(digest), (byte) =>
-    byte.toString(16).padStart(2, '0'),
-  ).join('');
-  const id = crypto.randomUUID();
-  try {
-    const previous = JSON.parse(sessionStorage.getItem('group-transport-submission') ?? 'null');
-    if (
-      previous?.fingerprint === fingerprint &&
-      typeof previous.id === 'string' &&
-      /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(previous.id)
-    )
-      return previous.id as string;
-    sessionStorage.setItem('group-transport-submission', JSON.stringify({ fingerprint, id }));
-  } catch {
-    /* Storage may be disabled. Server-side deduplication still applies. */
-  }
-  return id;
-}
-
 export default function GroupTransportForm({ prefill }: { prefill: Prefill }) {
   const { register, control, handleSubmit } = useForm<Registration>({
     defaultValues: {
@@ -60,42 +35,17 @@ export default function GroupTransportForm({ prefill }: { prefill: Prefill }) {
   const [serverError, setServerError] = useState('');
   const [busy, setBusy] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [token, setToken] = useState('');
-  const [tokenReady, setTokenReady] = useState(false);
-  const [tokenVersion, setTokenVersion] = useState(0);
+  const sendingRef = useRef(false);
   const formRef = useRef<HTMLFormElement>(null);
   const trapRef = useRef<HTMLInputElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const abort = new AbortController();
-    let timer: ReturnType<typeof setTimeout>;
-    fetch('/api/yhteiskuljetus/valtuutus', { cache: 'no-store', signal: abort.signal })
-      .then(async (response) => {
-        if (!response.ok) throw new Error();
-        const body = await response.json();
-        if (typeof body.token !== 'string') throw new Error();
-        setToken(body.token);
-        timer = setTimeout(() => setTokenReady(true), 2100);
-      })
-      .catch(() => {
-        if (!abort.signal.aborted)
-          setServerError(
-            'Ilmoituspalvelu ei ole juuri nyt käytettävissä. Yritä myöhemmin tai soita 050 354 7763.',
-          );
-      });
-    return () => {
-      abort.abort();
-      clearTimeout(timer);
-    };
-  }, [tokenVersion]);
 
   useEffect(() => {
     if (submitted) successRef.current?.focus();
   }, [submitted]);
 
   const submit = async (input: Registration) => {
-    if (busy) return;
+    if (sendingRef.current) return;
     const validated = validateRegistration(input);
     if (validated.errors) {
       setErrors(validated.errors);
@@ -105,43 +55,34 @@ export default function GroupTransportForm({ prefill }: { prefill: Prefill }) {
     }
     setErrors({});
     setServerError('');
+    sendingRef.current = true;
     setBusy(true);
     try {
-      const id = await submissionId(validated.data);
       const response = await fetch('/api/yhteiskuljetus', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...validated.data,
-          submissionId: id,
-          formToken: token,
           website: trapRef.current?.value ?? '',
         }),
       });
       const body = await response.json();
       if (!response.ok || body.success !== true) {
         if (body.fields) setErrors(body.fields);
-        if (body.refreshToken) {
-          setTokenReady(false);
-          setTokenVersion((value) => value + 1);
-        }
-        throw new Error(
-          typeof body.error === 'string' ? body.error : 'Tallennus ei onnistunut. Yritä uudelleen.',
+        setServerError(
+          typeof body.error === 'string'
+            ? body.error
+            : 'Ilmoituksen lähetys epäonnistui. Yritä uudelleen tai soita 050 354 7763.',
         );
+        return;
       }
       setSubmitted(true);
-      try {
-        sessionStorage.removeItem('group-transport-submission');
-      } catch {
-        /* optional */
-      }
-    } catch (error) {
+    } catch {
       setServerError(
-        error instanceof Error && error.message
-          ? error.message
-          : 'Tallennus ei onnistunut. Yritä uudelleen tai soita 050 354 7763.',
+        'Lähetyksen onnistumista ei voitu varmistaa. Soita 050 354 7763 ennen uudelleenlähetystä.',
       );
     } finally {
+      sendingRef.current = false;
       setBusy(false);
     }
   };
@@ -170,8 +111,8 @@ export default function GroupTransportForm({ prefill }: { prefill: Prefill }) {
       >
         <h2>Ennakkoilmoitus vastaanotettu</h2>
         <p>
-          Kiitos! Ilmoituksesi on tallennettu. Otamme yhteyttä, kun reitille voidaan suunnitella
-          sopiva yhteiskuljetus.
+          Kiitos! Ennakkoilmoituksesi on lähetetty meille sähköpostitse. Otamme yhteyttä, kun
+          reitille voidaan suunnitella sopiva yhteiskuljetus.
         </p>
         <p>
           Tämä ei ole sitova kuljetustilaus. Toteutuminen, aikataulu ja hinta vahvistetaan erikseen.
@@ -369,28 +310,11 @@ export default function GroupTransportForm({ prefill }: { prefill: Prefill }) {
       {serverError && (
         <p className="error-text" role="alert">
           {serverError}
-          {!tokenReady && (
-            <button
-              type="button"
-              className="group-transport-link"
-              onClick={() => {
-                setServerError('');
-                setTokenVersion((value) => value + 1);
-              }}
-            >
-              Yritä yhteyttä uudelleen
-            </button>
-          )}
         </p>
       )}
-      <button type="submit" className="btn-primary" disabled={busy || !tokenReady}>
-        {busy ? 'Tallennetaan…' : 'Lähetä ennakkoilmoitus →'}
+      <button type="submit" className="btn-primary" disabled={busy}>
+        {busy ? 'Lähetetään…' : 'Lähetä ennakkoilmoitus →'}
       </button>
-      {!tokenReady && !serverError && (
-        <p className="group-transport-help" role="status">
-          Valmistellaan turvallista lähetystä…
-        </p>
-      )}
     </form>
   );
 }

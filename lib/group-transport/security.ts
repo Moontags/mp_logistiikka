@@ -1,22 +1,6 @@
 import 'server-only';
-import { createHmac, randomUUID, timingSafeEqual } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import { isIP } from 'node:net';
-
-export function hashValue(value: string) {
-  const secret = process.env.GROUP_TRANSPORT_HASH_SECRET;
-  if (!secret || secret.length < 32) throw new Error('GROUP_TRANSPORT_HASH_SECRET missing');
-  return createHmac('sha256', secret).update(value).digest('hex');
-}
-
-export function clientRateKey(request: Request) {
-  // Vercel overwrites this header. Never trust arbitrary proxy headers off Vercel.
-  const ip =
-    process.env.VERCEL === '1'
-      ? request.headers.get('x-forwarded-for')?.split(',')[0].trim()
-      : '127.0.0.1';
-  if (!ip || !isIP(ip)) throw new Error('Trusted client IP unavailable');
-  return hashValue(`ip:${ip}`);
-}
 
 export function sameOrigin(request: Request) {
   return (
@@ -25,29 +9,31 @@ export function sameOrigin(request: Request) {
   );
 }
 
-export function createFormToken(rateKey: string, now = Date.now()) {
-  const payload = Buffer.from(JSON.stringify({ time: now, nonce: randomUUID(), rateKey })).toString(
-    'base64url',
-  );
-  return `${payload}.${hashValue(`form:${payload}`)}`;
+// Lightweight per-instance protection, not a persistent or global rate limit.
+// Keep only salted IP digests and counters, never form/contact data.
+const salt = randomBytes(32);
+export function clientRateKey(request: Request) {
+  const ip =
+    process.env.VERCEL === '1'
+      ? request.headers.get('x-forwarded-for')?.split(',')[0].trim()
+      : '127.0.0.1';
+  if (!ip || !isIP(ip)) throw new Error('Trusted client IP unavailable');
+  return createHash('sha256').update(salt).update(ip).digest('hex');
 }
 
-export function verifyFormToken(token: unknown, rateKey: string, now = Date.now()): boolean {
-  if (typeof token !== 'string' || token.length > 512) return false;
-  const [payload, signature, extra] = token.split('.');
-  if (!payload || !signature || extra || !/^[a-f0-9]{64}$/.test(signature)) return false;
-  const expected = hashValue(`form:${payload}`);
-  if (!timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) return false;
-  try {
-    const data = JSON.parse(Buffer.from(payload, 'base64url').toString());
-    const age = now - data.time;
-    return (
-      typeof data.time === 'number' &&
-      age >= 2000 &&
-      age <= 60 * 60 * 1000 &&
-      data.rateKey === rateKey
-    );
-  } catch {
-    return false;
-  }
+export function createRateLimiter() {
+  const attempts = new Map<string, { count: number; expires: number }>();
+  return (key: string, now = Date.now()) => {
+    for (const [id, entry] of attempts) if (entry.expires <= now) attempts.delete(id);
+    const entry = attempts.get(key);
+    if (entry) {
+      if (entry.count >= 8) return false;
+      entry.count += 1;
+    } else {
+      if (attempts.size >= 10000) return false;
+      attempts.set(key, { count: 1, expires: now + 3600000 });
+    }
+    return true;
+  };
 }
+export const allowSubmission = createRateLimiter();

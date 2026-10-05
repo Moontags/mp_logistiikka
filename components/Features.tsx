@@ -36,11 +36,6 @@ export default function Features() {
       desc: 'Joustava aikataulu mahdollistaa kuljetusten yhdistämisen. Toteutuminen ja hinta vahvistetaan erikseen.',
       href: '/yhteiskuljetus',
     },
-    {
-      icon: '🏍️',
-      title: 'Ajopalvelu',
-      desc: 'Tarvittaessa ajamme pyöräsi perille itse. Edullisempi vaihtoehto. Hintaan lisätään lentolipun hinta.',
-    },
   ];
 
   return (

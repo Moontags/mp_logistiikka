@@ -1,6 +1,7 @@
 import { validateRegistration } from '@/lib/group-transport/validation';
-import { clientRateKey, sameOrigin, verifyFormToken } from '@/lib/group-transport/security';
-import { acceptRegistration, RegistrationError } from '@/lib/group-transport/service';
+import { clientRateKey, sameOrigin, allowSubmission } from '@/lib/group-transport/security';
+import { sendGroupTransportEmail } from '@/lib/email';
+import { randomUUID } from 'node:crypto';
 import { readSubmission } from '@/lib/group-transport/request';
 
 function response(data: object, status: number, headers?: Record<string, string>) {
@@ -22,45 +23,32 @@ export async function POST(request: Request) {
   }
   if (typeof body.website !== 'string' || body.website !== '')
     return response({ error: 'Lähetys hylättiin.' }, 400);
-  if (
-    typeof body.submissionId !== 'string' ||
-    !/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(
-      body.submissionId,
-    )
-  )
-    return response({ error: 'Virheellinen lähetyksen tunniste.' }, 400);
   const validated = validateRegistration(body);
   if (validated.errors)
     return response({ error: 'Tarkista lomakkeen tiedot.', fields: validated.errors }, 400);
   try {
     const rateKey = clientRateKey(request);
-    if (!verifyFormToken(body.formToken, rateKey))
+    if (!allowSubmission(rateKey))
       return response(
-        {
-          error: 'Lomakkeen suojaus vanheni. Odota hetki ja lähetä uudelleen.',
-          refreshToken: true,
-        },
-        403,
-      );
-    const saved = await acceptRegistration(body.submissionId, validated.data, rateKey);
-    return response({ success: true }, saved.created ? 201 : 200);
-  } catch (error) {
-    const status = error instanceof RegistrationError ? error.status : 503;
-    if (status === 429)
-      return response(
-        { error: 'Liian monta lähetysyritystä. Yritä myöhemmin tai ota yhteyttä puhelimitse.' },
+        { error: 'Liian monta lähetysyritystä. Yritä myöhemmin tai soita 050 354 7763.' },
         429,
         { 'Retry-After': '3600' },
       );
-    if (status === 409)
-      return response(
-        { error: 'Lähetyksen tunniste on jo käytetty. Päivitä sivu ja yritä uudelleen.' },
-        409,
-      );
-    console.error('[yhteiskuljetus] Storage unavailable');
+    await sendGroupTransportEmail(validated.data, randomUUID());
+    return response({ success: true }, 200);
+  } catch (error) {
+    const smtp = error as { responseCode?: number; code?: string } | null;
+    const rejected = typeof smtp?.responseCode === 'number' && smtp.responseCode >= 400;
+    // Nodemailer may label a lost DATA acknowledgement as a CONN error too.
+    // Only definite rejection/auth/DNS errors are safe to suggest retrying.
+    const beforeMessage = ['EDNS', 'EAUTH'].includes(smtp?.code ?? '');
+    console.error('[yhteiskuljetus] SMTP submission failed');
     return response(
       {
-        error: 'Ilmoituksen tallennus ei onnistunut. Yritä uudelleen tai ota yhteyttä puhelimitse.',
+        error:
+          rejected || beforeMessage
+            ? 'Ilmoituksen lähetys epäonnistui. Yritä uudelleen tai soita 050 354 7763.'
+            : 'Lähetyksen onnistumista ei voitu varmistaa. Soita 050 354 7763 ennen uudelleenlähetystä.',
       },
       503,
     );

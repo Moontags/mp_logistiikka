@@ -171,7 +171,9 @@ export async function sendGroupTransportEmail(
     socketTimeout: 20000,
   });
   try {
-    await transporter.sendMail(groupTransportEmail(data, id));
+    const result = await transporter.sendMail(groupTransportEmail(data, id));
+    if (!result.accepted?.includes('info@mp-logistiikka.fi'))
+      throw Object.assign(new Error('Recipient was not accepted'), { responseCode: 550 });
   } finally {
     transporter.close();
   }

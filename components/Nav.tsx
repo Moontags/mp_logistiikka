@@ -14,18 +14,19 @@ const navLinks = [
 ];
 
 export default function Nav() {
+  const pathname = usePathname();
+  // A new route gets a closed menu without an effect-triggered state update.
+  return <Navigation key={pathname} pathname={pathname} />;
+}
+
+function Navigation({ pathname }: { pathname: string }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  // Close menu on route change
-  useEffect(() => { setOpen(false); }, [pathname]);
 
   return (
     <nav
@@ -162,7 +163,8 @@ export default function Nav() {
         <button
           onClick={() => setOpen(!open)}
           className="nav-hamburger"
-          aria-label="Avaa valikko"
+          aria-label={open ? 'Sulje valikko' : 'Avaa valikko'}
+          aria-expanded={open}
           style={{
             background: 'none',
             border: 'none',

@@ -23,4 +23,4 @@ Muiden toimintojen (kartat, etäisyyslaskenta ja tilausten sähköpostit) ympär
 
 ## Yhteiskuljetus
 
-Ennakkoilmoitus, erillinen Supabase-tallennus ja yrityssähköposti: [toteutus- ja käyttöönotto-ohje](docs/yhteiskuljetus.md). Tarkistukset: `npm test`. Tuotantokäyttö edellyttää ohjeen mukaisia tietokanta- ja ympäristöasetuksia.
+Ennakkoilmoitus nykyisen SMTP-palvelun kautta: [toteutus- ja käyttöönotto-ohje](docs/yhteiskuljetus.md). Tarkistukset: `npm test`. Toiminto käyttää samoja SMTP-asetuksia kuin nykyinen tilauslomake eikä tarvitse tietokantaa tai uusia palveluja.

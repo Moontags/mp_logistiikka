@@ -9,11 +9,9 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "node --conditions=react-server --import tsx --test tests/*.test.ts",
-    "group-transport:retry": "node --env-file=.env.local --conditions=react-server --import tsx scripts/retry-group-transport.ts"
+    "test": "node --conditions=react-server --import tsx --test tests/*.test.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "2.117.2",
     "date-fns": "^4.1.0",
     "next": "16.2.4",
     "nodemailer": "^8.0.6",

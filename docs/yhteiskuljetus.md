@@ -1,85 +1,64 @@
 # Yhteiskuljetuksen ennakkoilmoitus
 
-`/yhteiskuljetus` on ennakkoilmoitus, ei sitova tilaus. Toteutuminen, aikataulu ja hinta vahvistetaan erikseen. Nykyinen `/api/order` ja tilauslomakkeen lähetysvirta säilyvät ennallaan.
+`/yhteiskuljetus` on ennakkoilmoitus, ei sitova tilaus. Toteutuminen, aikataulu ja hinta vahvistetaan erikseen. Sivu, lomakkeen esitäyttö sekä laskurin, Palvelut-sivun ja footerin linkit säilyvät. Tulevien reittien listaa tai julkista asiakastietojen lukua ei toteuteta.
 
-## Toteutus ja ylläpito
+## Lähetys ja asetukset
 
-- Sivun tekstit: `app/yhteiskuljetus/page.tsx` ja `components/GroupTransportForm.tsx`.
-- Pyörätyypit: `BIKE_OPTIONS` tiedostossa `lib/pricing.ts`, yhteiset laskurin kanssa. Hintalaskentaa ei muutettu: hinnat sisältävät ALV:n, mopo −20 €, iso +50 €.
-- Esitäyttö: `origin`, `destination` ja `bikeType` URL-parametreissa. Paikkakunnat tarkistetaan, katuosoitteesta poimitaan paikkakunta ja asiakkaan annetaan muokata tietoja. Moninkertaiset tai virheelliset parametrit ohitetaan.
-- Palvelinvalidaatio ja rajat: `lib/group-transport/validation.ts`. Paikkakunnat/nimi 100, sähköposti 254, puhelin 30 ja lisätiedot 2000 merkkiä. Viikko tai enintään 90 päivän aikaväli nykyhetkestä seuraavan kahden vuoden ajalta.
-- `POST /api/yhteiskuljetus` tallentaa ilmoituksen ja lähettää yrityksen ilmoitusviestin. `GET /api/yhteiskuljetus/valtuutus` antaa lyhytikäisen lomakesuojaustunnisteen; se ei lue asiakastietoja. Julkista ilmoitusten luku-API:a tai tulevien reittien listaa ei ole.
+`POST /api/yhteiskuljetus` validoi tiedot palvelimella ja lähettää viestin nykyisellä SMTP-palvelulla **vain yritykselle** osoitteeseen `info@mp-logistiikka.fi`. `replyTo` on asiakkaan validoitu sähköpostiosoite. Käyttäjän tekstit HTML-escapataan. Asiakkaalle ei lähetetä erillistä vahvistusviestiä.
 
-## Tietokanta ja käyttöönotto
+Toiminto tarvitsee vain nykyiset ympäristömuuttujat:
 
-Vercel Marketplacen kautta luotiin ilmainen Supabase-resurssi `mp-logistiikka-yhteiskuljetus-dev` (Stockholm). Se on liitetty **vain Development-ympäristöön**. Migraatio `supabase/migrations/20261005095634_group_transport_registrations.sql` on ajettu tähän oikeaan kehitystietokantaan ja kirjattu migraatiohistoriaan. Testirivit poistettiin. Tuotantoon ei ole julkaistu mitään.
+- `SMTP_HOST`
+- `SMTP_PORT` (nykyinen TLS-yhteys, oletus 465)
+- `SMTP_USER`
+- `SMTP_PASS`
 
-Migraatio luo:
+Tuotannon nykyisiä SMTP-arvoja ei muuteta. Avainarvoja ei tulosteta tai versionhallita. Supabasea, `GROUP_TRANSPORT_HASH_SECRET`-muuttujaa tai lomaketunnisteen hakemista ei käytetä. Uusia palveluja, tietokantaa tai palvelumaksuja ei tarvita; nykyisen SMTP-palvelun ja hostingin käyttö jatkuu.
 
-1. `public.group_transport_registrations`: yksityiset ilmoitukset ja yrityssähköpostin toimitustila.
-2. `public.group_transport_rate_limits`: atominen, eri palvelininstanssien yhteinen lähetysrajoitus.
-3. Palvelimelle rajatut RPC-funktiot tallennukseen, sähköpostin varaukseen ja toimitustilan päivitykseen.
+Nykyinen `/api/order` ja tilauslomakkeen yritys- ja asiakasviestien lähetysvirta säilyvät ennallaan. Yhteiskuljetuksen viesti käyttää samaa kuljetusasetusten rakentajaa erillisillä aikakatkaisuilla.
 
-Molemmissa tauluissa on RLS eikä yhtään julkista lukupolitiikkaa. `anon`- ja `authenticated`-roolien taulu- ja RPC-oikeudet on poistettu. Vain palvelimen `service_role` saa käyttää niitä. Funktiot ovat `security invoker`, eivät ohita käyttöoikeuksia. Suojaus tarkistettiin oikeaa tietokantaa vasten sekä Supabasen security advisors -komennolla (ei havaintoja).
+## Onnistuminen ja virheet
 
-**Ennen tuotantokäyttöä:** liitä valittu Supabase-resurssi Production-ympäristöön ja aja sama migraatio kyseiseen tietokantaan, jos käytät erillistä tuotantotietokantaa. Määritä myös Preview erikseen, jos haluat testata Vercel-esikatseluissa. Tarkista kohdetietokanta ennen `supabase db push` -komentoa. Älä kopioi kehitys- ja tuotantoavaimia ristiin. Tämä toteutus ei tee tuotantoliitosta tai julkaisua automaattisesti.
+Onnistuminen näytetään vasta, kun SMTP-palvelin on hyväksynyt yrityksen vastaanottajan ja viestin. Tämä tarkoittaa sähköpostipalvelun hyväksyntää, ei lupausta viestin saapumisesta postilaatikkoon. Ilmoitusta ei tallenneta tietokantaan.
 
-Palvelimen ympäristömuuttujat:
+Lähetyksen aikana painike ja kentät ovat pois käytöstä. Synkroninen lähetyslukko estää saman lomakkeen rinnakkaiset pyynnöt myös nopeilla tuplaklikkauksilla. Virheen jälkeen tiedot säilyvät muokattavina ja lähetyspainike palautuu käyttöön.
 
-| Nimi | Käyttö |
-| --- | --- |
-| `SUPABASE_URL` | Supabase-projektin osoite |
-| `SUPABASE_SECRET_KEY` | Supabasen palvelinavain; ei koskaan `NEXT_PUBLIC_`-etuliitettä |
-| `GROUP_TRANSPORT_HASH_SECRET` | Pysyvä satunnainen vähintään 32 merkin salaisuus HMAC-tunnisteille ja lomakesuojaukselle; esimerkiksi `openssl rand -hex 32` |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | Nykyisen sähköpostipalvelun asetukset; käytössä jo tilauslomakkeella |
+- Selvä SMTP-hylkäys tai epäonnistunut valtuutus/DNS-haku: asiakas näkee lähetysvirheen ja voi yrittää uudelleen tai soittaa.
+- Katkennut selainyhteys tai epäselvä SMTP-kuittaus: asiakas näkee, ettei onnistumista voitu varmistaa, ja häntä pyydetään soittamaan ennen uudelleenlähetystä. Tarkista SMTP-lokit/postilaatikko ennen uusintaa. Viestissä on oma Message-ID ja ilmoitustunnus.
+- Sovellus ei tee automaattisia uusintoja, eikä sillä ole tietokantajonoa tai ylläpitotyökalua jonon lähettämiseen.
 
-Supabase-osoite, yksityinen avain ja HMAC-salaisuus on määritetty paikalliseen `.env.local`-tiedostoon ja Development-ympäristöön. Marketplace lisäsi myös muita Supabase/Postgres-muuttujia; tämä sovellus tarvitsee niistä vain kaksi yllä mainittua. Julkista Supabase-asiakasta ei käytetä. Ympäristötiedostoja ei versionhallita.
+Ilman pysyvää tallennusta palvelininstanssien tai sivun uudelleenlatausten välistä täydellistä kaksoissuojausta ei luvata. Yritys käsittelee ennakkoilmoitukset sähköpostista. Julkista luetteloa ei ole.
 
-## Roskapostisuojaus ja kaksoisilmoitukset
+## Kevyt roskapostisuojaus ja validaatio
 
-API vaatii saman alkuperän, JSON-rungon (enintään 16 KiB), tyhjän piilokentän ja allekirjoitetun, IP-tunnisteeseen sidotun lomaketunnisteen (ikä 2 sekuntia–1 tunti). Palvelimen validaatio ei luota selaimeen. Tietokantarajoitus on 8 yritystä/IP/tunti ja 8 yritystä/sähköpostiosoite/päivä; yritykset sisältävät uusintapyynnöt. IP ja rajoituksen sähköpostitunniste tallentuvat HMAC-tiivisteinä. Vanhat rajoitusjaksot siivotaan tallennuskutsussa. Vercelissä käytetään sen korvaamaa `x-forwarded-for`-otsaketta. Paikallinen ajo käyttää yhtä yhteistä tunnistetta; muu hosting vaatii luotetun välityspalvelimen tunnistuksen määrittämisen.
+API vaatii saman alkuperän, JSON-rungon (enintään 16 KiB) ja tyhjän honeypot-kentän. Palvelin tarkistaa paikkakunnat, pyörätyypin, sähköpostin, puhelimen ja toivotun ajankohdan. Kenttärajat: paikkakunnat/nimi 100, sähköposti 254, puhelin 30 ja lisätiedot 2000 merkkiä. Viikko tai enintään 90 päivän aikaväli valitaan nykyhetkestä seuraavan kahden vuoden ajalta.
 
-Tallennus käyttää asiakkaan lähetys-UUID:ta ja normalisoidun sisällön HMAC-tiivisteen uniikkiutta. Saman ilmoituksen uusinta ei luo uutta riviä, vaikka sivu ladattaisiin uudelleen tai rinnakkainen pyyntö saapuisi. Selain säilyttää sessionStorageen vain UUID:n ja tiivisteen, ei lomakkeen asiakastietoja.
+Lisäksi palvelininstanssin muistissa sallitaan enintään kahdeksan validoitua lähetysyritystä IP-tunnistetta kohti tunnissa. Muisti sisältää vain prosessikohtaisella satunnaisella suolalla tiivistetyn IP:n ja laskurin, ei lomaketietoja. Vanhat laskurit poistuvat ja muistin koko on rajattu. Vercelissä käytetään sen korvaamaa `x-forwarded-for`-otsaketta; paikallisessa ajossa yhtä yhteistä tunnistetta. Tämä on kevyt suojaus: instanssin uudelleenkäynnistys tai uusi instanssi nollaa rajoituksen. Ulkoista rajoituspalvelua ei hankita.
 
-Ilmoitus tallennetaan **ennen** sähköpostia. Tallennusvirhe palauttaa 503 eikä lähetä sähköpostia. Sähköpostivirheen jälkeen asiakas saa onnistumiskuittauksen, koska ilmoitus on vastaanotettu tietokantaan. Atominen sähköpostivaraus estää rinnakkaiset lähetykset. Viesti menee vain yritykselle, `replyTo` on validoitu asiakkaan osoite ja käyttäjän teksti HTML-escapataan.
+## Ylläpito ja tarkistukset
 
-## Sähköpostivirheiden käsittely
-
-Seuraa taulun `notification_status`-kenttää Supabasen yksityisestä hallinnasta. Sovellus ei sisällä automaattista ajastettua uusintaa.
-
-- `pending`: tallennettu, lähetys ei ole vielä alkanut.
-- `sent`: SMTP-palvelu hyväksyi viestin ja toimitustila tallentui.
-- `failed`: palvelu hylkäsi viestin tai yhteys/valtuutus epäonnistui ennen viestiä. Uusinta on mahdollinen minuutin kuluttua, enintään kolmesti.
-- `sending`: lähetys varattu. Jos tila jää tähän, kuittaus voi olla epäselvä tai tilapäivitys epäonnistunut. Sitä **ei** lähetetä automaattisesti uudelleen edes varausajan jälkeen.
-
-Paikallinen ylläpitotyökalu lukee yksityistä tietokantaa ja näyttää vain ilmoitus-ID:t, tilat ja yritysten määrät:
-
-```sh
-npm run group-transport:retry
-```
-
-Se ei lähetä viestejä ilman erillistä valitsinta. Kun SMTP-asetukset on korjattu ja haluat lähettää oikeat odottavat/epäonnistuneet ilmoitukset:
-
-```sh
-npm run group-transport:retry -- --send
-```
-
-Työkalu käsittelee enintään 100 jonossa olevaa ilmoitusta kerrallaan ja noudattaa samoja varauksia/rajoja. Kolmen epäonnistuneen yrityksen jälkeen tarkista virheen syy ja ilmoitus käsin. Pitkäksi aikaa `sending`-tilaan jääneen ilmoituksen kohdalla tarkista ensin SMTP-lokit ja yrityksen postilaatikko: viesti on voinut saapua. Vain jos vahvistat, ettei viestiä ole hyväksytty, palautetaan kyseinen ilmoitus yksityisestä hallinnasta `pending`-tilaan ja tyhjennetään `notification_claim` sekä `notification_locked_until` (tarvittaessa nollataan yritykset). SMTP ei takaa täsmälleen yhtä toimitusta epäselvässä verkkokatkossa; vakaa Message-ID helpottaa tarkistusta. Asiakkaan ei tarvitse ilmoittaa uudelleen.
-
-Sovi käyttöönottovaiheessa yrityksen sisäinen seurantavastuu sekä asiakastietojen säilytysaika. Tietoja ei julkaista.
-
-## Mahdollinen tuleva julkinen reittilista
-
-Tätä ei toteutettu. Myöhemmin julkiseen listaan voidaan siirtää **vain erikseen hyväksytyn reitin paikkakunnat ja viikko** esimerkiksi erilliseen tauluun, jossa ei ole asiakastietoja tai lisätietoja. Pelkkä SQL-näkymä ei takaa taustataulun RLS-suojausta: näkymän oikeudet ja `security_invoker` on arvioitava erikseen. Nykyisten yksityisten taulujen julkisia oikeuksia ei pidä avata.
-
-## Tarkistukset
+- Sivun tekstit: `app/yhteiskuljetus/page.tsx`, `components/GroupTransportForm.tsx`.
+- Esitäyttö ja validaatio: `lib/group-transport/validation.ts`.
+- Sähköpostin sisältö: `lib/group-transport/email.ts`; lähetys `lib/email.ts`.
+- Roskapostisuojaus: `lib/group-transport/security.ts`.
+- Hintamäärittelyt: `lib/pricing.ts`, yhteiset laskurin ja selitystekstien kanssa. Hinnoittelua ei muuteta tässä korjauksessa.
 
 ```sh
 npm test
-npm run build
 npm run lint
+npm run build
 ```
 
-Automaattiset testit kattavat validaation, lomaketunnisteen, koko- ja sisältötyyppirajat, tallennus- ja sähköpostivirheet, rinnakkaiset uusinnat, epäselvän SMTP-kuittauksen, HTML-escapauksen ja hinnan laskennan regressiot. Kehitystietokannasta testattiin todellinen tallennus, uniikkius, sähköpostivaraukset, uusinta, lähetysrajoitus ja julkisten roolien esto. Selain tarkistettiin mobiilissa ja työpöydällä tuotantokoonnilla; SMTP ohjattiin vain paikalliseen testivastaanottimeen. Nykyinen laskuri testattiin vakioidulla etäisyysvastauksella ja tilauslomakkeen molemmat viestit paikallisella SMTP:llä. Oikeita testiviestejä ei lähetetty.
+Selaintestit tehdään paikallista tuotantokoontia vasten mobiilissa ja työpöydällä. SMTP-asetukset ohjataan vain paikalliseen testivastaanottimeen; yritykselle tai asiakkaalle ei lähetetä oikeita testiviestejä. Tarkista esitäyttö, validaatio, nopea toistuva lähetys, SMTP-hylkäys, epäselvä kuittaus sekä onnistuminen vasta SMTP-hyväksynnän jälkeen. Nykyinen tilauslomake testataan samalla paikallisella vastaanottimella.
 
-Koko projektin lintissä on ennestään `components/Nav.tsx:28`-virhe (setState effectissä) ja `scripts/compress-images.mjs:3`-varoitus. Muutetut yhteiskuljetustiedostot läpäisevät lintin.
+Valmistelussa tuotantokoonti, yhdeksän automaattista testiä ja lint läpäisivät tarkistukset (lintissä yksi aiempi kuvapakkausskriptin varoitus). Mobiili- ja työpöytätestit vahvistivat toiminnan ilman Supabase-/HMAC-asetuksia, yhden pyynnön nopeilla rinnakkaisilla submit-tapahtumilla, onnistumisen vasta viivästetyn SMTP-hyväksynnän jälkeen, hylkäyksen jälkeisen uusinnan, epäselvän kuittauksen ohjeen ja lähetysrajoituksen. Esitäyttö, linkit, nykyinen laskuri ja tilauslomakkeen molemmat viestit tarkistettiin. Kaikki viestit jäivät paikalliseen SMTP-testivastaanottimeen.
+
+## Aiempi Supabase-kokeilu ja julkaisu
+
+Supabase-SDK, sovelluksen tietokantayhteys, RPC-kutsut, tietokantajonon koodi, uusintatyökalu ja `/api/yhteiskuljetus/valtuutus` on poistettu tästä toteutuksesta. Aiempi kehitystietokannan migraatio on säilytetty historiatietona tiedostossa `docs/archive/group-transport-supabase-migration.sql`; sitä **ei ajeta** käyttöönotossa.
+
+Palvelussa olevaa `mp-logistiikka-yhteiskuljetus-dev`-resurssia, tauluja, tietoja tai niiden RLS-suojausta ei muuteta eikä poisteta. Vanhoja paikallisia/Vercelin Supabase- ja HMAC-muuttujia ei tarvita, mutta niitä ei poisteta palvelusta tämän korjauksen yhteydessä. Tuotantotietokantaa tai maksullista resurssia ei luoda.
+
+Korjaus julkaistiin käyttäjän hyväksynnällä 5.10.2026 osoitteeseen https://www.mp-logistiikka.fi/yhteiskuljetus (Vercel-julkaisu `dpl_2vmFbte2AfeNriFDzVRDBidi4C9o`, READY). Julkaisu käyttää olemassa olevia SMTP-asetuksia; tietokantamigraatioita tai uusia ympäristömuuttujia ei tarvita. Julkaisun jälkeen tarkistetaan sivu, linkit, esitäyttö ja virheellisen API-pyynnön hylkäys ilman oikeaa sähköpostilähetystä. Oikeaa kelvollista ilmoitusta ei lähetetä testinä ilman erillistä pyyntöä.
+
+Tuotantojulkaisun jälkeen mobiili- ja työpöytäsivu, muokattava esitäyttö, heti käytettävissä oleva lähetyspainike ja linkit tarkistettiin. Tunniste-API palauttaa nyt 404; virheellinen sähköposti hylätään API:ssa 400:lla ja väärä alkuperä 403:lla ennen SMTP-lähetystä. Kelvollista ilmoitusta tai oikeaa testisähköpostia ei lähetetty.

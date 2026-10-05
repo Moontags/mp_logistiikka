@@ -6,8 +6,8 @@ import {
   weekDates,
   type Registration,
 } from '../lib/group-transport/validation';
-import { createFormToken, verifyFormToken } from '../lib/group-transport/security';
-import { acceptRegistration, type RegistrationStore } from '../lib/group-transport/service';
+import { createRateLimiter, sameOrigin } from '../lib/group-transport/security';
+import { POST } from '../app/api/yhteiskuljetus/route';
 import { groupTransportEmail } from '../lib/group-transport/email';
 import { readSubmission } from '../lib/group-transport/request';
 import { calculatePrice, positioningTierSummary, PRICING } from '../lib/pricing';
@@ -90,17 +90,31 @@ test('prefill rejects parameter pollution and malicious data and extracts towns'
   assert.equal(prefillFromParams(new URLSearchParams({ origin: 'x'.repeat(301) })).origin, '');
 });
 
-test('signed anti-spam token checks signature, age and IP binding', () => {
-  process.env.GROUP_TRANSPORT_HASH_SECRET = 'unit-test-secret'.repeat(4);
-  const token = createFormToken('test-ip-key', 10000);
-  assert(verifyFormToken(token, 'test-ip-key', 12500));
-  assert(!verifyFormToken(token, 'test-ip-key', 11000));
-  assert(!verifyFormToken(token, 'other-ip', 12500));
-  assert(!verifyFormToken(token, 'test-ip-key', 10000 + 3600001));
-  assert(!verifyFormToken(token + 'x', 'test-ip-key', 12500));
+test('lightweight rate limit expires and keeps clients separate', () => {
+  const allow = createRateLimiter();
+  for (let i = 0; i < 8; i++) assert(allow('client-a', 10000));
+  assert(!allow('client-a', 10000));
+  assert(allow('client-b', 10000));
+  assert(allow('client-a', 3610000));
 });
 
-test('rejects oversized and non-JSON requests before storage', async () => {
+test('same-origin protection rejects foreign and missing origins', () => {
+  assert(
+    sameOrigin(
+      new Request('https://example.invalid/api', {
+        headers: { Origin: 'https://example.invalid' },
+      }),
+    ),
+  );
+  assert(!sameOrigin(new Request('https://example.invalid/api')));
+  assert(
+    !sameOrigin(
+      new Request('https://example.invalid/api', { headers: { Origin: 'https://evil.invalid' } }),
+    ),
+  );
+});
+
+test('rejects oversized and non-JSON requests before processing', async () => {
   await assert.rejects(
     readSubmission(
       new Request('https://example.invalid', {
@@ -122,122 +136,17 @@ test('rejects oversized and non-JSON requests before storage', async () => {
   );
 });
 
-function storeFixture() {
-  let count = 0;
-  let state: 'pending' | 'sending' | 'failed' | 'sent' = 'pending';
-  const store: RegistrationStore = {
-    async save() {
-      count += 1;
-      return { id: 'stored-id', created: count === 1 };
-    },
-    async claim() {
-      if (state === 'pending' || state === 'failed') {
-        state = 'sending';
-        return true;
-      }
-      return false;
-    },
-    async finish(_id, _claim, sent) {
-      state = sent ? 'sent' : 'failed';
-    },
-  };
-  return { store, state: () => state };
-}
-
-test('storage failure never sends email or reports acceptance', async () => {
-  let emails = 0;
-  const fixture = storeFixture();
-  fixture.store.save = async () => {
-    throw new Error('database down');
-  };
-  await assert.rejects(
-    acceptRegistration('id', valid, 'rate', {
-      store: fixture.store,
-      send: async () => {
-        emails += 1;
-      },
-    }),
-  );
-  assert.equal(emails, 0);
-});
-
-test('email failure retains acceptance; retry uses the stored ID', async () => {
-  const fixture = storeFixture();
-  const ids: string[] = [];
-  const saved = await acceptRegistration('new-id', valid, 'rate', {
-    store: fixture.store,
-    send: async (_data, id) => {
-      ids.push(id);
-      throw Object.assign(new Error('SMTP rejected'), { responseCode: 550 });
-    },
-  });
-  assert.equal(saved.id, 'stored-id');
-  assert.equal(fixture.state(), 'failed');
-  const retry = await acceptRegistration('retry-id', valid, 'rate', {
-    store: fixture.store,
-    send: async (_data, id) => {
-      ids.push(id);
-    },
-  });
-  assert.equal(retry.created, false);
-  assert.deepEqual(ids, ['stored-id', 'stored-id']);
-  assert.equal(fixture.state(), 'sent');
-});
-
-test('concurrent requests and successful retries send only once', async () => {
-  const fixture = storeFixture();
-  let emails = 0;
-  const dependencies = {
-    store: fixture.store,
-    send: async () => {
-      emails += 1;
-      await new Promise((resolve) => setTimeout(resolve, 10));
-    },
-  };
-  await Promise.all([
-    acceptRegistration('a', valid, 'rate', dependencies),
-    acceptRegistration('b', valid, 'rate', dependencies),
-  ]);
-  await acceptRegistration('c', valid, 'rate', dependencies);
-  assert.equal(emails, 1);
-  assert.equal(fixture.state(), 'sent');
-});
-
-test('uncertain SMTP acknowledgement is not automatically sent twice', async () => {
-  const fixture = storeFixture();
-  let emails = 0;
-  fixture.store.finish = async () => {
-    throw new Error('database unavailable after email');
-  };
-  const dependencies = {
-    store: fixture.store,
-    send: async () => {
-      emails += 1;
-    },
-  };
-  await acceptRegistration('a', valid, 'rate', dependencies);
-  await acceptRegistration('b', valid, 'rate', dependencies);
-  assert.equal(emails, 1);
-  assert.equal(fixture.state(), 'sending');
-});
-
-test('lost SMTP acknowledgement after DATA remains for manual review', async () => {
-  const fixture = storeFixture();
-  let emails = 0;
-  const dependencies = {
-    store: fixture.store,
-    send: async () => {
-      emails += 1;
-      throw Object.assign(new Error('Socket closed after DATA'), {
-        code: 'ESOCKET',
-        command: 'DATA',
-      });
-    },
-  };
-  await acceptRegistration('a', valid, 'rate', dependencies);
-  await acceptRegistration('b', valid, 'rate', dependencies);
-  assert.equal(emails, 1);
-  assert.equal(fixture.state(), 'sending');
+test('API rejects invalid requests before SMTP is called', async () => {
+  const make = (data: unknown, origin = 'https://example.invalid') =>
+    new Request('https://example.invalid/api/yhteiskuljetus', {
+      method: 'POST',
+      headers: { Origin: origin, 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+  assert.equal((await POST(make(valid, 'https://evil.invalid'))).status, 403);
+  assert.equal((await POST(make({ ...valid, website: 'bot' }))).status, 400);
+  assert.equal((await POST(make({ ...valid, website: '', email: 'bad' }))).status, 400);
+  assert.equal((await POST(make({ ...valid, website: '', notes: 'x'.repeat(18000) }))).status, 413);
 });
 
 test('email escapes user HTML, sets validated replyTo, and sends only to business', () => {
