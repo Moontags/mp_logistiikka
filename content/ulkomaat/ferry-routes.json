@@ -1,0 +1,42 @@
+[
+  {
+    "routeName": "Helsinki–Travemünde",
+    "operator": "Finnlines",
+    "crossingDurationHours": 31,
+    "id": "helsinki-travemuende",
+    "image": {
+      "alt": "finnlines ship back",
+      "card": "/images/ulkomaat/helsinki-travemuende-card.jpg"
+    },
+    "vehiclePricing": [
+      {
+        "_key": "785127e41afc",
+        "vehicleType": "van",
+        "direction": "molemmat",
+        "priceEur": 1394,
+        "includesCabin": true,
+        "notes": "Ikkunallinen hytti ja wifi 3 vrk"
+      }
+    ]
+  },
+  {
+    "routeName": "Naantali–Kapellskär",
+    "operator": "Finnlines",
+    "crossingDurationHours": 8,
+    "id": "naantali-kapellskaer",
+    "image": {
+      "alt": "Finnlines ship",
+      "card": "/images/ulkomaat/naantali-kapellskaer-card.png"
+    },
+    "vehiclePricing": [
+      {
+        "_key": "46d85eb9cc1c",
+        "vehicleType": "van",
+        "direction": "molemmat",
+        "priceEur": 314,
+        "includesCabin": true,
+        "notes": "Ikkunallinen hytti ja wifi "
+      }
+    ]
+  }
+]

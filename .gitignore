@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local database/agent tooling installed by the integration
+supabase/.temp/
+.agents/skills/supabase/
+.claude/skills/supabase
+skills-lock.json

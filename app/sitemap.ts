@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-import { client } from '@/sanity/lib/client';
-import { POSTS_SITEMAP_QUERY } from '@/sanity/lib/queries';
+import { posts } from '@/content/ulkomaat';
 
 const BASE_URL = 'https://www.mp-logistiikka.fi';
 
@@ -10,6 +9,7 @@ const staticRoutes: MetadataRoute.Sitemap = [
   { url: `${BASE_URL}/hinnasto`, changeFrequency: 'monthly', priority: 0.9 },
   { url: `${BASE_URL}/tilauslomake`, changeFrequency: 'monthly', priority: 0.9 },
   { url: `${BASE_URL}/palvelut`, changeFrequency: 'monthly', priority: 0.8 },
+  { url: `${BASE_URL}/yhteiskuljetus`, changeFrequency: 'monthly', priority: 0.7 },
   { url: `${BASE_URL}/ulkomaat`, changeFrequency: 'weekly', priority: 0.8 },
   { url: `${BASE_URL}/ulkomaat/hinnoittelu`, changeFrequency: 'weekly', priority: 0.8 },
   { url: `${BASE_URL}/kuvat`, changeFrequency: 'monthly', priority: 0.6 },
@@ -17,18 +17,12 @@ const staticRoutes: MetadataRoute.Sitemap = [
   { url: `${BASE_URL}/sopimusehdot`, changeFrequency: 'yearly', priority: 0.3 },
 ];
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await client.fetch(
-    POSTS_SITEMAP_QUERY,
-    {},
-    { perspective: 'published', stega: false }
-  );
-
+export default function sitemap(): MetadataRoute.Sitemap {
   const postRoutes: MetadataRoute.Sitemap = posts
     .filter((post) => post.slug)
     .map((post) => ({
       url: `${BASE_URL}/ulkomaat/${post.slug}`,
-      lastModified: new Date(post._updatedAt),
+      lastModified: new Date(post.updatedAt),
       changeFrequency: 'monthly',
       priority: 0.6,
     }));

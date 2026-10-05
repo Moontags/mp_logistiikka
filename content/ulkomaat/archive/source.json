@@ -1,0 +1,889 @@
+[
+  {
+    "_createdAt": "2026-09-06T14:48:42Z",
+    "_id": "0bd25f02-b4cb-4945-9852-c2a3402f981f",
+    "_rev": "jdIi0iSkX4NXv9moDvpGTf",
+    "_system": {
+      "base": {
+        "id": "0bd25f02-b4cb-4945-9852-c2a3402f981f",
+        "rev": "Qc7Gq032aXYhUXMuDybb99"
+      }
+    },
+    "_type": "ferryRoute",
+    "_updatedAt": "2026-09-07T06:26:29Z",
+    "arrivalPort": "Kapellskär",
+    "crossingDurationHours": 8,
+    "departurePort": "Naantali",
+    "image": {
+      "_type": "image",
+      "alt": "Finnlines ship",
+      "asset": {
+        "_ref": "image-aa8b384a4d39b4b9c81a347e300eeec4a7ddce64-957x637-png",
+        "_type": "reference"
+      }
+    },
+    "operator": "Finnlines",
+    "routeName": "Naantali–Kapellskär",
+    "slug": {
+      "_type": "slug",
+      "current": "naantali-kapellskaer"
+    },
+    "usedByFinishpoint": false,
+    "usedByMpLogistiikka": true,
+    "vehiclePricing": [
+      {
+        "_key": "46d85eb9cc1c",
+        "_type": "vehiclePrice",
+        "direction": "molemmat",
+        "includesCabin": true,
+        "notes": "Ikkunallinen hytti ja wifi ",
+        "priceEur": 314,
+        "vehicleType": "van"
+      }
+    ]
+  },
+  {
+    "_createdAt": "2026-09-06T08:33:19Z",
+    "_id": "2869d55f-a875-4b60-9606-dd5e043b9a69",
+    "_rev": "Mtij2FIbO1I0nUyGx5Lens",
+    "_type": "post",
+    "_updatedAt": "2026-09-21T04:54:47Z",
+    "body": [
+      {
+        "_key": "intro0",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "intro0s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Kansainvälisen kuljetuksen hinta rakentuu kahdesta osasta: varustamon perimästä lauttamaksusta ja itse kuljetuspalvelusta. Koska Saksassa on useita mahdollisia lähtöpaikkoja, kerromme alla kaksi tapaa, joilla kuljetus voidaan hoitaa — kumpi kannattaa, riippuu siitä, kuinka kaukana noutopaikka on Travemündesta."
+          }
+        ],
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "intro1",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "intro1s0",
+            "_type": "span",
+            "marks": [],
+            "text": "1. Suora nouto meiltä"
+          }
+        ],
+        "markDefs": [],
+        "style": "h2"
+      },
+      {
+        "_key": "intro2",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "intro2s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Haemme pyörän suoraan noutopaikalta ja kuljetamme sen läpi koko matkan. Tämä on edullisin ja nopein vaihtoehto, mitä lähempänä noutopaikka on Travemündea — hinta nousee ajomatkan mukana."
+          }
+        ],
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "saksanoutohinnat",
+        "_type": "priceTable",
+        "caption": "Suuntaa-antavia kokonaishintoja Helsinkiin (sis. ALV):",
+        "columns": ["Noutoalue Saksassa", "Etäisyys Travemündesta", "Arvioitu kokonaishinta"],
+        "rows": [
+          {
+            "_key": "r0",
+            "_type": "row",
+            "cells": ["Lyypekki / Hampuri / Kiel", "~60 km", "n. 1 600 €"]
+          },
+          {
+            "_key": "r1",
+            "_type": "row",
+            "cells": ["Hannover / Bremen / Berliini", "~300 km", "n. 2 150 €"]
+          },
+          {
+            "_key": "r2",
+            "_type": "row",
+            "cells": ["Ruhrin alue / Köln / Düsseldorf", "~450 km", "n. 2 500 €"]
+          },
+          {
+            "_key": "r3",
+            "_type": "row",
+            "cells": ["Frankfurt / Kassel / Leipzig / Dresden", "~550 km", "n. 2 750 €"]
+          },
+          {
+            "_key": "r4",
+            "_type": "row",
+            "cells": ["Stuttgart / Nürnberg / München", "~700 km", "n. 3 100 €"]
+          }
+        ]
+      },
+      {
+        "_key": "partner0",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "partner0s0",
+            "_type": "span",
+            "marks": [],
+            "text": "2. Kuljetus yhteistyökumppanimme kautta lähimpään terminaaliin"
+          }
+        ],
+        "markDefs": [],
+        "style": "h2"
+      },
+      {
+        "_key": "partner1",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "partner1s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Jos noutopaikka on kauempana Travemündesta — esimerkiksi Etelä- tai Länsi-Saksassa — voi olla edullisempaa tilata pyörän kuljetus ensin yhteistyökumppanimme kautta heidän lähimpään terminaaliinsa Saksassa. Haemme pyörän sitten terminaalilta ja hoidamme loppumatkan Travemünden kautta Suomeen. Mitä kauempana pyörä alun perin on Travemündesta, sitä enemmän tässä vaihtoehdossa yleensä säästää verrattuna suoraan noutoon meiltä."
+          }
+        ],
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "partner2",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "partner2s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Kuljetuksesta peritään 40 % ennakkomaksu tilausvahvistuksen yhteydessä, loppuosa laskutetaan toimituksen yhteydessä."
+          }
+        ],
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b02",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b02s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Esimerkkilaskelma: Helsinki–München, Saksa"
+          }
+        ],
+        "markDefs": [],
+        "style": "h2"
+      },
+      {
+        "_key": "b03",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b03s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Ajo Helsinki–satama (paikallinen) — ~0,5 h"
+          }
+        ],
+        "level": 1,
+        "listItem": "bullet",
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b04",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b04s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Lauttamaksu Helsinki–Travemünde–Helsinki — ~900–1 500 € (kausivaihtelu; kesäkausi hintahaarukan yläpäässä)"
+          }
+        ],
+        "level": 1,
+        "listItem": "bullet",
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b05",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b05s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Ajo Travemünde–München (~700 km, molempiin suuntiin ~1 400 km) — ~7,5 h/suunta"
+          }
+        ],
+        "level": 1,
+        "listItem": "bullet",
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b06",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b06s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Kuljetuspalvelu (nouto, lastaus, sidonta, ajo, kuljettajan työaika, vakuutus) — ~1 400–1 600 €"
+          }
+        ],
+        "level": 1,
+        "listItem": "bullet",
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b07",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b07s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Kokonaishinta sis. ALV: n. 2 350–3 100 €"
+          }
+        ],
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b08",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b08s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Arvioitu kesto nouto–toimitus: noin 5–5,5 vuorokautta"
+          }
+        ],
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b09",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b09s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Esimerkkilaskelma: Helsinki–Fuengirola/Malaga, Espanja"
+          }
+        ],
+        "markDefs": [],
+        "style": "h2"
+      },
+      {
+        "_key": "b10",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b10s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Ajo Helsinki–satama (paikallinen) — ~0,5 h"
+          }
+        ],
+        "level": 1,
+        "listItem": "bullet",
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b11",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b11s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Lauttamaksu Helsinki–Travemünde–Helsinki — ~900–1 500 € (kausivaihtelu)"
+          }
+        ],
+        "level": 1,
+        "listItem": "bullet",
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b12",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b12s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Ajo Travemünde–kumppanin noutopiste (~300 km, molempiin suuntiin ~600 km) — ~3,5 h/suunta"
+          }
+        ],
+        "level": 1,
+        "listItem": "bullet",
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b13",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b13s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Luovutus kuljetuskumppanille Saksassa"
+          }
+        ],
+        "level": 1,
+        "listItem": "bullet",
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b14",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b14s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Kuljetus Saksa–Espanja–Saksa (yhteistyökumppanimme kautta)"
+          }
+        ],
+        "level": 1,
+        "listItem": "bullet",
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b15",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b15s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Kuljetuspalvelu (nouto, lastaus, sidonta, ajo, kuljettajan työaika, vakuutus, koordinointi)"
+          }
+        ],
+        "level": 1,
+        "listItem": "bullet",
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b16",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b16s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Kokonaishinta sis. ALV: alkaen n. 2 000 €/moottoripyörä (ryhmäkuljetuksissa, enintään 4 pyörää — hinta per pyörä laskee ryhmäkoon kasvaessa)"
+          }
+        ],
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b17",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b17s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Arvioitu kesto nouto–toimitus: noin 2–3 viikkoa (riippuu kumppanin lähtöaikataulusta)"
+          }
+        ],
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b18",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b18s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Ryhmäalennus MC-porukoille"
+          }
+        ],
+        "markDefs": [],
+        "style": "h2"
+      },
+      {
+        "_key": "b19",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b19s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Kuljetamme mielellämme useampaa pyörää samalla reissulla. Enintään 4 pyörän ryhmäkuljetuksessa hinta per moottoripyörä laskee selvästi, koska lauttamaksu ja ajokilometrit jakautuvat useamman pyörän kesken. Kerro montako pyörää olette liikkeellä, niin lasketaan teille ryhmähinta."
+          }
+        ],
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "b20",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b20s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Talvisäilytys Espanjassa"
+          }
+        ],
+        "markDefs": [],
+        "style": "h2"
+      },
+      {
+        "_key": "b21",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "b21s0",
+            "_type": "span",
+            "marks": [],
+            "text": "Kysy myös mahdollisuudesta säilyttää moottoripyörä Espanjassa talvikaudeksi."
+          }
+        ],
+        "markDefs": [],
+        "style": "normal"
+      },
+      {
+        "_key": "notefinal",
+        "_type": "block",
+        "children": [
+          {
+            "_key": "notefinals0",
+            "_type": "span",
+            "marks": [],
+            "text": "Lauttamaksut ovat varustamojen ilmoittamia hintoja ja voivat muuttua ilman ennakkoilmoitusta. Vahvistamme voimassa olevan lauttamaksun ja kokonaishinnan aina tarjouksessa. Katso ajoneuvokohtaiset lauttahinnat "
+          },
+          {
+            "_key": "notefinals1",
+            "_type": "span",
+            "marks": ["lnkpricing"],
+            "text": "Hinnoittelu-sivulta"
+          },
+          {
+            "_key": "notefinals2",
+            "_type": "span",
+            "marks": [],
+            "text": "."
+          }
+        ],
+        "markDefs": [
+          {
+            "_key": "lnkpricing",
+            "_type": "link",
+            "href": "/ulkomaat/hinnoittelu"
+          }
+        ],
+        "style": "normal"
+      }
+    ],
+    "excerpt": "Mitä kansainvälisen moottoripyöräkuljetuksen hinta oikeasti sisältää? Kaksi esimerkkilaskelmaa: Helsinki–München ja Helsinki–Fuengirola/Malaga, sekä ryhmäalennus MC-porukoille.",
+    "mainImage": {
+      "_type": "image",
+      "alt": "mp-logistiikka logo",
+      "asset": {
+        "_ref": "image-4d56d95e4552a5d6f98556131dc68e9c2513e40b-4032x3024-jpg",
+        "_type": "reference"
+      }
+    },
+    "publishedAt": "2026-09-06T08:32:39.681Z",
+    "slug": {
+      "_type": "slug",
+      "current": "naein-lasketaan-moottoripyoeraen-kuljetushinta-saksasta-suomeen"
+    },
+    "title": "Näin lasketaan moottoripyörän kuljetushinta ulkomaille"
+  },
+  {
+    "_createdAt": "2026-09-06T09:13:46Z",
+    "_id": "7ba0dab3-4077-45a7-9c85-ff3b9885cb8b",
+    "_rev": "Qc7Gq032aXYhUXMuDwEp1X",
+    "_system": {
+      "base": {
+        "id": "7ba0dab3-4077-45a7-9c85-ff3b9885cb8b",
+        "rev": "Qc7Gq032aXYhUXMuDwEBYl"
+      }
+    },
+    "_type": "ferryRoute",
+    "_updatedAt": "2026-09-06T16:02:25Z",
+    "arrivalPort": "Travemünde",
+    "crossingDurationHours": 31,
+    "departurePort": "Helsinki",
+    "image": {
+      "_type": "image",
+      "alt": "finnlines ship back",
+      "asset": {
+        "_ref": "image-738dabdee817fb6b3f1c48369f4df5b7be51e1e5-658x493-avif",
+        "_type": "reference"
+      }
+    },
+    "operator": "Finnlines",
+    "routeName": "Helsinki–Travemünde",
+    "slug": {
+      "_type": "slug",
+      "current": "helsinki-travemuende"
+    },
+    "usedByFinishpoint": false,
+    "usedByMpLogistiikka": true,
+    "vehiclePricing": [
+      {
+        "_key": "785127e41afc",
+        "_type": "vehiclePrice",
+        "direction": "molemmat",
+        "includesCabin": true,
+        "notes": "Ikkunallinen hytti ja wifi 3 vrk",
+        "priceEur": 1394,
+        "vehicleType": "van"
+      }
+    ]
+  },
+  {
+    "_createdAt": "2026-09-06T08:56:34Z",
+    "_id": "image-4d56d95e4552a5d6f98556131dc68e9c2513e40b-4032x3024-jpg",
+    "_rev": "jdIi0iSkX4NXv9moDuNyql",
+    "_type": "sanity.imageAsset",
+    "_updatedAt": "2026-09-06T08:56:34Z",
+    "assetId": "4d56d95e4552a5d6f98556131dc68e9c2513e40b",
+    "extension": "jpg",
+    "metadata": {
+      "_type": "sanity.imageMetadata",
+      "blurHash": "VBCGok.AD*xtR+00McX9xuxZ?w.8oIR%t6I9RPxvRjbH",
+      "dimensions": {
+        "_type": "sanity.imageDimensions",
+        "aspectRatio": 1.3333333333333333,
+        "height": 3024,
+        "width": 4032
+      },
+      "hasAlpha": false,
+      "isOpaque": true,
+      "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAUHBP/EACUQAAICAQMDBAMAAAAAAAAAAAEDAgQABRETITFBBgcSFCJhcf/EABcBAAMBAAAAAAAAAAAAAAAAAAECAwT/xAAZEQACAwEAAAAAAAAAAAAAAAAAAQIDQRH/2gAMAwEAAhEDEQA/AJi97LM4ivHls8XHIN6b/wAzfYrJdXKmhkNQhEALA28ef1lMT7fz+0Lq2w5O4EgCMRa16eZpNmVh7RJjPwlIDsD4zROt4RjZjJa9rKrCpsomce+xwx/rMqK70o8Hy2A64YiQen//2Q==",
+      "palette": {
+        "_type": "sanity.imagePalette",
+        "darkMuted": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#273145",
+          "foreground": "#fff",
+          "population": 4.53,
+          "title": "#fff"
+        },
+        "darkVibrant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#822e1a",
+          "foreground": "#fff",
+          "population": 0.08,
+          "title": "#fff"
+        },
+        "dominant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#b1c0d2",
+          "foreground": "#000",
+          "population": 7.62,
+          "title": "#fff"
+        },
+        "lightMuted": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#b1c0d2",
+          "foreground": "#000",
+          "population": 7.62,
+          "title": "#fff"
+        },
+        "lightVibrant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#c3d4ec",
+          "foreground": "#000",
+          "population": 0.07,
+          "title": "#000"
+        },
+        "muted": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#768086",
+          "foreground": "#fff",
+          "population": 7.14,
+          "title": "#fff"
+        },
+        "vibrant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#dd7833",
+          "foreground": "#fff",
+          "population": 0.35,
+          "title": "#fff"
+        }
+      },
+      "thumbHash": "l+cJDYJqiHlgiHireGiXiFCfRvWJ"
+    },
+    "mimeType": "image/jpeg",
+    "originalFilename": "IMG_5056.jpeg",
+    "path": "images/w3tas30e/production/4d56d95e4552a5d6f98556131dc68e9c2513e40b-4032x3024.jpg",
+    "sha1hash": "4d56d95e4552a5d6f98556131dc68e9c2513e40b",
+    "size": 3353129,
+    "uploadId": "dd99d8ff7f448b95a7219348b1038edcb84051f1",
+    "url": "https://cdn.sanity.io/images/w3tas30e/production/4d56d95e4552a5d6f98556131dc68e9c2513e40b-4032x3024.jpg"
+  },
+  {
+    "_createdAt": "2026-09-06T15:59:01Z",
+    "_id": "image-738dabdee817fb6b3f1c48369f4df5b7be51e1e5-658x493-avif",
+    "_rev": "Hv3zyv14FBW5AozIicTbLZ",
+    "_type": "sanity.imageAsset",
+    "_updatedAt": "2026-09-06T15:59:01Z",
+    "assetId": "738dabdee817fb6b3f1c48369f4df5b7be51e1e5",
+    "extension": "avif",
+    "metadata": {
+      "_type": "sanity.imageMetadata",
+      "blurHash": "VVF?6CoJITWAt6~qkCt7a#WC?bRjxuofWB_NWAM{ofof",
+      "dimensions": {
+        "_type": "sanity.imageDimensions",
+        "aspectRatio": 1.3346855983772818,
+        "height": 493,
+        "width": 658
+      },
+      "hasAlpha": false,
+      "isOpaque": true,
+      "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAQGAwf/xAAoEAABAwMBBgcAAAAAAAAAAAADAQIFAAQRUQYHEiExYRQXIjJCkaH/xAAWAQEBAQAAAAAAAAAAAAAAAAADAQL/xAAaEQEBAAIDAAAAAAAAAAAAAAABAEFRAhEi/9oADAMBAAIRAxEAPwB+M3nSF6quZFjYFPm4nVdErKW3syEQdor+FcxXJlvPqmtc0gJc0bdeMMMRhCxgeF4U741qulNuWytuy5dbgUI244iBRyp2SmAckapie88sclin/dFRTzW14R5xD9Llz7UT8orXXDdPWr//2Q==",
+      "palette": {
+        "_type": "sanity.imagePalette",
+        "darkMuted": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#3a475a",
+          "foreground": "#fff",
+          "population": 2.36,
+          "title": "#fff"
+        },
+        "darkVibrant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#040e1c",
+          "foreground": "#fff",
+          "population": 0.88,
+          "title": "#fff"
+        },
+        "dominant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#4a6281",
+          "foreground": "#fff",
+          "population": 8.28,
+          "title": "#fff"
+        },
+        "lightMuted": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#b4bccb",
+          "foreground": "#000",
+          "population": 0.22,
+          "title": "#fff"
+        },
+        "lightVibrant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#d8dff1",
+          "foreground": "#000",
+          "population": 0.56,
+          "title": "#000"
+        },
+        "muted": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#4a6281",
+          "foreground": "#fff",
+          "population": 8.28,
+          "title": "#fff"
+        },
+        "vibrant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#16568e",
+          "foreground": "#fff",
+          "population": 1.8,
+          "title": "#fff"
+        }
+      },
+      "thumbHash": "nfcNDYBHh3iPeYd8ifdnl3xf7Pnk"
+    },
+    "mimeType": "image/avif",
+    "originalFilename": "fin.avif",
+    "path": "images/w3tas30e/production/738dabdee817fb6b3f1c48369f4df5b7be51e1e5-658x493.avif",
+    "sha1hash": "738dabdee817fb6b3f1c48369f4df5b7be51e1e5",
+    "size": 39700,
+    "uploadId": "1304a00935f1152dd9065d170566f3a060e2794a",
+    "url": "https://cdn.sanity.io/images/w3tas30e/production/738dabdee817fb6b3f1c48369f4df5b7be51e1e5-658x493.avif"
+  },
+  {
+    "_createdAt": "2026-09-06T08:35:37Z",
+    "_id": "image-9e8e9d1b56b4e45ec9490f0bf2aac19eea0a848a-2048x2048-png",
+    "_rev": "Qc7Gq032aXYhUXMuDvIMwJ",
+    "_type": "sanity.imageAsset",
+    "_updatedAt": "2026-09-06T08:35:37Z",
+    "assetId": "9e8e9d1b56b4e45ec9490f0bf2aac19eea0a848a",
+    "extension": "png",
+    "metadata": {
+      "_type": "sanity.imageMetadata",
+      "blurHash": "eWQ]+wof~qt7j[Rjayt7j[j[_3j[IUj[M{xuj[j[ayRjxuj[M{ayt7",
+      "dimensions": {
+        "_type": "sanity.imageDimensions",
+        "aspectRatio": 1,
+        "height": 2048,
+        "width": 2048
+      },
+      "hasAlpha": true,
+      "isOpaque": true,
+      "lqip": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsSAAALEgHS3X78AAADSUlEQVQ4jY1Ua08aURT0p9ZHP9hvovVZFQUfKKAVfACCRQUiIEi1BrCa2MRE/UBFRSEaGqVEiopGBJfH7jT3AIqoTUk2ubnMzs45Z85UAQLefAQBuVwOqdQ90ukUeD7/eP/WO1WVF0IRLAg8Edzd3SEUCuH09AT39/fgeZ7+K8ei7CMvCNkLjCiTyeA6cY2DgwMsOhZhs9nofHt7i2w2SxiGxZuEgoB8Po9k8g6x2AUCRwGsrq5ienoavRIJGpsaoVKp4F3zIhgKIh7/Q4rz+fzrJTP5TFU4HIZ90Y5B2SAGBgcwOTUJqVSK2rpadHV3QzmihHpcjZVvKzg/P6ceU+mVCtllOp3G9vY2Ors6Ufu+Dv2DA1heXoZWq0X9h3oiN84aIWoUoVfSC99PH7gM96yXRMiazC5jsRj1iqmTKxWQK+Sw2mwwm81o+tiE8XE17HY7ZEMydHZ1wfXVhaurq+L7/BMhay4r1+/3Y1g+jInJCQJPaTTQG/TQ6/WkSCKVwGg0wuPxYGZmBjqdDsFgsDikIiFT9vDwgEjkHM4lJxpEIoh7xDDMGCCTydDxqQOtra1obm5GS0szNBoNNjY2MDs7S0q9Xg+i0Sg4jnsiTCaTODw8hMPpgFqthlanhcVioXNfXx/EYjF6enow+nmUMFabFUqlEiOjI3C5lnB8fEzmfyyZSU4kEjS1QCCAra0tKmvBugCTyYS5uTkYDAaYLWa4XC7Mm0wwmU2EC/8K4+bmBrlctnwohcEw2ScnJ3B7PDScufl5aoPD6YRarYJuWocFqxVfjEY4HA7CchxX3J4XtuFpX3d2diBXKGgIrI+bPzaJpEHUQC2w2W1k9KHhIez592iYL2xTUsm+tr+/D4VSWbDJxDjcHjc0Wg2qa2poCOzc1t6OMdUYQqEgGfvNTclmM7i4uMDu7i4pYYTskfZJ8a66Gm3tbWTuJdcSfD4fLi/jT5vyWtqwhee4B6RSKcQv4xQGbrebVq1/oJ/6eXQUIDOzrWLl8uUB8Xp8FVzPyNn0mce+r6/Du7aG39EoKSpFWGk78C/C58QCqT07O0MkEiFVBUf8V8CWfpX5yNrAlZVXwlTiC+cqip3HlK6I97L0fq28ShzD/wVz6oAsrWIcxwAAAABJRU5ErkJggg==",
+      "palette": {
+        "_type": "sanity.imagePalette",
+        "darkMuted": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#434444",
+          "foreground": "#fff",
+          "population": 0.17,
+          "title": "#fff"
+        },
+        "darkVibrant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#040c0c",
+          "foreground": "#fff",
+          "population": 0.2,
+          "title": "#fff"
+        },
+        "dominant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#040c0c",
+          "foreground": "#fff",
+          "population": 0.2,
+          "title": "#fff"
+        },
+        "lightMuted": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#c4c4bc",
+          "foreground": "#000",
+          "population": 0,
+          "title": "#fff"
+        },
+        "lightVibrant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#9bdddd",
+          "foreground": "#000",
+          "population": 0,
+          "title": "#000"
+        },
+        "muted": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#7b7c7c",
+          "foreground": "#fff",
+          "population": 0.19,
+          "title": "#fff"
+        },
+        "vibrant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#3fbfbf",
+          "foreground": "#000",
+          "population": 0,
+          "title": "#fff"
+        }
+      },
+      "thumbHash": "NfgNBwD3h3h2iHiOhZaIl2h4d3/4+HUP"
+    },
+    "mimeType": "image/png",
+    "originalFilename": "mp kopio.png",
+    "path": "images/w3tas30e/production/9e8e9d1b56b4e45ec9490f0bf2aac19eea0a848a-2048x2048.png",
+    "sha1hash": "9e8e9d1b56b4e45ec9490f0bf2aac19eea0a848a",
+    "size": 3427911,
+    "uploadId": "d50f120183fccf1cb622195e1653b6d0f181c660",
+    "url": "https://cdn.sanity.io/images/w3tas30e/production/9e8e9d1b56b4e45ec9490f0bf2aac19eea0a848a-2048x2048.png"
+  },
+  {
+    "_createdAt": "2026-09-06T14:54:23Z",
+    "_id": "image-aa8b384a4d39b4b9c81a347e300eeec4a7ddce64-957x637-png",
+    "_rev": "jdIi0iSkX4NXv9moDuisKF",
+    "_type": "sanity.imageAsset",
+    "_updatedAt": "2026-09-06T14:54:23Z",
+    "assetId": "aa8b384a4d39b4b9c81a347e300eeec4a7ddce64",
+    "extension": "png",
+    "metadata": {
+      "_type": "sanity.imageMetadata",
+      "blurHash": "VrHCcrM|M{j[ay?wWCoej]jto#oej[WBjsx^WBRkf6ay",
+      "dimensions": {
+        "_type": "sanity.imageDimensions",
+        "aspectRatio": 1.5023547880690737,
+        "height": 637,
+        "width": 957
+      },
+      "hasAlpha": true,
+      "isOpaque": true,
+      "lqip": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAAsSAAALEgHS3X78AAADi0lEQVQ4jS3DaU/TBwDA4f+n2F7NLNmbubHEF3MyJdEwuQoEBrRFEOV03IMBUsACDgTbgr1LkfsswVIGlKMXyOmgIufYOALMGCdQ/Aq/ZboneYQO9x5d7l16pvfpmztiYOk1z5bfYPO+ZXj1HSNrJ4ytnzKxcYpj6wzn1hmuLR/u7Y892z6m//Dh3jplZPlvhH73NpbpHQZnd7HOHzC8dMiY9zVTG29xbZ/g2Tlj5k8fz3fPmds7Z2H/PYv/X9p/z4uDjxf+OsOxeoxgc63yzLnGkGeT4ZktRud3mPx9j+frxyztvGF59x9W9k/wHpzy8vCMtSMf60c+Xh36WDs6Z/P4nK3jc1b33jGzuo9g7rXztH+KtkE3nUMz9NkXGXIuM+rxMjGzgmN2BdecF/e8F8/iS6YXV/F8+IrppXXmljdY8m4y+2INu2sBoaiinlK5Anmtmjp1C43mXjTNXTzRN6Ns0KBUNqLR6jA3NdFsNmM2GTHpNRg1jejVKvTqBpr0asx6NXq1EiG/SE5mThG5P9+noqqe6pp6SkuKyc2+R1paKulZuciq61HqmlEbn6LRGXiiUlBfXU6lrJDy+79QWV5CdUUx8rJChOJfjeSWN5BbrqL4oZaSKhU5RRWk5hZxN7+M7KpGqkwDKLsnaOidRG+ZxNw/irbNQmNTBypTB/XGTmq0rVQ2GBFSy3Qky3Qkl+lJqTCS8sBAmtxAXq2ZB9ouNF022qxTGC3jPG63oe8doX/EiWXEyaDdhWXUhb5vnLpWGxUGC4IoTY4ovRLRvWrCM2uILVCSX9eKtsNKv/U37ON2HI4prLZhmts76ejuwTY6inV8CovdSfuwg8ftVmSaDrJrTAj+MVn89/vYHK6K84jMqqLK2EP/mJOB8Sl6xybpHpmkZcBGS3cfrT19aDoHkBl6yFK0kPLQQHypgh/zKonIKEW4GCjhYqCUr36Ixy84kWvSbJJkdRSoTGQqmkh9ZCKjRkdOtYrKWgW1j+ookMmR/lRI5J1Mwm6lEyhO5UZsGtdj0xA++zaIC5eDufBdCJ9fCeXL65H4R4i5KUkkOP4OEYkpxCbdRZqQQHJiPBlJUlJuS0m8JUEsjkMUHUeASMIVUQL+EYkIn3x9lQ/9rvHpNwF8cfkGAUGhREWHI4mJ4LYkiiRJJOLIEMKDAwkLvokoLIzQ8AiCRFEEhERzKTAGv8A4LgWL+Rf5Zr6M2A5r1QAAAABJRU5ErkJggg==",
+      "palette": {
+        "_type": "sanity.imagePalette",
+        "darkMuted": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#294156",
+          "foreground": "#fff",
+          "population": 1.87,
+          "title": "#fff"
+        },
+        "darkVibrant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#106997",
+          "foreground": "#fff",
+          "population": 2.17,
+          "title": "#fff"
+        },
+        "dominant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#66829d",
+          "foreground": "#fff",
+          "population": 2.37,
+          "title": "#fff"
+        },
+        "lightMuted": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#aebcd4",
+          "foreground": "#000",
+          "population": 0.53,
+          "title": "#fff"
+        },
+        "lightVibrant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#66bee7",
+          "foreground": "#000",
+          "population": 0.02,
+          "title": "#fff"
+        },
+        "muted": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#66829d",
+          "foreground": "#fff",
+          "population": 2.37,
+          "title": "#fff"
+        },
+        "vibrant": {
+          "_type": "sanity.imagePaletteSwatch",
+          "background": "#1175b1",
+          "foreground": "#fff",
+          "population": 0.47,
+          "title": "#fff"
+        }
+      },
+      "thumbHash": "ZOcRDYJmeIiPiHeHeKd3dQBxIGII"
+    },
+    "mimeType": "image/png",
+    "originalFilename": "finnlines.png",
+    "path": "images/w3tas30e/production/aa8b384a4d39b4b9c81a347e300eeec4a7ddce64-957x637.png",
+    "sha1hash": "aa8b384a4d39b4b9c81a347e300eeec4a7ddce64",
+    "size": 781594,
+    "uploadId": "69669e491442af4148cb2f892b8c66ca7cb29d2b",
+    "url": "https://cdn.sanity.io/images/w3tas30e/production/aa8b384a4d39b4b9c81a347e300eeec4a7ddce64-957x637.png"
+  }
+]

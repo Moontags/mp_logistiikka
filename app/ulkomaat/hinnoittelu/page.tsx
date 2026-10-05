@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { stegaClean } from 'next-sanity';
 
 import {
   entryLabel,
@@ -11,9 +10,7 @@ import {
   groupByVehicle,
   hasSplitPricing,
 } from '@/lib/ferryPricing';
-import { urlFor } from '@/sanity/lib/image';
-import { sanityFetch } from '@/sanity/lib/live';
-import { MP_FERRY_ROUTES_QUERY } from '@/sanity/lib/queries';
+import { ferryRoutes as routes } from '@/content/ulkomaat';
 
 export const metadata: Metadata = {
   title: 'Hinnoittelu ja lauttamaksut | MP-Logistiikka',
@@ -46,9 +43,7 @@ const INCLUDED_SERVICES = [
   },
 ];
 
-export default async function HinnoitteluPage() {
-  const { data: routes } = await sanityFetch({ query: MP_FERRY_ROUTES_QUERY });
-
+export default function HinnoitteluPage() {
   return (
     <div className="legal-scroll">
       <section className="legal-page" aria-labelledby="pricing-title">
@@ -63,11 +58,11 @@ export default async function HinnoitteluPage() {
           </h1>
 
           <p className="legal-intro">
-            Kuljetuksen hinta rakentuu kahdesta osasta: varustamon perimästä lauttamaksusta ja
-            itse kuljetuspalvelusta. 
+            Kuljetuksen hinta rakentuu kahdesta osasta: varustamon perimästä lauttamaksusta ja itse
+            kuljetuspalvelusta.
           </p>
 
-          {/* ── Ferry costs (from Sanity) ── */}
+          {/* ── Ferry costs (local content) ── */}
           <section className="legal-section" aria-labelledby="ferry-title">
             <h2 id="ferry-title" className="legal-section-title">
               Lauttamaksut reiteittäin
@@ -85,7 +80,7 @@ export default async function HinnoitteluPage() {
                   const isSplitPriced = hasSplitPricing(groups);
 
                   return (
-                    <article key={route._id} className="ferry-card">
+                    <article key={route.id} className="ferry-card">
                       <header className="ferry-card-head">
                         <h3 className="ferry-route">{route.routeName}</h3>
                         <p className="ferry-meta">
@@ -100,10 +95,10 @@ export default async function HinnoitteluPage() {
                         </p>
                       </header>
 
-                      {route.image?.asset?._ref && (
+                      {route.image && (
                         <Image
-                          src={urlFor(route.image).width(800).height(450).url()}
-                          alt={stegaClean(route.image.alt) ?? ''}
+                          src={route.image.card}
+                          alt={route.image.alt ?? ''}
                           width={800}
                           height={450}
                           sizes="(max-width: 767px) 100vw, 360px"
@@ -144,13 +139,13 @@ export default async function HinnoitteluPage() {
                                   </span>
                                 </li>
                               );
-                            })
+                            }),
                           )}
                         </ul>
                       )}
 
                       {groups.some(
-                        (group) => group.entries.length === 1 && group.entries[0].notes
+                        (group) => group.entries.length === 1 && group.entries[0].notes,
                       ) && (
                         <ul className="ferry-notes">
                           {groups
@@ -170,8 +165,8 @@ export default async function HinnoitteluPage() {
 
             <p className="legal-note">
               Lauttamaksut ovat varustamojen ilmoittamia hintoja ja voivat muuttua ilman
-              ennakkoilmoitusta. Sesonkiaikoina ja tietyillä lähdöillä hinta voi poiketa
-              taulukosta. Vahvistamme voimassa olevan lauttamaksun aina tarjouksessa.
+              ennakkoilmoitusta. Sesonkiaikoina ja tietyillä lähdöillä hinta voi poiketa taulukosta.
+              Vahvistamme voimassa olevan lauttamaksun aina tarjouksessa.
             </p>
           </section>
 
@@ -200,16 +195,16 @@ export default async function HinnoitteluPage() {
             <p className="legal-note">
               Trailerikuljetuksen sijaan voimme joissain tapauksissa myös ajaa pyörän perille –
               kuljettajallamme on A-luokan ajokortti. Tämä voi olla edullisempi ratkaisu, jos
-              noutopaikka on kaukana tai reitti sopii ajettavaksi. Hintaan lisätään lentolipun
-              hinta noutopaikkaan; muuten hinta vaihtelee kausittain, joten kysy mahdollisuutta
-              ja hintaa tarjouksen yhteydessä.
+              noutopaikka on kaukana tai reitti sopii ajettavaksi. Hintaan lisätään lentolipun hinta
+              noutopaikkaan; muuten hinta vaihtelee kausittain, joten kysy mahdollisuutta ja hintaa
+              tarjouksen yhteydessä.
             </p>
           </section>
 
           <div className="legal-area">
             <h2 className="legal-area-title">Pyydä tarjous</h2>
             <p>
-              Kokonaishinta muodostuu reitistä, ajoneuvotyypistä, kuljetuksen kestosta ja 
+              Kokonaishinta muodostuu reitistä, ajoneuvotyypistä, kuljetuksen kestosta ja
               lauttaosuudesta. Kerro lähtö- ja kohdeosoite, niin saat meiltä tarjouksen.
             </p>
           </div>

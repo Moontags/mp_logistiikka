@@ -1,0 +1,78 @@
+[
+  {
+    "source": "https://cdn.sanity.io/images/w3tas30e/production/4d56d95e4552a5d6f98556131dc68e9c2513e40b-4032x3024.jpg?dlRaw=IMG_5056.jpeg",
+    "path": "/images/ulkomaat/4d56d95e4552a5d6f98556131dc68e9c2513e40b.jpg",
+    "bytes": 3353129,
+    "sha256": "3a36b349dc6a2c6eb6221c782570950a351be496fba424f3bd5013bc30f8ab6e",
+    "width": 4032,
+    "height": 3024,
+    "originalSha1Verified": true
+  },
+  {
+    "source": "https://cdn.sanity.io/images/w3tas30e/production/738dabdee817fb6b3f1c48369f4df5b7be51e1e5-658x493.avif?dlRaw=fin.avif",
+    "path": "/images/ulkomaat/738dabdee817fb6b3f1c48369f4df5b7be51e1e5.avif",
+    "bytes": 39700,
+    "sha256": "4ed505785109ff6b4995d6cb576be19290a9437b1c05230a972898771ee11f1d",
+    "width": 658,
+    "height": 493,
+    "originalSha1Verified": true
+  },
+  {
+    "source": "https://cdn.sanity.io/images/w3tas30e/production/9e8e9d1b56b4e45ec9490f0bf2aac19eea0a848a-2048x2048.png?dlRaw=mp+kopio.png",
+    "path": "/images/ulkomaat/9e8e9d1b56b4e45ec9490f0bf2aac19eea0a848a.png",
+    "bytes": 3427911,
+    "sha256": "269266a8bfdcc0dcf618f06d5891806060f4ac75ec5ebe12eee6bf19d6e6871d",
+    "width": 2048,
+    "height": 2048,
+    "originalSha1Verified": true
+  },
+  {
+    "source": "https://cdn.sanity.io/images/w3tas30e/production/aa8b384a4d39b4b9c81a347e300eeec4a7ddce64-957x637.png?dlRaw=finnlines.png",
+    "path": "/images/ulkomaat/aa8b384a4d39b4b9c81a347e300eeec4a7ddce64.png",
+    "bytes": 781594,
+    "sha256": "057e3201331440280b32a74414fda5d93e75dcaba80b13b58773b46dafe41efb",
+    "width": 957,
+    "height": 637,
+    "originalSha1Verified": true
+  },
+  {
+    "source": "https://cdn.sanity.io/images/w3tas30e/production/aa8b384a4d39b4b9c81a347e300eeec4a7ddce64-957x637.png?rect=0,50,957,538&w=800&h=450&fit=max",
+    "path": "/images/ulkomaat/naantali-kapellskaer-card.png",
+    "bytes": 660017,
+    "sha256": "6995909c5f70fa2c28ab01a7b6af2ffc0e81900e0749476b04ce96757abb7c80",
+    "width": 800,
+    "height": 450
+  },
+  {
+    "source": "https://cdn.sanity.io/images/w3tas30e/production/4d56d95e4552a5d6f98556131dc68e9c2513e40b-4032x3024.jpg?rect=0,378,4032,2268&w=800&h=450&fit=max",
+    "path": "/images/ulkomaat/naein-lasketaan-moottoripyoeraen-kuljetushinta-saksasta-suomeen-card.jpg",
+    "bytes": 75225,
+    "sha256": "344db92bcb0b26d170aa4641e4c852b6a8031b1842c77c63d7e625782e7db204",
+    "width": 800,
+    "height": 450
+  },
+  {
+    "source": "https://cdn.sanity.io/images/w3tas30e/production/4d56d95e4552a5d6f98556131dc68e9c2513e40b-4032x3024.jpg?rect=0,378,4032,2268&w=1200&h=675&fit=max",
+    "path": "/images/ulkomaat/naein-lasketaan-moottoripyoeraen-kuljetushinta-saksasta-suomeen-hero.jpg",
+    "bytes": 150708,
+    "sha256": "1df9b933a55dec910ff6e3b438971a9fa8392d16aaf3275edd83f22f4b4ab16d",
+    "width": 1200,
+    "height": 675
+  },
+  {
+    "source": "https://cdn.sanity.io/images/w3tas30e/production/4d56d95e4552a5d6f98556131dc68e9c2513e40b-4032x3024.jpg?rect=0,454,4032,2117&w=1200&h=630&fit=max",
+    "path": "/images/ulkomaat/naein-lasketaan-moottoripyoeraen-kuljetushinta-saksasta-suomeen-og.jpg",
+    "bytes": 141984,
+    "sha256": "4515a5a6e6a1c1b6164488df927915977ad798c8b0894277e256c7b39e3e8715",
+    "width": 1200,
+    "height": 630
+  },
+  {
+    "source": "https://cdn.sanity.io/images/w3tas30e/production/738dabdee817fb6b3f1c48369f4df5b7be51e1e5-658x493.avif?rect=0,62,658,370&w=800&h=450&fit=max",
+    "path": "/images/ulkomaat/helsinki-travemuende-card.jpg",
+    "bytes": 46137,
+    "sha256": "949c6400ca339cddf8557caf66cba49db0d3dc7dd9c6a2bbc2fa90c64c7797d0",
+    "width": 658,
+    "height": 370
+  }
+]

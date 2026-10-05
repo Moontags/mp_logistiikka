@@ -1,11 +1,8 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { stegaClean } from 'next-sanity';
 
-import { urlFor } from '@/sanity/lib/image';
-import { sanityFetch } from '@/sanity/lib/live';
-import { POSTS_QUERY } from '@/sanity/lib/queries';
+import { posts } from '@/content/ulkomaat';
 
 export const metadata: Metadata = {
   title: 'Ulkomaat | MP-Logistiikka',
@@ -24,9 +21,7 @@ function formatDate(value?: string | null) {
   });
 }
 
-export default async function UlkomaatPage() {
-  const { data: posts } = await sanityFetch({ query: POSTS_QUERY });
-
+export default function UlkomaatPage() {
   return (
     <div className="blog-scroll">
       <section className="blog-page" aria-labelledby="ulkomaat-title">
@@ -34,21 +29,18 @@ export default async function UlkomaatPage() {
         <h1 id="ulkomaat-title" className="blog-title">
           Tietoa kuljetuksista
         </h1>
-        <p className="blog-lead">
-          Täältä löydät kuljetuksen hinnoittelun
-        </p>
+        <p className="blog-lead">Täältä löydät kuljetuksen hinnoittelun</p>
 
         <p className="blog-lead">
           Jos et itse ehdi ajaa pyörää kohteeseen, voimme myös ajaa sen puolestasi – kysy
-          ajopalvelusta tarjouksen yhteydessä (hintaan lisätään lentolipun hinta
-          noutopaikkaan).
+          ajopalvelusta tarjouksen yhteydessä (hintaan lisätään lentolipun hinta noutopaikkaan).
         </p>
 
         <Link href="/ulkomaat/hinnoittelu" className="info-card">
           <p className="info-card-eyebrow">Hinnoittelu</p>
           <h2 className="info-card-title">Näin kuljetuksen hinta ulkomaille muodostuu</h2>
           <p className="info-card-text">
-            Lauttamaksu varustamon hinnaston mukaan sekä itse kuljetuspalvelu. 
+            Lauttamaksu varustamon hinnaston mukaan sekä itse kuljetuspalvelu.
           </p>
           <span className="info-card-cta">Katso hinnoittelu →</span>
         </Link>
@@ -58,18 +50,16 @@ export default async function UlkomaatPage() {
         </h2>
 
         {posts.length === 0 ? (
-          <p className="blog-empty">
-            Ei vielä julkaistuja artikkeleita. Kirjoita ensimmäinen Sanity Studiossa.
-          </p>
+          <p className="blog-empty">Ei vielä julkaistuja artikkeleita.</p>
         ) : (
           <ul className="blog-grid" aria-labelledby="articles-title">
             {posts.map((post) => (
-              <li key={post._id} className="blog-card">
+              <li key={post.slug} className="blog-card">
                 <Link href={`/ulkomaat/${post.slug}`} className="blog-card-link">
-                  {post.mainImage?.asset?._ref && (
+                  {post.mainImage && (
                     <Image
-                      src={urlFor(post.mainImage).width(800).height(450).url()}
-                      alt={stegaClean(post.mainImage.alt) ?? ''}
+                      src={post.mainImage.card}
+                      alt={post.mainImage.alt ?? ''}
                       width={800}
                       height={450}
                       sizes="(max-width: 767px) 100vw, 360px"

@@ -22,7 +22,7 @@ const bikeLabels: Record<string, string> = {
   large: 'Iso / Strike',
 };
 
-function createTransporter() {
+function createTransporter(timeouts: { connectionTimeout?: number; greetingTimeout?: number; socketTimeout?: number } = {}) {
   return nodemailer.createTransport({
     host: process.env.SMTP_HOST || 'posti.zoner.fi',
     port: Number(process.env.SMTP_PORT) || 465,
@@ -32,6 +32,7 @@ function createTransporter() {
       pass: process.env.SMTP_PASS,
     },
     tls: { rejectUnauthorized: false },
+    ...timeouts,
   });
 }
 
@@ -155,4 +156,23 @@ export async function sendOrderEmail(data: OrderEmailData) {
   }
 
   console.log('Order emails sent successfully for:', name, email);
+}
+
+/** Separate business-only notification; the existing order flow stays unchanged. */
+export async function sendGroupTransportEmail(
+  data: import('./group-transport/validation').Registration,
+  id: string,
+) {
+  const { groupTransportEmail } = await import('./group-transport/email');
+  // Limit failures without changing the transport settings used by order emails.
+  const transporter = createTransporter({
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 20000,
+  });
+  try {
+    await transporter.sendMail(groupTransportEmail(data, id));
+  } finally {
+    transporter.close();
+  }
 }

@@ -16,9 +16,9 @@ export const PRICING = {
    * Portaiden on oltava nousevassa järjestyksessä.
    */
   KM_TIERS: [
-    { upToKm: 150, perKm: 1.16 },   //  41–150 km
-    { upToKm: 400, perKm: 0.95 },   // 151–400 km
-    { upToKm: null, perKm: 0.75 },  // 401 km +
+    { upToKm: 150, perKm: 1.16 }, //  41–150 km
+    { upToKm: 400, perKm: 0.95 }, // 151–400 km
+    { upToKm: null, perKm: 0.75 }, // 401 km +
   ],
 
   TYPE_EXTRA: {
@@ -47,16 +47,26 @@ export const PRICING = {
    */
   HOME_BASE: 'Riihimäki, Suomi',
   POSITIONING_TIERS: [
-    { upToKm: 40, perKm: 0 },       //   0–40 km  ilmainen
-    { upToKm: 80, perKm: 0.50 },    //  40–80 km
-    { upToKm: 200, perKm: 0.40 },   //  80–200 km
-    { upToKm: 400, perKm: 0.30 },   // 200–400 km
-    { upToKm: 600, perKm: 0.35 },   // 400–600 km
-    { upToKm: null, perKm: 0.50 },  // 600 km +
+    { upToKm: 40, perKm: 0 }, //   0–40 km  ilmainen
+    { upToKm: 80, perKm: 0.5 }, //  40–80 km
+    { upToKm: 200, perKm: 0.4 }, //  80–200 km
+    { upToKm: 400, perKm: 0.3 }, // 200–400 km
+    { upToKm: 600, perKm: 0.35 }, // 400–600 km
+    { upToKm: null, perKm: 0.5 }, // 600 km +
   ],
 } as const;
 
-export type BikeType = 'scooter' | 'standard' | 'large';
+export const BIKE_OPTIONS = [
+  { value: 'scooter', label: 'Mopo/Skootteri', description: null },
+  { value: 'standard', label: 'Perus / Vakio', description: null },
+  { value: 'large', label: 'Iso / Strike', description: '≥ 250 kg tai ≥ 1 000 cm³' },
+] as const;
+
+export type BikeType = (typeof BIKE_OPTIONS)[number]['value'];
+
+export function isBikeType(value: unknown): value is BikeType {
+  return BIKE_OPTIONS.some((option) => option.value === value);
+}
 
 /** Yhden portaan osuus tästä matkasta – käytetään hintaerittelyn riveinä. */
 export interface KmTierBreakdown {
@@ -155,8 +165,8 @@ function positioningLeg(distanceKm: number): PositioningLeg {
  * koska kaksi 100 km:n päätä ei ole sama asia kuin yksi 200 km:n pää.
  */
 export function laskePositiointimaksu(
-  etaisyysNoutoon: number,  // km, tukikohta -> noutopaikka
-  etaisyysJatosta: number,  // km, jättöpaikka -> tukikohta
+  etaisyysNoutoon: number, // km, tukikohta -> noutopaikka
+  etaisyysJatosta: number, // km, jättöpaikka -> tukikohta
 ): PositioningResult {
   const pickup = positioningLeg(etaisyysNoutoon);
   const delivery = positioningLeg(etaisyysJatosta);
@@ -207,13 +217,13 @@ export function startingPrice(bikeType: BikeType): number {
 /** Hinnastokuvaus portaista, esim. "41–150 km 1,16 €/km · 151–400 km 0,95 €/km · yli 400 km 0,75 €/km" */
 function tiersToText(tiers: readonly Tier[], startKm: number): string {
   let cursor = startKm;
-  return tiers.map((tier) => {
-    const range = tier.upToKm === null
-      ? `yli ${cursor} km`
-      : `${cursor + 1}–${tier.upToKm} km`;
-    cursor = tier.upToKm ?? cursor;
-    return `${range} ${eur(tier.perKm)} €/km`;
-  }).join(' · ');
+  return tiers
+    .map((tier) => {
+      const range = tier.upToKm === null ? `yli ${cursor} km` : `${cursor + 1}–${tier.upToKm} km`;
+      cursor = tier.upToKm ?? cursor;
+      return `${range} ${eur(tier.perKm)} €/km`;
+    })
+    .join(' · ');
 }
 
 export function tierSummary(): string {

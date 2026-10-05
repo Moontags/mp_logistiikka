@@ -1,15 +1,46 @@
 'use client';
 
+import Link from 'next/link';
 import { PRICING, tierSummary, positioningSummary, startingPrice, eurShort } from '@/lib/pricing';
 
 export default function Features() {
   const features = [
-    { icon: '🔗', title: 'Ammattimainen sidonta', desc: 'Liinoilla ja pehmusteilla – ei naarmuja, ei liikkumista.' },
-    { icon: '🛡️', title: 'Vakuutettu kuljetus', desc: 'Kuljetus on vakuutettu lastauksen ja matkan ajaksi.' },
-    { icon: '🗺️', title: 'Suomi & Eurooppa', desc: 'Toimipiste Riihimäellä, kuljetuksia kaikkialle Suomeen ja Eurooppaan.' },
-    { icon: '⚡', title: 'Nopea aikataulu', desc: 'Kuljetus usein jo samana tai seuraavana päivänä.' },
-    { icon: '📦', title: 'Ford Transit L3H2', desc: 'Mahtuu isommatkin pyörät ja skootterit vaivatta.' },
-    { icon: '🏍️', title: 'Ajopalvelu', desc: 'Tarvittaessa ajamme pyöräsi perille itse. Edullisempi vaihtoehto. Hintaan lisätään lentolipun hinta.' },
+    {
+      icon: '🔗',
+      title: 'Ammattimainen sidonta',
+      desc: 'Liinoilla ja pehmusteilla – ei naarmuja, ei liikkumista.',
+    },
+    {
+      icon: '🛡️',
+      title: 'Vakuutettu kuljetus',
+      desc: 'Kuljetus on vakuutettu lastauksen ja matkan ajaksi.',
+    },
+    {
+      icon: '🗺️',
+      title: 'Suomi & Eurooppa',
+      desc: 'Toimipiste Riihimäellä, kuljetuksia kaikkialle Suomeen ja Eurooppaan.',
+    },
+    {
+      icon: '⚡',
+      title: 'Nopea aikataulu',
+      desc: 'Kuljetus usein jo samana tai seuraavana päivänä.',
+    },
+    {
+      icon: '📦',
+      title: 'Ford Transit L3H2',
+      desc: 'Mahtuu isommatkin pyörät ja skootterit vaivatta.',
+    },
+    {
+      icon: '🔄',
+      title: 'Yhteiskuljetukset – ilmoita ennakkoon, maksa vähemmän',
+      desc: 'Joustava aikataulu mahdollistaa kuljetusten yhdistämisen. Toteutuminen ja hinta vahvistetaan erikseen.',
+      href: '/yhteiskuljetus',
+    },
+    {
+      icon: '🏍️',
+      title: 'Ajopalvelu',
+      desc: 'Tarvittaessa ajamme pyöräsi perille itse. Edullisempi vaihtoehto. Hintaan lisätään lentolipun hinta.',
+    },
   ];
 
   return (
@@ -26,33 +57,39 @@ export default function Features() {
       <div style={{ maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
         {/* Header */}
         <div style={{ marginBottom: '1.5rem' }}>
-          <p style={{
-            fontFamily: 'var(--font-barlow)',
-            fontSize: '0.75rem',
-            fontWeight: 600,
-            letterSpacing: '0.15em',
-            textTransform: 'uppercase',
-            color: 'var(--orange)',
-            marginBottom: '0.35rem',
-          }}>
+          <p
+            style={{
+              fontFamily: 'var(--font-barlow)',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              color: 'var(--orange)',
+              marginBottom: '0.35rem',
+            }}
+          >
             Palvelut
           </p>
-          <h2 style={{
-            fontFamily: 'var(--font-barlow-condensed)',
-            fontWeight: 800,
-            fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
-            textTransform: 'uppercase',
-            letterSpacing: '-0.01em',
-            margin: '0 0 0.4rem',
-          }}>
+          <h2
+            style={{
+              fontFamily: 'var(--font-barlow-condensed)',
+              fontWeight: 800,
+              fontSize: 'clamp(1.75rem, 3.5vw, 2.75rem)',
+              textTransform: 'uppercase',
+              letterSpacing: '-0.01em',
+              margin: '0 0 0.4rem',
+            }}
+          >
             Miksi valita MP-Logistiikka?
           </h2>
-          <p style={{
-            fontFamily: 'var(--font-barlow)',
-            color: 'var(--muted)',
-            fontSize: '0.9rem',
-            margin: 0,
-          }}>
+          <p
+            style={{
+              fontFamily: 'var(--font-barlow)',
+              color: 'var(--muted)',
+              fontSize: '0.9rem',
+              margin: 0,
+            }}
+          >
             Sujuva palvelu ammattitaidolla.
           </p>
         </div>
@@ -68,6 +105,7 @@ export default function Features() {
                 borderRadius: '8px',
                 padding: '1rem 1.25rem',
                 transition: 'border-color 0.2s, transform 0.2s',
+                position: 'relative',
               }}
               onMouseOver={(e) => {
                 const el = e.currentTarget as HTMLDivElement;
@@ -81,24 +119,34 @@ export default function Features() {
               }}
             >
               <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{f.icon}</div>
-              <h3 style={{
-                fontFamily: 'var(--font-barlow-condensed)',
-                fontWeight: 700,
-                fontSize: '1rem',
-                textTransform: 'uppercase',
-                letterSpacing: '0.02em',
-                margin: '0 0 0.3rem',
-                color: 'var(--text)',
-              }}>
-                {f.title}
+              <h3
+                style={{
+                  fontFamily: 'var(--font-barlow-condensed)',
+                  fontWeight: 700,
+                  fontSize: '1rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.02em',
+                  margin: '0 0 0.3rem',
+                  color: 'var(--text)',
+                }}
+              >
+                {f.href ? (
+                  <Link href={f.href} className="feature-card-link">
+                    {f.title}
+                  </Link>
+                ) : (
+                  f.title
+                )}
               </h3>
-              <p style={{
-                fontFamily: 'var(--font-barlow)',
-                color: 'var(--muted)',
-                fontSize: '0.82rem',
-                lineHeight: 1.5,
-                margin: 0,
-              }}>
+              <p
+                style={{
+                  fontFamily: 'var(--font-barlow)',
+                  color: 'var(--muted)',
+                  fontSize: '0.82rem',
+                  lineHeight: 1.5,
+                  margin: 0,
+                }}
+              >
                 {f.desc}
               </p>
             </div>
@@ -106,31 +154,50 @@ export default function Features() {
         </div>
 
         {/* Bike types */}
-        <div style={{
-          padding: '1.5rem',
-          background: 'transparent',
-          borderRadius: '8px',
-          border: '1px solid var(--border)',
-        }}>
-          <h3 style={{
-            fontFamily: 'var(--font-barlow-condensed)',
-            fontWeight: 800,
-            fontSize: 'clamp(1.1rem, 2vw, 1.4rem)',
-            textTransform: 'uppercase',
-            letterSpacing: '-0.01em',
-            margin: '0 0 0.875rem',
-          }}>
+        <div
+          style={{
+            padding: '1.5rem',
+            background: 'transparent',
+            borderRadius: '8px',
+            border: '1px solid var(--border)',
+          }}
+        >
+          <h3
+            style={{
+              fontFamily: 'var(--font-barlow-condensed)',
+              fontWeight: 800,
+              fontSize: 'clamp(1.1rem, 2vw, 1.4rem)',
+              textTransform: 'uppercase',
+              letterSpacing: '-0.01em',
+              margin: '0 0 0.875rem',
+            }}
+          >
             Pyörätyypit ja hinnat
           </h3>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '0.75rem',
-          }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+              gap: '0.75rem',
+            }}
+          >
             {[
-              { type: 'Mopo / Skootteri', price: `alkaen ${eurShort(startingPrice('scooter'))} €`, desc: 'Mopot ja skootterit' },
-              { type: 'Perus / Vakio', price: `alkaen ${eurShort(startingPrice('standard'))} €`, desc: 'Tavallinen moottoripyörä', highlight: true },
-              { type: 'Iso / Strike', price: `alkaen ${eurShort(startingPrice('large'))} €`, desc: 'Isot chopper- ja matkapyörät' },
+              {
+                type: 'Mopo / Skootteri',
+                price: `alkaen ${eurShort(startingPrice('scooter'))} €`,
+                desc: `Mopot ja skootterit · −${eurShort(Math.abs(PRICING.TYPE_EXTRA.scooter))} € peruspyörän hinnasta`,
+              },
+              {
+                type: 'Perus / Vakio',
+                price: `alkaen ${eurShort(startingPrice('standard'))} €`,
+                desc: 'Tavallinen moottoripyörä',
+                highlight: true,
+              },
+              {
+                type: 'Iso / Strike',
+                price: `alkaen ${eurShort(startingPrice('large'))} €`,
+                desc: `≥ 250 kg tai ≥ 1 000 cm³ · +${eurShort(PRICING.TYPE_EXTRA.large)} € peruspyörän hintaan`,
+              },
             ].map((b) => (
               <div
                 key={b.type}
@@ -143,43 +210,51 @@ export default function Features() {
                 }}
               >
                 {/* Oranssi viiva poistettu */}
-                <p style={{
-                  fontFamily: 'var(--font-barlow-condensed)',
-                  fontWeight: 700,
-                  fontSize: '1rem',
-                  textTransform: 'uppercase',
-                  color: 'var(--text)',
-                  margin: '0 0 0.2rem',
-                }}>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-barlow-condensed)',
+                    fontWeight: 700,
+                    fontSize: '1rem',
+                    textTransform: 'uppercase',
+                    color: 'var(--text)',
+                    margin: '0 0 0.2rem',
+                  }}
+                >
                   {b.type}
                 </p>
-                <p style={{
-                  fontFamily: 'var(--font-barlow)',
-                  color: 'var(--muted)',
-                  fontSize: '0.78rem',
-                  margin: '0 0 0.5rem',
-                }}>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-barlow)',
+                    color: 'var(--muted)',
+                    fontSize: '0.78rem',
+                    margin: '0 0 0.5rem',
+                  }}
+                >
                   {b.desc}
                 </p>
-                <p style={{
-                  fontFamily: 'var(--font-barlow-condensed)',
-                  fontWeight: 800,
-                  fontSize: '1.25rem',
-                  color: 'var(--orange)',
-                  margin: 0,
-                }}>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-barlow-condensed)',
+                    fontWeight: 800,
+                    fontSize: '1.25rem',
+                    color: 'var(--orange)',
+                    margin: 0,
+                  }}
+                >
                   {b.price}
                 </p>
               </div>
             ))}
           </div>
-          <p style={{
-            fontFamily: 'var(--font-barlow)',
-            color: 'var(--muted)',
-            fontSize: '0.75rem',
-            margin: '0.75rem 0 0',
-          }}>
-            {`* Perusmaksu ${PRICING.BASE_FEE} € sis. ensimmäiset ${PRICING.BASE_KM_INCLUDED} km · sen jälkeen ${tierSummary()} · ${positioningSummary()} · tarkka hinta laskurilla`}
+          <p
+            style={{
+              fontFamily: 'var(--font-barlow)',
+              color: 'var(--muted)',
+              fontSize: '0.75rem',
+              margin: '0.75rem 0 0',
+            }}
+          >
+            {`* Perusmaksu ${PRICING.BASE_FEE} € sis. ensimmäiset ${PRICING.BASE_KM_INCLUDED} km · sen jälkeen ${tierSummary()} · ${positioningSummary()} · kaikki hinnat sisältävät ALV:n · tarkka hinta laskurilla`}
           </p>
         </div>
       </div>
