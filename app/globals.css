@@ -681,6 +681,20 @@ h1, h2, h3, h4 {
   text-align: center;
 }
 
+@media (min-width: 769px) {
+  #hinnasto .calc-grid { align-items: stretch; }
+  #hinnasto .calc-result { display: flex; flex-direction: column; }
+  #hinnasto .km-block { margin-bottom: 0.5rem; }
+  #hinnasto .km-number { font-size: 2.75rem; }
+  #hinnasto .km-meta { display: block; min-height: 2.7em; line-height: 1.35; }
+  #hinnasto .total-price { font-size: 3.25rem; }
+  #hinnasto .total-label { margin: 0.25rem 0 0.75rem; }
+  #hinnasto .breakdown { padding-top: 0.75rem; margin-bottom: 1rem; }
+  #hinnasto .breakdown-row { padding: 0.25rem 0; line-height: 1.35; }
+  #hinnasto .total-row { margin-top: 0.25rem; padding-top: 0.5rem; }
+  #hinnasto .btn-order { margin-top: auto; }
+}
+
 /* ── Disabled order button (before calculation) ── */
 .btn-disabled {
   opacity: 0.4;
