@@ -77,6 +77,15 @@
 .more {
   grid-column: 1 / -1;
 }
+@media (min-width: 769px) {
+  .actions {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 2rem;
+  }
+  .summary {
+    padding-left: 2rem;
+  }
+}
 @media (max-width: 768px) {
   .actions {
     grid-template-columns: minmax(0, 1fr);
