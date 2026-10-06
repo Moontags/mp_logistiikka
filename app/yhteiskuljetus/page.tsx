@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Suspense } from 'react';
 import GroupTransportContent from './GroupTransportContent';
 
@@ -52,6 +53,9 @@ export default function GroupTransportPage() {
                 Kiireellinen kuljetus? <a href="/hinnasto">Laske kuljetuksen hinta</a> tai soita{' '}
                 <a href="tel:+358503547763">050 354 7763</a>.
               </p>
+              <Link href="/" className="btn-primary group-transport-home">
+                Takaisin etusivulle
+              </Link>
             </aside>
           </GroupTransportContent>
         </Suspense>
