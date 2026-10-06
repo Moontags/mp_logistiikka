@@ -285,13 +285,6 @@ export default function Calculator() {
               </div>
             )}
 
-            {result && (
-              <p style={{ color: 'var(--text)' }}>
-                Lähtö: {result.origin}
-                <br />
-                Määränpää: {result.destination}
-              </p>
-            )}
             {error && !loading && (
               <p className="error-text" role="alert">
                 {error}
