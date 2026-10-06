@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PRICING } from '@/lib/pricing';
+import { geocodeLocation } from '@/lib/geocoding';
 
 function formatDuration(seconds: number): string {
   const h = Math.floor(seconds / 3600);
@@ -11,30 +12,26 @@ function formatDuration(seconds: number): string {
 
 type Leg = { km: number; durationSec: number };
 
-async function fetchLeg(
-  apiKey: string,
-  origin: string,
-  destination: string,
-): Promise<Leg | null> {
+async function fetchLeg(apiKey: string, origin: string, destination: string): Promise<Leg | null> {
+  if (origin === destination) return { km: 0, durationSec: 0 };
   const body = {
-    origins: [{ waypoint: { address: origin } }],
-    destinations: [{ waypoint: { address: destination } }],
+    origins: [{ waypoint: { placeId: origin } }],
+    destinations: [{ waypoint: { placeId: destination } }],
     travelMode: 'DRIVE',
     routingPreference: 'TRAFFIC_UNAWARE',
   };
 
-  const res = await fetch(
-    'https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix',
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Goog-Api-Key': apiKey,
-        'X-Goog-FieldMask': 'originIndex,destinationIndex,duration,distanceMeters,status',
-      },
-      body: JSON.stringify(body),
-    }
-  );
+  const res = await fetch('https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Goog-Api-Key': apiKey,
+      'X-Goog-FieldMask': 'originIndex,destinationIndex,duration,distanceMeters,status',
+    },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(12_000),
+    cache: 'no-store',
+  });
 
   if (!res.ok) {
     const err = await res.text();
@@ -47,7 +44,11 @@ async function fetchLeg(
 
   // status:{} (empty) = OK, non-zero code = error
   const statusCode = element?.status?.code;
-  if (!element || !element.distanceMeters || (statusCode !== undefined && statusCode !== 0)) {
+  if (
+    !element ||
+    typeof element.distanceMeters !== 'number' ||
+    (statusCode !== undefined && statusCode !== 0)
+  ) {
     return null;
   }
 
@@ -69,28 +70,49 @@ export async function GET(request: NextRequest) {
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   if (!apiKey) {
     console.error('GOOGLE_MAPS_API_KEY is not set');
-    return NextResponse.json({ error: 'Route not found' }, { status: 404 });
+    return NextResponse.json(
+      { error: 'Reittipalvelu ei ole juuri nyt käytettävissä.' },
+      { status: 503 },
+    );
   }
 
-  const from = `${origin}, Finland`;
-  const to = `${destination}, Finland`;
-
-  // Kuljetusreitti + positiointiajot tukikohdasta noudolle ja jätöstä takaisin.
-  const [main, toPickup, fromDelivery] = await Promise.all([
-    fetchLeg(apiKey, from, to),
-    fetchLeg(apiKey, PRICING.HOME_BASE, from),
-    fetchLeg(apiKey, to, PRICING.HOME_BASE),
-  ]);
-
-  if (!main) {
-    return NextResponse.json({ error: 'Route not found' }, { status: 404 });
+  try {
+    const [from, to, base] = await Promise.all([
+      geocodeLocation(apiKey, origin.trim()),
+      geocodeLocation(apiKey, destination.trim()),
+      geocodeLocation(apiKey, PRICING.HOME_BASE),
+    ]);
+    if (from.placeId === to.placeId) {
+      return NextResponse.json({ error: 'Lähtöpaikka ja määränpää ovat samat.' }, { status: 400 });
+    }
+    const [main, toPickup, fromDelivery] = await Promise.all([
+      fetchLeg(apiKey, from.placeId, to.placeId),
+      fetchLeg(apiKey, base.placeId, from.placeId),
+      fetchLeg(apiKey, to.placeId, base.placeId),
+    ]);
+    if (!main || !toPickup || !fromDelivery) {
+      return NextResponse.json(
+        { error: 'Kaikkia reittiosuuksia ei löytynyt. Yritä uudelleen tai ota yhteyttä.' },
+        { status: 503 },
+      );
+    }
+    return NextResponse.json({
+      km: main.km,
+      duration: formatDuration(main.durationSec),
+      origin: from.address,
+      destination: to.address,
+      positioningToPickupKm: toPickup.km,
+      positioningFromDeliveryKm: fromDelivery.km,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error && /^(Paikkaa |Paikkahaku )/.test(error.message)
+            ? error.message
+            : 'Reittipalvelu ei vastaa juuri nyt. Yritä uudelleen.',
+      },
+      { status: 503 },
+    );
   }
-
-  // Positiointiosuudet eivät saa kaataa tarjousta – jos ne epäonnistuvat, maksu jää 0 €.
-  return NextResponse.json({
-    km: main.km,
-    duration: formatDuration(main.durationSec),
-    positioningToPickupKm: toPickup?.km ?? 0,
-    positioningFromDeliveryKm: fromDelivery?.km ?? 0,
-  });
 }

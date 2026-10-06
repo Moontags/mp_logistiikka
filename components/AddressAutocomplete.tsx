@@ -16,7 +16,6 @@ const NAV_OFFSET = 72;
 /** Vertical gap between the input and the list. Keep in sync with globals.css. */
 const GAP = 6;
 const MAX_LIST_HEIGHT = 288;
-const MIN_LIST_HEIGHT = 108;
 /** Below this much room under the input we flip the list above the field. */
 const FLIP_THRESHOLD = 168;
 
@@ -42,6 +41,7 @@ type Props = {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  onSubmit?: () => void;
 };
 
 /**
@@ -54,7 +54,13 @@ type Props = {
  * `PlaceAutocompleteElement` puts its dropdown in a shadow DOM we cannot
  * reposition. Both made the suggestions render off-screen on phones.
  */
-export default function AddressAutocomplete({ label, value, onChange, placeholder }: Props) {
+export default function AddressAutocomplete({
+  label,
+  value,
+  onChange,
+  placeholder,
+  onSubmit,
+}: Props) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -69,6 +75,7 @@ export default function AddressAutocomplete({ label, value, onChange, placeholde
   const [suggestions, setSuggestions] = useState<AddressSuggestion[]>([]);
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
+  const [lookupFailed, setLookupFailed] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [placement, setPlacement] = useState<Placement>({
     side: 'below',
@@ -98,9 +105,7 @@ export default function AddressAutocomplete({ label, value, onChange, placeholde
     const spaceAbove = rect.top - band.top - GAP;
     const side = spaceBelow < FLIP_THRESHOLD && spaceAbove > spaceBelow ? 'above' : 'below';
     const available = side === 'below' ? spaceBelow : spaceAbove;
-    const maxHeight = Math.round(
-      Math.max(MIN_LIST_HEIGHT, Math.min(MAX_LIST_HEIGHT, available)),
-    );
+    const maxHeight = Math.round(Math.max(44, Math.min(MAX_LIST_HEIGHT, available)));
 
     setPlacement((prev) =>
       prev.side === side && prev.maxHeight === maxHeight ? prev : { side, maxHeight },
@@ -187,6 +192,7 @@ export default function AddressAutocomplete({ label, value, onChange, placeholde
         })
         .catch(() => {
           if (requestId !== requestIdRef.current) return;
+          setLookupFailed(true);
           setSuggestions([]);
           setActiveIndex(-1);
           setPending(false);
@@ -207,8 +213,12 @@ export default function AddressAutocomplete({ label, value, onChange, placeholde
 
   function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
     const next = event.target.value;
+    requestIdRef.current++;
+    setActiveIndex(-1);
+    setSuggestions([]);
     // Drop a pending details lookup from an earlier selection.
     selectionIdRef.current++;
+    setLookupFailed(false);
     onChange(next);
     setSearch(next);
 
@@ -277,6 +287,10 @@ export default function AddressAutocomplete({ label, value, onChange, placeholde
     if (event.key === 'Enter' && open && activeIndex >= 0 && suggestions[activeIndex]) {
       event.preventDefault();
       void selectSuggestion(suggestions[activeIndex]);
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      setOpen(false);
+      onSubmit?.();
     }
   }
 
@@ -330,7 +344,6 @@ export default function AddressAutocomplete({ label, value, onChange, placeholde
                 // and re-open (which would move the field mid-tap).
                 onPointerDown={(event) => event.preventDefault()}
                 onClick={() => void selectSuggestion(suggestion)}
-                onMouseEnter={() => setActiveIndex(index)}
               >
                 <span className="addr-option-primary">{suggestion.primary}</span>
                 {suggestion.secondary && (
@@ -341,7 +354,11 @@ export default function AddressAutocomplete({ label, value, onChange, placeholde
 
             {suggestions.length === 0 && (
               <li role="presentation" className="addr-status">
-                {pending ? 'Haetaan osoitteita…' : 'Ei osoite-ehdotuksia'}
+                {pending
+                  ? 'Haetaan paikkoja…'
+                  : lookupFailed
+                    ? 'Ehdotushaku ei toimi. Kirjoita kaupunki – laskuri hakee paikan erikseen.'
+                    : 'Ei ehdotuksia. Voit käyttää kirjoittamaasi kaupunkia.'}
               </li>
             )}
           </ul>

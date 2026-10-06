@@ -1442,14 +1442,14 @@ ol.blog-list { list-style: decimal outside; }
 .group-transport-info h2, .group-transport-success h2 { margin-top: 0; font-family: var(--font-barlow-condensed), sans-serif; font-size: 1.75rem; }
 .group-transport-info li { padding: 0 0 .75rem .25rem; }
 .group-transport-info ol { padding-left: 1.25rem; }
-.group-transport-info p { color: var(--muted); }
+.group-transport-info p { color: var(--text); }
 .group-transport-info a, .group-transport-success a, .group-transport-link { color: var(--orange); text-underline-offset: 3px; }
 .group-transport-info .group-transport-home {
   display: block;
   flex-shrink: 0;
   width: 100%;
   margin-top: auto;
-  color: #fff;
+  color: #111;
   line-height: 1.5;
 }
 .group-transport-link { display: block; font-family: var(--font-barlow), sans-serif; font-size: .85rem; line-height: 1.6; margin-top: .85rem; }

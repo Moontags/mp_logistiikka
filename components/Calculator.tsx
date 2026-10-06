@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { calculatePrice, BikeType, PRICING, eur, eurShort, BIKE_OPTIONS } from '@/lib/pricing';
 import { hasCity } from '@/lib/address';
 import AddressAutocomplete from '@/components/AddressAutocomplete';
@@ -12,6 +12,7 @@ export default function Calculator() {
   // (street, postal code, city) of the picked suggestion.
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
+  const [addressRevision, setAddressRevision] = useState(0);
 
   const [bikeType, setBikeType] = useState<BikeType>('standard');
   const [result, setResult] = useState<{
@@ -33,7 +34,34 @@ export default function Calculator() {
 
   const kokonaishinta = price ? price.total : 0;
 
+  const requestRef = useRef(0);
+  const controllerRef = useRef<AbortController | null>(null);
+
+  // Typing and selecting both lead to a quote; no selection is required.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (origin.trim() && destination.trim()) void handleCalculate();
+    }, 800);
+    return () => clearTimeout(timer);
+    // Calculation uses the current field values; bike type only changes pricing.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [origin, destination, addressRevision]);
+
+  function updateAddress(setter: (value: string) => void, value: string) {
+    requestRef.current++;
+    controllerRef.current?.abort();
+    setLoading(false);
+    setResult(null);
+    setError(null);
+    setter(value);
+    setAddressRevision((revision) => revision + 1);
+  }
+
   async function handleCalculate() {
+    controllerRef.current?.abort();
+    const requestId = ++requestRef.current;
+    const controller = new AbortController();
+    controllerRef.current = controller;
     const originValue = origin.trim();
     const destinationValue = destination.trim();
     if (!originValue || !destinationValue) {
@@ -56,21 +84,29 @@ export default function Calculator() {
     try {
       const res = await fetch(
         `/api/distance?origin=${encodeURIComponent(originValue)}&destination=${encodeURIComponent(destinationValue)}`,
+        { signal: AbortSignal.any([controller.signal, AbortSignal.timeout(30_000)]) },
       );
-      if (!res.ok) throw new Error('not found');
       const data = await res.json();
+      if (requestId !== requestRef.current) return;
+      if (!res.ok) throw new Error(data.error || 'Reittiä ei löytynyt.');
       setResult({
         km: data.km,
         duration: data.duration,
-        origin: originValue,
-        destination: destinationValue,
+        origin: data.origin,
+        destination: data.destination,
         positioningToPickupKm: data.positioningToPickupKm ?? 0,
         positioningFromDeliveryKm: data.positioningFromDeliveryKm ?? 0,
       });
-    } catch {
-      setError('Reitti ei löydy – tarkista kaupunkien nimet tai ota yhteyttä.');
+    } catch (error) {
+      if (requestId !== requestRef.current || controller.signal.aborted) return;
+      setResult(null);
+      setError(
+        error instanceof Error && error.name !== 'TimeoutError' && error.name !== 'TypeError'
+          ? error.message
+          : 'Reittipalvelu ei vastaa juuri nyt. Yritä uudelleen.',
+      );
     } finally {
-      setLoading(false);
+      if (requestId === requestRef.current) setLoading(false);
     }
   }
 
@@ -144,13 +180,15 @@ export default function Calculator() {
             <AddressAutocomplete
               label="Lähtöpaikka"
               value={origin}
-              onChange={setOrigin}
+              onChange={(value) => updateAddress(setOrigin, value)}
+              onSubmit={() => void handleCalculate()}
               placeholder="esim. Riihimäki"
             />
             <AddressAutocomplete
               label="Määränpää"
               value={destination}
-              onChange={setDestination}
+              onChange={(value) => updateAddress(setDestination, value)}
+              onSubmit={() => void handleCalculate()}
               placeholder="esim. Helsinki"
             />
 
@@ -195,7 +233,7 @@ export default function Calculator() {
           </div>
 
           {/* Oikea puoli – näyttää aina saman rakenteen */}
-          <div className="calc-result">
+          <div className="calc-result" aria-live="polite" aria-busy={loading}>
             <div className="km-block">
               <span className="km-number">{result ? `${result.km} km` : '0 km'}</span>
               <span className="km-meta">
@@ -247,7 +285,21 @@ export default function Calculator() {
               </div>
             )}
 
-            {error && !loading && <p className="error-text">{error}</p>}
+            {result && (
+              <p style={{ color: 'var(--text)' }}>
+                Lähtö: {result.origin}
+                <br />
+                Määränpää: {result.destination}
+              </p>
+            )}
+            {error && !loading && (
+              <p className="error-text" role="alert">
+                {error}
+                <br />
+                <a href="tel:+358503547763">Soita 050 354 7763</a> tai{' '}
+                <a href="/yhteiskuljetus">tee ennakkoilmoitus</a>.
+              </p>
+            )}
 
             <a
               href={

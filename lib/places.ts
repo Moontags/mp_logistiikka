@@ -39,7 +39,9 @@ type LegacyAutocompleteService = {
   getPlacePredictions: (
     request: {
       input: string;
-      componentRestrictions?: { country: string };
+      componentRestrictions?: { country: string[] };
+      types?: string[];
+      locationBias?: { south: number; west: number; north: number; east: number };
       sessionToken?: object;
     },
     callback: (predictions: LegacyPrediction[] | null, status: string) => void,
@@ -49,7 +51,10 @@ type LegacyAutocompleteService = {
 type LegacyPlacesService = {
   getDetails: (
     request: { placeId: string; fields: string[]; sessionToken?: object },
-    callback: (result: { formatted_address?: string; name?: string } | null, status: string) => void,
+    callback: (
+      result: { formatted_address?: string; name?: string } | null,
+      status: string,
+    ) => void,
   ) => void;
 };
 
@@ -59,6 +64,8 @@ type PlacesNamespace = {
     fetchAutocompleteSuggestions: (request: {
       input: string;
       includedRegionCodes?: string[];
+      includedPrimaryTypes?: string[];
+      locationBias?: { south: number; west: number; north: number; east: number };
       language?: string;
       region?: string;
       sessionToken?: object;
@@ -100,6 +107,8 @@ export const MIN_QUERY_LENGTH = 2;
 
 const REGION_CODE = 'fi';
 const LANGUAGE = 'fi';
+const SEARCH_COUNTRIES = ['fi', 'se', 'no', 'ee', 'de'];
+const FINLAND_BIAS = { south: 59.5, west: 19, north: 70.1, east: 31.6 };
 const POLL_INTERVAL_MS = 150;
 const LOAD_TIMEOUT_MS = 15_000;
 
@@ -216,10 +225,10 @@ function fromLegacyPrediction(
 }
 
 /**
- * Fetches address predictions for `input`, restricted to Finland.
+ * Fetches city-first predictions across Finland and nearby transport countries.
  *
  * Returns an empty list for queries that are too short, and throws only if the
- * Places library itself is unreachable.
+ * lookup fails.
  */
 export async function fetchAddressSuggestions(
   input: string,
@@ -232,30 +241,52 @@ export async function fetchAddressSuggestions(
   const token = tokenFor(places, session);
 
   if (places.AutocompleteSuggestion) {
-    const { suggestions } = await places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+    const request = {
       input: query,
-      includedRegionCodes: [REGION_CODE],
+      includedRegionCodes: SEARCH_COUNTRIES,
       language: LANGUAGE,
       region: REGION_CODE,
+      locationBias: FINLAND_BIAS,
       ...(token ? { sessionToken: token } : {}),
-    });
-    return (suggestions ?? [])
+    };
+    // A separate city query prevents establishments such as Oulunkylä sports
+    // facilities from crowding a matching municipality out of the five results.
+    const [cities, all] = await Promise.all([
+      places.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+        ...request,
+        includedPrimaryTypes: ['(cities)'],
+      }),
+      places.AutocompleteSuggestion.fetchAutocompleteSuggestions(request),
+    ]);
+    const predictions = [...(cities.suggestions ?? []), ...(all.suggestions ?? [])]
       .map((suggestion) => suggestion.placePrediction)
-      .filter((prediction): prediction is PlacePrediction => Boolean(prediction))
+      .filter((prediction): prediction is PlacePrediction => Boolean(prediction));
+    const seen = new Set<string>();
+    return predictions
+      .filter((prediction) => {
+        if (seen.has(prediction.placeId)) return false;
+        seen.add(prediction.placeId);
+        return true;
+      })
       .map(fromPlacePrediction);
   }
 
   if (places.AutocompleteService) {
     if (!legacyPredictionService) legacyPredictionService = new places.AutocompleteService();
     const service = legacyPredictionService;
-    const predictions = await new Promise<LegacyPrediction[]>((resolve) => {
+    const predictions = await new Promise<LegacyPrediction[]>((resolve, reject) => {
       service.getPlacePredictions(
         {
           input: query,
-          componentRestrictions: { country: REGION_CODE },
+          componentRestrictions: { country: SEARCH_COUNTRIES },
+          types: ['geocode'],
+          locationBias: FINLAND_BIAS,
           ...(token ? { sessionToken: token } : {}),
         },
-        (result) => resolve(result ?? []),
+        (result, status) =>
+          status === 'OK' || status === 'ZERO_RESULTS'
+            ? resolve(result ?? [])
+            : reject(new Error(`Places: ${status}`)),
       );
     });
     return predictions.map((prediction) => fromLegacyPrediction(prediction, places, token));
