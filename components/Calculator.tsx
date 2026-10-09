@@ -305,7 +305,7 @@ export default function Calculator() {
                 }
                 className="group-transport-link"
               >
-                Ei kiire? Ilmoita ennakkoon – yhdistetty kuljetus on edullisempi →
+                Ei kiire? Ilmoita ennakkoon →
               </a>
             }
           />
