@@ -1497,3 +1497,15 @@ ol.blog-list { list-style: decimal outside; }
     padding: 0;
   }
 }
+
+/* Keep the secondary calculator links below the calculator at every screen size. */
+.calculator-layout {
+  display: flex;
+  flex-direction: column;
+}
+.calculator-actions {
+  margin-top: 1.5rem;
+}
+.calculator-heading {
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+}

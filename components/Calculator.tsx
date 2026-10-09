@@ -121,8 +121,8 @@ export default function Calculator() {
         borderTop: '1px solid var(--border)',
       }}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ marginBottom: 'clamp(1.5rem, 4vw, 3rem)' }}>
+      <div className="calculator-layout" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <div className="calculator-heading">
           <p
             style={{
               fontFamily: 'var(--font-barlow)',
@@ -158,20 +158,6 @@ export default function Calculator() {
           >
             {`Hinta määräytyy matkan pituuden, nouto-/jättöpaikan sijainnin ja pyörätyypin mukaan. Peruspyörän hinta alkaen ${PRICING.BASE_FEE} € (sis. ALV).`}
           </p>
-          <FullPriceList
-            leadLink={
-              <a
-                href={
-                  result
-                    ? `/yhteiskuljetus?${new URLSearchParams({ origin: townFromAddress(result.origin), destination: townFromAddress(result.destination), bikeType }).toString()}`
-                    : '/yhteiskuljetus'
-                }
-                className="group-transport-link"
-              >
-                Ei kiire? Ilmoita ennakkoon – yhdistetty kuljetus on edullisempi →
-              </a>
-            }
-          />
         </div>
 
         <div className="calc-grid">
@@ -307,6 +293,22 @@ export default function Calculator() {
               Tilaa tämä kuljetus →
             </a>
           </div>
+        </div>
+        <div className="calculator-actions">
+          <FullPriceList
+            leadLink={
+              <a
+                href={
+                  result
+                    ? `/yhteiskuljetus?${new URLSearchParams({ origin: townFromAddress(result.origin), destination: townFromAddress(result.destination), bikeType }).toString()}`
+                    : '/yhteiskuljetus'
+                }
+                className="group-transport-link"
+              >
+                Ei kiire? Ilmoita ennakkoon – yhdistetty kuljetus on edullisempi →
+              </a>
+            }
+          />
         </div>
       </div>
     </section>
