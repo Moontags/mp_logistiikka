@@ -10,7 +10,12 @@ import { createRateLimiter, sameOrigin } from '../lib/group-transport/security';
 import { POST } from '../app/api/yhteiskuljetus/route';
 import { groupTransportEmail } from '../lib/group-transport/email';
 import { readSubmission } from '../lib/group-transport/request';
-import { calculatePrice, positioningTierSummary, PRICING } from '../lib/pricing';
+import {
+  calculatePrice,
+  laskePositiointimaksu,
+  positioningTierSummary,
+  PRICING,
+} from '../lib/pricing';
 
 const now = new Date('2026-10-05T09:00:00Z');
 const valid: Registration = {
@@ -162,12 +167,37 @@ test('email escapes user HTML, sets validated replyTo, and sends only to busines
   assert.equal(message.messageId, '<yhteiskuljetus-test-id@mp-logistiikka.fi>');
 });
 
-test('existing gross prices and positioning tariff stay unchanged', () => {
+test('short-distance gross prices stay unchanged and updated tariffs are applied', () => {
   assert.deepEqual(PRICING.TYPE_EXTRA, { scooter: -20, standard: 0, large: 50 });
   assert.equal(calculatePrice(40, 'standard').total, 119);
   assert.equal(calculatePrice(40, 'scooter').total, 99);
   assert.equal(calculatePrice(40, 'large').total, 169);
-  assert.equal(calculatePrice(150, 'standard').total, 246.6);
-  assert(positioningTierSummary().includes('401–600 km 0,35 €/km'));
-  assert(positioningTierSummary().includes('yli 600 km 0,50 €/km'));
+  assert.equal(calculatePrice(150, 'standard').total, 237.8);
+  assert(positioningTierSummary().includes('401–600 km 0,15 €/km'));
+  assert(positioningTierSummary().includes('yli 600 km 0,10 €/km'));
+});
+
+test('transport uses marginal tiers for the requested comparison distances', () => {
+  for (const [km, expected] of [
+    [25, 119],
+    [100, 183.8],
+    [175, 259.05],
+    [610, 593.1],
+  ]) {
+    assert.equal(calculatePrice(km, 'standard').total, expected);
+  }
+});
+
+test('positioning preserves boundaries and prices each endpoint separately', () => {
+  for (const [km, expected] of [
+    [40, 0],
+    [80, 20],
+    [200, 68],
+    [400, 108],
+    [600, 138],
+    [610, 139],
+  ]) {
+    assert.equal(laskePositiointimaksu(km, 0).fee, expected);
+  }
+  assert.equal(laskePositiointimaksu(100, 100).fee, 56);
 });

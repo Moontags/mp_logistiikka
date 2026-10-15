@@ -16,9 +16,9 @@ export const PRICING = {
    * Portaiden on oltava nousevassa järjestyksessä.
    */
   KM_TIERS: [
-    { upToKm: 150, perKm: 1.16 }, //  41–150 km
-    { upToKm: 400, perKm: 0.95 }, // 151–400 km
-    { upToKm: null, perKm: 0.75 }, // 401 km +
+    { upToKm: 150, perKm: 1.08 }, //  41–150 km
+    { upToKm: 400, perKm: 0.85 }, // 151–400 km
+    { upToKm: null, perKm: 0.68 }, // 401 km +
   ],
 
   TYPE_EXTRA: {
@@ -37,8 +37,8 @@ export const PRICING = {
    * kilometreissä.
    *
    * Sama progressiivinen tier-laskenta kuin KM_TIERS:ssä, mutta oma taulukko:
-   * marginaalinen km halpenee lähiportaissa ja kallistuu taas kaukoportaissa,
-   * koska pitkä tyhjä ajo syö koko päivän. Ensimmäinen porras on 0 €/km, joten
+   * marginaalinen km halpenee matkan pidentyessä.
+   * Ensimmäinen porras on 0 €/km, joten
    * se toimii vapaarajana – pidetään BASE_KM_INCLUDED:n tasalla, jotta
    * perusmaksuun mahtuva lähikeikka ei saa positiointilisää.
    *
@@ -50,9 +50,9 @@ export const PRICING = {
     { upToKm: 40, perKm: 0 }, //   0–40 km  ilmainen
     { upToKm: 80, perKm: 0.5 }, //  40–80 km
     { upToKm: 200, perKm: 0.4 }, //  80–200 km
-    { upToKm: 400, perKm: 0.3 }, // 200–400 km
-    { upToKm: 600, perKm: 0.35 }, // 400–600 km
-    { upToKm: null, perKm: 0.5 }, // 600 km +
+    { upToKm: 400, perKm: 0.2 }, // 200–400 km
+    { upToKm: 600, perKm: 0.15 }, // 400–600 km
+    { upToKm: null, perKm: 0.1 }, // 600 km +
   ],
 } as const;
 
@@ -195,7 +195,7 @@ export function calculatePrice(
   return { baseFee: PRICING.BASE_FEE, kmFee, billableKm, tiers, typeExtra, positioning, total };
 }
 
-/** Muotoilee luvun suomalaiseen muotoon, esim. 1.16 -> "1,16". */
+/** Muotoilee luvun suomalaiseen muotoon, esim. 1.08 -> "1,08". */
 export function eur(n: number): string {
   return n.toFixed(2).replace('.', ',');
 }
@@ -214,7 +214,7 @@ export function startingPrice(bikeType: BikeType): number {
   return round2(PRICING.BASE_FEE + PRICING.TYPE_EXTRA[bikeType]);
 }
 
-/** Hinnastokuvaus portaista, esim. "41–150 km 1,16 €/km · 151–400 km 0,95 €/km · yli 400 km 0,75 €/km" */
+/** Hinnastokuvaus portaista, esim. "41–150 km 1,08 €/km · 151–400 km 0,85 €/km · yli 400 km 0,68 €/km" */
 function tiersToText(tiers: readonly Tier[], startKm: number): string {
   let cursor = startKm;
   return tiers

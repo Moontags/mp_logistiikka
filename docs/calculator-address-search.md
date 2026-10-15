@@ -22,6 +22,8 @@ Tariffit ja lib/pricing.ts pysyivät muuttumattomina.
 
 ## Testitulokset
 
+Huom.: alla olevat selaintestien hinnat ovat historiallisia, ennen 15.10.2026 tehtyä tariffimuutosta. Ajantasaiset hinnat johdetaan tiedostosta `lib/pricing.ts`.
+
 Kaikki parit testattiin Google Chrome -selaimessa sekä kirjoittamalla kaupungit ilman listavalintaa (Tab ja Enter) että valitsemalla molemmat kaupungit ehdotuslistasta. Molemmat tavat tuottivat saman tuloksen. Hinnat ovat peruspyörälle, sisältävät ALV:n ja nykyisen positioinnin Riihimäeltä.
 
 | Reitti            | Kuljetus km | Tukikohta → nouto km | Jättö → tukikohta km | Perusmaksu € | Km-maksu € | Positiointi € | Yhteensä € |
