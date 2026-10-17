@@ -123,19 +123,6 @@ export default function Calculator() {
     >
       <div className="calculator-layout" style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div className="calculator-heading">
-          <p
-            style={{
-              fontFamily: 'var(--font-barlow)',
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              color: 'var(--orange)',
-              marginBottom: '0.5rem',
-            }}
-          >
-            Hinnasto
-          </p>
           <h2
             style={{
               fontFamily: 'var(--font-barlow-condensed)',

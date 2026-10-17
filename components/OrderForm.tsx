@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import FullPriceList from './FullPriceList';
 import styles from './OrderForm.module.css';
 import { useForm } from 'react-hook-form';
@@ -48,10 +48,19 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState('');
   const [showPriceList, setShowPriceList] = useState(false);
+  const priceDialog = useRef<HTMLDialogElement>(null);
   const [kuntoraportti, setKuntoraportti] = useState(false);
 
   useEffect(() => {
-    if (showPriceList) document.getElementById('hinnasto-tarkemmin')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!showPriceList) return;
+    const dialog = priceDialog.current;
+    dialog?.showModal();
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      dialog?.close();
+      document.body.style.overflow = previousOverflow;
+    };
   }, [showPriceList]);
 
   // Kuntoraportti sisältyy ilmaiseksi kun kuljetus ylittää PRICING.KUNTORAPORTTI_FREE_FROM.
@@ -564,7 +573,27 @@ export default function OrderForm({ prefillOrigin, prefillDestination, prefillBi
           </div>
 
           {/* Full-width below grid – contact */}
-          {showPriceList && <FullPriceList leadLink={null} initiallyOpen />}
+          {showPriceList && (
+            <dialog
+              ref={priceDialog}
+              className={styles.priceDialog}
+              aria-labelledby="price-dialog-title"
+              onClose={() => setShowPriceList(false)}
+              onClick={(event) => {
+                if (event.target === event.currentTarget) setShowPriceList(false);
+              }}
+            >
+              <div className={styles.priceDialogBody}>
+                <div className={styles.priceDialogHeader}>
+                  <h2 id="price-dialog-title">Hinnasto</h2>
+                  <button type="button" autoFocus onClick={() => setShowPriceList(false)}>
+                    Sulje ✕
+                  </button>
+                </div>
+                <FullPriceList leadLink={null} initiallyOpen />
+              </div>
+            </dialog>
+          )}
           <div
             style={{
               background: 'transparent',

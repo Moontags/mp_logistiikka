@@ -1,4 +1,6 @@
-import type { ReactNode } from 'react';
+'use client';
+
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import {
   PRICING,
@@ -25,88 +27,129 @@ function zones(
   });
 }
 
-export default function FullPriceList({ leadLink, initiallyOpen = false }: { leadLink: ReactNode; initiallyOpen?: boolean }) {
+export default function FullPriceList({
+  leadLink,
+  initiallyOpen = false,
+}: {
+  leadLink: ReactNode;
+  initiallyOpen?: boolean;
+}) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const dialog = dialogRef.current;
+    dialog?.showModal();
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      dialog?.close();
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen]);
+
+  const content = (
+    <div className={`calc-form ${styles.content}`}>
+      <section>
+        <h3>Perushinnoittelu</h3>
+        <ul>
+          <li>
+            Perusmaksu {eurShort(PRICING.BASE_FEE)} €, sisältää ensimmäiset{' '}
+            {PRICING.BASE_KM_INCLUDED} km
+          </li>
+          {zones(PRICING.KM_TIERS, PRICING.BASE_KM_INCLUDED)}
+        </ul>
+      </section>
+      <section>
+        <h3>Pyörätyyppi</h3>
+        <ul>
+          {BIKE_OPTIONS.map(({ value, label, description }) => {
+            const extra = PRICING.TYPE_EXTRA[value];
+            return (
+              <li key={value}>
+                {value === 'scooter' ? 'Mopo / Skootteri' : label}
+                {description ? ` (${description})` : ''} {extra < 0 ? '−' : '+'}
+                {eurShort(Math.abs(extra))} €
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+      <section>
+        <h3>Siirtymä noutoon / jätöstä</h3>
+        <p>
+          Lähtö on{' '}
+          {PRICING.HOME_BASE.split(',')[0] === 'Riihimäki' ? 'Riihimäellä' : PRICING.HOME_BASE}. Jos
+          nouto- tai jättöpaikka on yli {positioningFreeKm()} km päässä, siirtymästä veloitetaan:
+        </p>
+        <ul>
+          {zones(
+            PRICING.POSITIONING_TIERS.filter((tier) => tier.perKm > 0),
+            positioningFreeKm(),
+          )}
+        </ul>
+      </section>
+      <section>
+        <h3>Esimerkkihintoja (Perus / Vakio, ilman siirtymää)</h3>
+        <ul>
+          {[40, 100, 200, 400, 600].map((km) => (
+            <li key={km}>
+              {km} km = {eur(calculatePrice(km, 'standard').total)} €
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section className={styles.more}>
+        <h3>Muuta</h3>
+        <ul>
+          <li>
+            Ajopalvelu: kuljettajamme voi ajaa pyörän perille – usein trailerikuljetusta
+            edullisempi.
+          </li>
+          <li>
+            Yhdistetyt kuljetukset: kun reitti ja ajankohta ilmoitetaan etukäteen, voimme yhdistää
+            kuljetuksia ja hinta laskee.
+          </li>
+          <li>Kuljetamme myös mopot, mopoautot, mönkijät ja moottorikelkat.</li>
+          <li>
+            <Link href="/ulkomaat/hinnoittelu">Ulkomaan kuljetusten hinnoittelu →</Link>
+          </li>
+          <li>Yritysasiakkaille ja toistuville kuljetuksille voimme sopia B2B-hinnoittelun.</li>
+          <li>Hinnat sisältävät alv:n.</li>
+          <li>Kaikki kuljetukset ovat vakuutettuja.</li>
+        </ul>
+      </section>
+    </div>
+  );
+
+  if (initiallyOpen) return content;
+
   return (
-    <div className={styles.actions}>
+    <div id="hinnasto-tarkemmin" className={styles.actions}>
       <div className={styles.leadLink}>{leadLink}</div>
-      <details id="hinnasto-tarkemmin" className={styles.details} open={initiallyOpen}>
-        <summary className={styles.summary} hidden={initiallyOpen}>
-          <span className={styles.closed}>Näytä hinnasto</span>
-          <span className={styles.open}>Piilota hinnasto →</span>
-        </summary>
-        <div className={`calc-form ${styles.content}`}>
-          <section>
-            <h3>Perushinnoittelu</h3>
-            <ul>
-              <li>
-                Perusmaksu {eurShort(PRICING.BASE_FEE)} €, sisältää ensimmäiset{' '}
-                {PRICING.BASE_KM_INCLUDED} km
-              </li>
-              {zones(PRICING.KM_TIERS, PRICING.BASE_KM_INCLUDED)}
-            </ul>
-          </section>
-          <section>
-            <h3>Pyörätyyppi</h3>
-            <ul>
-              {BIKE_OPTIONS.map(({ value, label, description }) => {
-                const extra = PRICING.TYPE_EXTRA[value];
-                return (
-                  <li key={value}>
-                    {value === 'scooter' ? 'Mopo / Skootteri' : label}
-                    {description ? ` (${description})` : ''} {extra < 0 ? '−' : '+'}
-                    {eurShort(Math.abs(extra))} €
-                  </li>
-                );
-              })}
-            </ul>
-          </section>
-          <section>
-            <h3>Siirtymä noutoon / jätöstä</h3>
-            <p>
-              Lähtö on{' '}
-              {PRICING.HOME_BASE.split(',')[0] === 'Riihimäki' ? 'Riihimäellä' : PRICING.HOME_BASE}.
-              Jos nouto- tai jättöpaikka on yli {positioningFreeKm()} km päässä, siirtymästä
-              veloitetaan:
-            </p>
-            <ul>
-              {zones(
-                PRICING.POSITIONING_TIERS.filter((tier) => tier.perKm > 0),
-                positioningFreeKm(),
-              )}
-            </ul>
-          </section>
-          <section>
-            <h3>Esimerkkihintoja (Perus / Vakio, ilman siirtymää)</h3>
-            <ul>
-              {[40, 100, 200, 400, 600].map((km) => (
-                <li key={km}>
-                  {km} km = {eur(calculatePrice(km, 'standard').total)} €
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section className={styles.more}>
-            <h3>Muuta</h3>
-            <ul>
-              <li>
-                Ajopalvelu: kuljettajamme voi ajaa pyörän perille – usein trailerikuljetusta
-                edullisempi.
-              </li>
-              <li>
-                Yhdistetyt kuljetukset: kun reitti ja ajankohta ilmoitetaan etukäteen, voimme
-                yhdistää kuljetuksia ja hinta laskee.
-              </li>
-              <li>Kuljetamme myös mopot, mopoautot, mönkijät ja moottorikelkat.</li>
-              <li>
-                <Link href="/ulkomaat/hinnoittelu">Ulkomaan kuljetusten hinnoittelu →</Link>
-              </li>
-              <li>Yritysasiakkaille ja toistuville kuljetuksille voimme sopia B2B-hinnoittelun.</li>
-              <li>Hinnat sisältävät alv:n.</li>
-              <li>Kaikki kuljetukset ovat vakuutettuja.</li>
-            </ul>
-          </section>
+      <button type="button" className={styles.summary} onClick={() => setIsOpen(true)}>
+        Näytä hinnasto
+      </button>
+      <dialog
+        ref={dialogRef}
+        className={styles.dialog}
+        aria-label="Hinnasto"
+        onClose={() => setIsOpen(false)}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) setIsOpen(false);
+        }}
+      >
+        <div className={styles.dialogBody}>
+          <div className={styles.dialogHeader}>
+            <h2>Hinnasto</h2>
+            <button type="button" autoFocus onClick={() => setIsOpen(false)}>
+              Sulje ✕
+            </button>
+          </div>
+          {content}
         </div>
-      </details>
+      </dialog>
     </div>
   );
 }
