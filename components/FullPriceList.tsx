@@ -79,9 +79,7 @@ export default function FullPriceList({
       <section>
         <h3>Siirtymä noutoon / jätöstä</h3>
         <p>
-          Lähtö on{' '}
-          {PRICING.HOME_BASE.split(',')[0] === 'Riihimäki' ? 'Riihimäellä' : PRICING.HOME_BASE}. Jos
-          nouto- tai jättöpaikka on yli {positioningFreeKm()} km päässä, siirtymästä veloitetaan:
+          Jos nouto- tai jättöpaikka on yli {positioningFreeKm()} km päässä, siirtymästä veloitetaan:
         </p>
         <ul>
           {zones(
@@ -91,7 +89,7 @@ export default function FullPriceList({
         </ul>
       </section>
       <section>
-        <h3>Esimerkkihintoja (Perus / Vakio, ilman siirtymää)</h3>
+        <h3>Esimerkkihintoja</h3>
         <ul>
           {[40, 100, 200, 400, 600].map((km) => (
             <li key={km}>
