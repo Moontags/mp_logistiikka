@@ -15,19 +15,22 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
-  min-height: 36px;
+  min-height: 44px;
   margin-top: 0;
-  padding: 0.4rem 0.75rem;
+  padding: calc(0.75rem - 1px) calc(1.5rem - 1px);
   border: 1px solid rgba(232, 93, 26, 0.5);
   border-radius: 5px;
   background: rgba(232, 93, 26, 0.08);
   color: var(--orange);
-  font-family: var(--font-barlow), sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  line-height: 1.4;
+  font-family: var(--font-barlow-condensed);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
   text-decoration: none;
   transition:
     background 0.2s,
@@ -46,10 +49,7 @@
   cursor: pointer;
   list-style: none;
   color: var(--orange);
-  font-family: var(--font-barlow), sans-serif;
-  font-size: 0.85rem;
   grid-column: 2;
-  line-height: 1.6;
 }
 .summary:focus-visible {
   outline: 2px solid var(--orange);

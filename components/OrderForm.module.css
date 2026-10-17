@@ -5,7 +5,7 @@
 }
 
 .priceLink {
-  width: fit-content;
+  width: 100%;
   align-self: flex-start;
   cursor: pointer;
   margin-top: 1rem;
@@ -16,14 +16,16 @@
   color: var(--orange);
   border: 1px solid rgba(232, 93, 26, 0.5);
   border-radius: 4px;
-  padding: 0.4rem 0.75rem;
-  font-family: var(--font-barlow), sans-serif;
-  font-weight: 600;
-  font-size: 0.85rem;
-  line-height: 1.4;
+  padding: calc(0.75rem - 1px) calc(1.5rem - 1px);
+  font-family: var(--font-barlow-condensed);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   text-decoration: none;
   text-align: center;
-  min-height: 36px;
+  min-height: 44px;
   transition: background 0.2s;
 }
 .priceLink:hover { background: rgba(232, 93, 26, 0.16); border-color: var(--orange); }

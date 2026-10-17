@@ -292,7 +292,7 @@ export default function Calculator() {
                 }
                 className="group-transport-link"
               >
-                Ei kiire? Ilmoita ennakkoon →
+                Ei kiire? Ilmoita ennakkoon
               </a>
             }
           />
