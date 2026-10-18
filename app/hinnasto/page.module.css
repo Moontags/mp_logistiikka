@@ -3,4 +3,30 @@
     height: 100%;
     overflow-y: auto;
   }
+
+  .scroll :global(.calculator-actions) > div > div > a,
+  .scroll :global(.calculator-actions) > div > button {
+    width: 260px;
+    min-height: 0;
+    justify-self: center;
+    padding: 10px 20px;
+    border-color: rgba(232, 93, 26, 0.4);
+    background: transparent;
+    font-size: 14px;
+    white-space: nowrap;
+    transition:
+      background 150ms,
+      border-color 150ms;
+  }
+
+  .scroll :global(.calculator-actions) > div > div > a:hover,
+  .scroll :global(.calculator-actions) > div > button:hover {
+    border-color: var(--orange);
+    background: rgba(232, 93, 26, 0.1);
+  }
+
+  .scroll :global(.calculator-actions) > div > div:has(> a) {
+    display: flex;
+    justify-content: center;
+  }
 }
